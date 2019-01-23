@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+  <head>
+    <title>a 7 year old discovers math.sin()</title>
+    <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        var ca = document.getElementById('canv');
+        var c = ca.getContext('2d');
+
+        c.canvas.width  = window.innerWidth - 10;
+        c.canvas.height = window.innerHeight - 10;
+        var w = c.canvas.width;
+        var h = c.canvas.height;
+
+        var t = 0;
+        var t2 = 0;
+
+        var fx, fy, tx, ty;
+        var lines = [
+          [1 ,6,  7 ,0], // A
+          [7 ,0,  13,6],
+          [16,0,  16,6], // L
+          [16,6,  28,6],
+          [31,0,  31,6], // L
+          [31,6,  44,6],
+          [52,0,  52,6], // I
+          [67,0,  61,6], // G
+          [61,6,  73,6],
+          [73,6,  70,3],
+          [70,3,  69,4],
+          [76,6,  82,0], // A
+          [82,0,  88,6],
+          [91,0,  103,0], // T
+          [97,0,  97 ,6],
+          [106,6, 106,0], // R
+          [106,0, 112,0],
+          [112,0, 118,6]
+        ]
+
+        var drawn = []
+
+        var makeLine = function() {
+          c.save();
+          c.closePath();
+          c.beginPath();
+          getCoords();
+
+          // var r = Math.floor(Math.random() * 255);
+
+          if (t % 25 == 0) {
+            c.strokeStyle = 'rgba(255, 255, 255, 1)';
+          } else {
+            c.strokeStyle = 'rgba(203, 75, 22, 0.5)';
+            // c.strokeStyle = 'rgba(181, 137, 0, 0.6)';
+          }
+
+          c.moveTo(fx, fy);
+          c.lineTo(tx, ty);
+          c.stroke();
+
+          if (lines.length == 0) {
+            clearInterval(timer);
+            // otherTimer = setInterval(fadeOut, 60);
+          }
+          c.restore();
+        }
+
+        var makeGate = function() {
+          c.save();
+          // var n = Math.floor(Math.random() * (lines.length - 1));
+          // var p = lines.splice(n, 1)[0];
+          var p = lines.shift();
+
+          if (!p) return;
+          // fix points
+          var ot = (w/3);
+          var nw = ot * 2;
+          p[1] = Math.floor(p[1] * nw/120);
+          p[3] = Math.floor(p[3] * nw/120);
+
+          p[0] = Math.floor(p[0] * nw/120);
+          p[2] = Math.floor(p[2] * nw/120);
+
+          p[1] += (h/2) - (3.5 * nw/120);
+          p[3] += (h/2) - (3.5 * nw/120);
+
+          p[0] += ot/2;
+          p[2] += ot/2;
+
+          drawn.push(p);
+
+          c.closePath();
+          c.beginPath();
+
+          c.lineWidth = 3;
+          c.strokeStyle = '#fff';
+          c.moveTo(p[0], p[1]);
+          c.lineTo(p[2], p[3]);
+          c.stroke();
+
+          for (var i = 0; i < drawn.length; i++) {
+            c.moveTo(drawn[i][0], drawn[i][1]);
+            c.lineTo(drawn[i][2], drawn[i][3]);
+            c.stroke();
+          }
+
+          c.restore();
+        }
+
+        var getCoords = function() {
+          t += 5;
+          t2 += 3;
+
+          fx = Math.cos(t/100) * (w/2);
+          fy = Math.sin(t/100) * (h/2);
+          fx += w/2;
+          fy += h/2;
+
+          tx = Math.cos(t2/100) * (w/2);
+          ty = Math.sin(t2/100) * (h/2);
+          tx += w/2;
+          ty += h/2;
+
+          // tx = Math.random() * w;
+          // ty = Math.random() * h;
+        }
+
+        var fadeOut = function() {
+          o += 0.01
+          c.fillStyle = 'rgba(0, 0, 0,' + o + ')';
+          c.fillRect(0, 0, w, h);
+
+          c.closePath();
+          c.beginPath();
+          c.strokeStyle = '#fff';
+          for (var i = 0; i < drawn.length; i++) {
+            c.moveTo(drawn[i][0], drawn[i][1]);
+            c.lineTo(drawn[i][2], drawn[i][3]);
+            c.stroke();
+          }
+
+          if (o >= 1) {
+            clearInterval(otherTimer);
+          }
+        }
+
+        c.strokeStyle = '#fff';
+        getCoords();
+
+        var timer = setInterval(makeLine, 28);
+        var otherTimer = setInterval(makeGate, 1000);
+        var o = 0;
+
+      });
+    </script>
+    <style type="text/css">
+      * {
+        margin: 0px;
+      }
+
+      html, body {
+        width:  100%;
+        height: 100%;
+      }
+
+      body {
+        background: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canv" width="640" height="480"></canvas>
+  </body>
+</html>
+

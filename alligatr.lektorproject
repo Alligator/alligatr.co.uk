@@ -1,0 +1,5 @@
+[project]
+name = alligatr
+
+[servers.ghpages]
+target = ghpages://Alligator/alligator.github.io?cname=alligatr.co.uk

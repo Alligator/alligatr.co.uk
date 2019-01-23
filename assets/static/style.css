@@ -1,0 +1,90 @@
+body {
+    font-family: sans-serif;
+    width: 76ex;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+a {
+    color: #2a99b6;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #33bbdf;
+    text-decoration: underline;
+}
+
+.project {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1rem;
+    margin: 1rem 0;
+    /* background-color: #ecf0f2; */
+    border: 2px solid #e7e7e7;
+    /* border-top: 1px solid #ccc; */
+}
+.project:last-child {
+    /* border-bottom: 1px solid #ccc; */
+}
+.project__image {
+    display: inline-block;
+    width: 100px;
+    min-width: 100px;
+    height: 100px;
+}
+.project__title {
+    font-weight: bold;
+}
+.project__body p {
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+}
+.project__year {
+    font-size: .8rem;
+}
+
+.cv {
+    font-family: 'Georgia', serif;
+    font-size: 12pt;
+    margin: 1rem auto;
+}
+@media print {
+    .cv {
+        font-size: 10pt;
+    }
+    .cv {
+        max-width: 76ex;
+    }
+}
+.cv header {
+    text-align: center;
+}
+.cv header .name {
+    font-size: 18pt;
+    /* letter-spacing: .1rem; */
+}
+.cv h2 {
+    font-weight: normal;
+    font-size: 12pt;
+    margin-bottom: 0;
+    border-bottom: 1px solid #aaa;
+}
+.cv h2 + p {
+    margin-top: 0;
+}
+.experience {
+    margin-bottom: 1rem;
+}
+.experience__header {
+    display: flex;
+    justify-content: space-between;
+}
+.experience__jobtitle, .experience__dates {
+    font-size: 14pt;
+}
+.experience__body ul {
+    margin: 0;
+    padding-left: 1rem;
+}

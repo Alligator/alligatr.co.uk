@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+  <head>
+    <title>lake.java</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="lake.js"></script>
+    <script type="text/javascript">
+      $(function() {
+          $('#tupac').lake({
+            'canvas': '#canv',
+            'speed': 0.25
+          });
+      });
+    </script>
+    <style type="text/css">
+      * {
+        margin: 0px;
+      }
+
+      html, body {
+        width:  100%;
+        height: 100%;
+      }
+
+      img {
+        display: none;
+      }
+
+      canvas {
+        background: #aaa;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canv" width="640" height="480"></canvas>
+    <img id="tupac" src="tupac.jpg" />
+  </body>
+</html>
+

@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+  <head>
+    <title>hat</title>
+    <link href='http://fonts.googleapis.com/css?family=Unkempt' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+      body {
+        background: #f38;
+        text-align: center;
+        font-family: 'Unkempt', cursive;
+        color: white;
+        font-size: 28pt;
+        text-transform: uppercase;
+        text-shadow: #000 0px 2px 1px;
+      }
+
+      .gate-anim {
+        opacity: 0;
+        -webkit-animation: fade-in 1s linear 1;
+        -webkit-animation-fill-mode: forwards;
+
+        -moz-animation: fade-in 1s linear 1;
+        -moz-animation-fill-mode: forwards;
+      }
+
+      #gate1 { -webkit-animation-delay: 0s; -moz-animation-delay: 0s; }
+      #gate2 { -webkit-animation-delay: 0.5s; -moz-animation-delay: 0.5s; }
+      #gate3 { -webkit-animation-delay: 1s; -moz-animation-delay: 1s; }
+      #gate4 { -webkit-animation-delay: 1.5s; -moz-animation-delay: 1.5s; }
+      #gate5 { -webkit-animation-delay: 2s; -moz-animation-delay: 2s; }
+      #gate6 { -webkit-animation-delay: 2.5s; -moz-animation-delay: 2.5s; }
+      #gate7 { -webkit-animation-delay: 3s; -moz-animation-delay: 3s; }
+      #gate8 { -webkit-animation-delay: 3.5s; -moz-animation-delay: 3.5s; }
+
+      @-webkit-keyframes fade-in {
+        0%   { opacity: 0; }
+        85%  { opacity: 0; }
+        100% { opacity: 1; }
+      }
+      @-moz-keyframes fade-in {
+        0%   { opacity: 0; }
+        85%  { opacity: 0; }
+        100% { opacity: 1; }
+      }
+
+      #cat {
+        -webkit-animation: rotate 0.8s ease-in-out alternate infinite;
+        -moz-animation: rotate 0.8s ease-in-out alternate infinite;
+      }
+
+      @-webkit-keyframes rotate {
+        from { -webkit-transform: rotate(-5deg); }
+        to   { -webkit-transform: rotate(5deg); }
+      }
+      @-moz-keyframes rotate {
+        from { -moz-transform: rotate(-5deg); }
+        to   { -moz-transform: rotate(5deg); }
+      }
+
+      #miaow-cont { position: relative; }
+
+      .miaow {
+        color: black;
+        text-shadow: #fff 0px 2px 1px;
+        font-size: 12pt;
+        position: absolute;
+        width: 50%;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        top: 250px;
+        opacity: 0;
+      }
+
+      #miaow {
+        -webkit-animation:
+          miaow 2.0s ease-in-out infinite,
+          rotate 0.8s ease-in-out alternate infinite;
+        -moz-animation:
+          miaow 2.0s ease-in-out infinite,
+          rotate 0.8s ease-in-out alternate infinite;
+      }
+      #miaow2 {
+        -webkit-animation:
+          miaow 2.0s ease-in-out 1s infinite,
+          rotate 0.8s ease-in-out alternate infinite;
+        -moz-animation:
+          miaow 2.0s ease-in-out 1s infinite,
+          rotate 0.8s ease-in-out alternate infinite;
+      }
+
+      @-webkit-keyframes miaow {
+        0%   { opacity: 0; top: 250px; }
+        10%  { opacity: 1; }
+        100% { opacity: 0; top: 350px; }
+      }
+      @-moz-keyframes miaow {
+        0%   { opacity: 0; top: 250px; }
+        10%  { opacity: 1; }
+        100% { opacity: 0; top: 350px; }
+      }
+
+      #kill-me {
+        font-size: 69pt;
+        opacity: 0;
+        -webkit-animation: kill-me 1s linear alternate 4.5s infinite;
+        -moz-animation: kill-me 1s linear alternate 4.5s infinite;
+      }
+
+      @-webkit-keyframes kill-me {
+        0%   { opacity: 0; }
+        95%  { opacity: 0; }
+        100% { opacity: 1; }
+      }
+      @-moz-keyframes kill-me {
+        0%   { opacity: 0; }
+        95%  { opacity: 0; }
+        100% { opacity: 1; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="kill-me">kill me</div>
+    <div id="miaow-cont">
+      <img id="cat" src="cat.png" />
+      <div id="miaow" class="miaow">miaow</div>
+      <div id="miaow2" class="miaow">miaow</div>
+    </div>
+    <div id="gate">
+      <span id="gate1" class="gate-anim">a</span>
+      <span id="gate2" class="gate-anim">l</span>
+      <span id="gate3" class="gate-anim">l</span>
+      <span id="gate4" class="gate-anim">i</span>
+      <span id="gate5" class="gate-anim">c</span>
+      <span id="gate6" class="gate-anim">a</span>
+      <span id="gate7" class="gate-anim">t</span>
+      <span id="gate8" class="gate-anim">r</span>
+    </div>
+  </body>
+</html>

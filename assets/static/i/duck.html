@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+  <head>
+    <title>duck</title>
+    <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      // get tweets and stuff
+      var tweets = [];
+      var tweet;
+      $.ajax({
+        url: 'http://search.twitter.com/search.json?q=quack&rpp=50',
+        dataType: 'jsonp',
+        success: function(data) {
+          $.each(data.results, function(i, thing) {
+            tweets.push(thing.text);
+          });
+          tweet = '"' + tweets[Math.floor(Math.random() * tweets.length)] + '"';
+        }
+      });
+
+      $(function() {
+        $('#canv').click(function(e) {
+          tweet = '"' + tweets[Math.floor(Math.random() * tweets.length)] + '"';
+        });
+
+        var ca = document.getElementById('canv');
+        var c = ca.getContext('2d');
+
+        c.canvas.width  = window.innerWidth;
+        c.canvas.height = window.innerHeight;
+        var w = c.canvas.width;
+        var h = c.canvas.height;
+
+        c.font = '24px Yanone Kaffeesatz';
+
+        // x, y, arc
+        var points = [
+          [-1,  1, false],
+          [-1, -1, false],
+          [ 0, -1, true ],
+          [ 1,  1, false],
+        ]
+        var t = 0.15;
+        var change = 0.005;
+
+        // scale points
+        var scale = 100;
+
+        for (var i = 0; i < points.length; i++) {
+          points[i][0] *= scale;
+          points[i][1] *= scale;
+        }
+
+        setInterval(function() {
+          c.save();
+
+          c.clearRect(0, 0, w, h);
+
+          // draw the duck
+
+          // head
+          c.beginPath();
+          c.fillStyle = '#b58900';
+          c.lineWidth = 3;
+          c.moveTo(w/3 + points[0][0], h/2 + points[0][1]);
+          for (var i = 0; i < points.length; i++) {
+            if (points[i][2]) {
+              c.arc(w/3 + points[i][0], h/2 + points[i][1], scale, Math.PI, 0);
+            } else {
+              c.lineTo(w/3 + points[i][0], h/2 + points[i][1]);
+            }
+          }
+          c.fill();
+          c.closePath();
+
+          // eyes
+          c.beginPath();
+          c.fillStyle = '#000';
+          c.arc(w/3 + 50, h/2 - scale, 10, 0, Math.PI*2);
+          c.fill();
+          c.closePath();
+
+          // break top
+          c.strokeStyle = '#cb4b16';
+
+          c.beginPath();
+          c.moveTo(w/3 + scale, h/2 - scale/2);
+          c.lineTo(w/3 + scale + 50, h/2 - scale/2);
+          c.stroke();
+          c.closePath();
+
+          // break bottom
+          c.beginPath();
+          var o = Math.PI*t;
+          var x = Math.abs(Math.sin(o * 2)) * 50;
+          var y = Math.abs(Math.cos(o * 2)) * 50;
+          c.moveTo(w/3 + scale, h/2 - scale/2);
+          c.lineTo(w/3 + scale + x, h/2 - scale/2 + y);
+          c.stroke();
+          c.closePath();
+
+          if (t > 0.25 || t < 0.15)  {
+            change = -change;
+          }
+          t += change;
+
+          // text
+          c.beginPath();
+          c.fillStyle = '#eee8d5';
+          var lines = getLines(c, tweet, 300, c.font);
+          for (var i = 0; i < lines.length; i++) {
+            c.fillText(lines[i], w/3 + scale + 75, h/2 - scale/2 + i * 25);
+          }
+          c.closePath();
+          c.restore();
+        }, 33);
+
+        // totes taken from stackoverflow
+        function getLines(c,phrase,maxPxLength,textStyle) {
+          var wa=phrase.split(" "),
+              phraseArray=[],
+              lastPhrase="",
+              l=maxPxLength,
+              measure=0;
+          c.font = textStyle;
+          for (var i=0;i<wa.length;i++) {
+            var w=wa[i];
+            measure=c.measureText(lastPhrase+w).width;
+            if (measure<l) {
+              lastPhrase+=(" "+w);
+            }else {
+              phraseArray.push(lastPhrase);
+              lastPhrase=w;
+            }
+            if (i===wa.length-1) {
+              phraseArray.push(lastPhrase);
+              break;
+            }
+          }
+          return phraseArray;
+        }
+
+      });
+    </script>
+    <style>
+      body {
+        background: #1a1311;
+      }
+      canvas {
+        position: fixed;
+        top: 0;
+      }
+    </style>
+  </head>
+  <body>
+   <canvas id="canv" width="640" height="480"></canvas>
+  </body>
+</html>
+

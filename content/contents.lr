@@ -1,0 +1,142 @@
+_model: page
+---
+body:
+
+I'm Reece Selwood/alligator. I'm based in Kent in the UK and I do weird programming things.
+
+[CV](/cv)<br />
+[contact@alligatr.co.uk](contact@alligatr.co.uk)<br />
+[GitHub](https://github.com/Alligator)
+---
+projects:
+
+#### project ####
+title: Games Done Quick Tracker
+----
+year: 2013 onwards
+----
+url: https://irc.alligatr.co.uk/agdq18/
+----
+source: 
+----
+image: 
+----
+technology: 
+----
+body:
+
+I've been running an unofficial viewers/donations tracker for the biannual [Games Done Quick](https://gamesdonequick.com/) marathons since 2013.
+
+| Links |
+|------|-|-|
+| 2019 | [AGDQ](https://irc.alligatr.co.uk/agdq19/) | |
+| 2018 | [AGDQ](https://irc.alligatr.co.uk/agdq18/) | [SGDQ](https://irc.alligatr.co.uk/sgdq18/) |
+| 2017 | [AGDQ](https://irc.alligatr.co.uk/agdq17/) | [SGDQ](https://irc.alligatr.co.uk/sgdq17/) |
+| 2016 | [AGDQ](https://irc.alligatr.co.uk/agdq16/) | [SGDQ](https://irc.alligatr.co.uk/sgdq16/) |
+| 2015 | [AGDQ](https://irc.alligatr.co.uk/agdq15/) | [SGDQ](https://irc.alligatr.co.uk/sgdq15/) |
+| 2014 | [AGDQ](https://irc.alligatr.co.uk/agdq14/) | [SGDQ](https://irc.alligatr.co.uk/sgdq14/) |
+| 2013 | | [SGDQ](https://irc.alligatr.co.uk/sgdq/) |
+#### project ####
+title: Hot Air
+----
+year: 2018
+----
+url: https://spongeh.itch.io/hot-air
+----
+source: https://github.com/Alligator/awful-holiday-jam-2018
+----
+image: hotair.png
+----
+technology: Written in wren using [sponge's 2D game engine](https://github.com/sponge/sdlgame/).
+----
+body: A balloon fight-ish arcade game about avoiding awkward family conversations at Christmas. Me and [sponge](http://d8d.org/)'s entry into the [Awful Holiday Jam 2018](https://itch.io/jam/awful-holiday-2018).
+#### project ####
+title: Clive Sturridge's Battlement Defence
+----
+year: 2018
+----
+url: https://alligator.itch.io/clive
+----
+source: https://github.com/sponge/sdlgame/tree/master/clive
+----
+image: battlement.png
+----
+technology: Written in wren using [sponge's 2D game engine](https://github.com/sponge/sdlgame/).
+----
+body: The story of one fictional game developers career, told tower defense game by tower defense game. Me and [sponge](http://d8d.org/)'s entry into the [Awful Summer Jam 2018](https://itch.io/jam/awful-summer-jam-2018).
+#### project ####
+title: Molasses!
+----
+year: 2018
+----
+url: https://alligator.itch.io/molasses
+----
+source: https://github.com/Alligator/awful-winter-jam-2018
+----
+image: molasses.png
+----
+technology: Written in JavaScript, for the TIC-80 fantasy console.
+----
+body: My entry into the Awful Winter Jam 2018. It won "Best Use of Theme".
+#### project ####
+title: 70s Dad Drivin'
+----
+year: 2017
+----
+url: https://alligator.itch.io/70s-dad-drivin
+----
+source: https://github.com/Alligator/game-off-throwback
+----
+image: dad.png
+----
+technology: Written in Lua, for the PICO-8 fantasy console.
+----
+body: A driving game about a dad mostly yelling. My entry into the GitHub Game Jam 2017. It came 15th overall out of 206 entries.
+#### project ####
+title: Lake.js
+----
+year: 2012
+----
+url: http://alligatr.co.uk/lake.js/
+----
+source: https://github.com/Alligator/lake.js
+----
+image: 
+----
+technology: 
+----
+body: Someone said it would be funny to remake the old Java lake applet effect using JavaScript and the canvas, so I did the damn thing.
+#### project ####
+title: SVG Sparklines
+----
+year: 2014
+----
+url: http://alligatr.co.uk/sparklines/
+----
+source: https://github.com/Alligator/sparklines
+----
+image: 
+----
+technology: 
+----
+body: A tiny JavaScript library to render sparklines in HTML content.
+#### project ####
+title: Other stuff
+----
+year: 
+----
+url: 
+----
+source: 
+----
+image: 
+----
+technology: 
+----
+body:
+
+[Blog](http://blog.alligatr.co.uk/) - rarely updated.<br />
+[pizza.alligatr](http://pizza.alligatr.co.uk/) - experiments that don't fit anywhere.<br />
+[old alligatr](static/canvas-things.html) - even older experiments that don't fit anywhere.<br />
+---
+title: 

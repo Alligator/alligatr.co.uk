@@ -1,0 +1,107 @@
+
+<!doctype html>
+<html>
+  <head>
+    <title>duck</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    var next_snd = 3;
+
+    $(function() {
+      $textarea = $('#ta');
+      $textarea.height($(window).height());
+
+      $('#snd2').get(0).volume = 0.5;
+      $('#snd3').get(0).volume = 0.5;
+
+      setInterval(newsound, 14000);
+
+      var snd = $('#snd').get(0);
+      snd.volume = 0;
+
+      var count = 0;
+      var lerp = 0;
+      var last_count = 0;
+      var timeout = 5000;
+      var last_key = new Date().getTime();
+
+      $('#ta').keyup(function(e) {
+        count++;
+        setTimeout(function() {
+          count--;
+        }, 2000);
+      });
+
+      $('#ta').focusin(function(e)  { $('#type').fadeOut(); });
+      $('#ta').focusout(function(e) { $('#type').fadeIn(); });
+
+      setInterval(function() {
+        var delta = count - last_count;
+        delta += count;
+        snd.volume = count/30;
+        last_count = count;
+      }, 100);
+    });
+
+    var newsound = function() {
+      document.getElementById('snd' + next_snd).play();
+      console.log(next_snd);
+      next_snd = next_snd == 3 ? 2 : 3;
+    }
+    </script>
+    <style>
+      body {
+        padding:0;
+        margin: 0;
+        color: black;
+        background-image: url('grid_noise.png');
+        overflow: hidden;
+        font-family: 'Palatino Linotype';
+      }
+
+      textarea {
+        border: none;
+        width: 100%;
+        color: black;
+        background-color: white;
+        font-family: 'Palatino Linotype';
+        font-size: 18px;
+        outline: none;
+      }
+
+      .content {
+        margin: 0 auto;
+        width: 600px;
+      }
+
+      #type {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        top: 45%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="type">
+      <h1>type</h1>
+    </div>
+
+    <div class="content">
+      <textarea id="ta"></textarea>
+
+      <audio id="snd" autoplay loop>
+        <source src="gatrfg.mp3" type="audio/mpeg" />
+      </audio>
+
+      <audio id="snd2" autoplay preload>
+        <source src="gatrbg.mp3" type="audio/mpeg" />
+      </audio>
+
+      <audio id="snd3" preload>
+        <source src="gatrbg.mp3" type="audio/mpeg" />
+      </audio>
+    </div>
+  </body>
+</html>
+

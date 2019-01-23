@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+  <head>
+    <title>coler</title>
+    <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var colours = [
+        'rgba(181, 137, 0,',
+        'rgba(203, 75,  22,',
+        'rgba(220, 50,  47,',
+        'rgba(211, 54,  130,',
+        'rgba(108, 113, 196,',
+        'rgba(38,  139, 210,',
+        'rgba(42,  161, 152,',
+        'rgba(133, 153, 0,'
+      ]
+      $(function() {
+        var ca = document.getElementById('canv');
+        var c = ca.getContext('2d');
+
+        c.canvas.width  = window.innerWidth;
+        c.canvas.height = window.innerHeight;
+
+        c.font = '20px Yanone Kaffeesatz';
+        var txt = "piss";
+        var type = Math.random() > 0.5;
+
+        var w = c.canvas.width;
+        var h = c.canvas.height;
+
+        var offset = 0;
+        var size = 200;
+        var rings = 8;
+        var width = 20;
+        var speed = 0.02;
+
+        setInterval(function() {
+          c.save();
+          var step = ((Math.PI * 2) / colours.length);
+          var t = 1.0;
+          c.clearRect(0, 0, w, h);
+          c.lineWidth = width;
+          for (var j = 0, sz = 200; j < rings; j++, sz -= width + 4) {
+            if (type) {
+              var s = (j % 2) == 0 ? offset : -offset;
+            } else {
+              var s = offset + j/10;
+            }
+            for (var i = 0; i < colours.length; i++) {
+              c.beginPath();
+
+              c.strokeStyle = colours[i] + t + ')';
+
+              c.arc(w/2, h/2, sz, s, (s + step) - 0.03);
+              c.stroke();
+              c.closePath();
+
+              if (j < txt.length) {
+                c.beginPath(); 
+                c.fillStyle = 'rgba(255, 255, 255, ' + t + ')';
+                c.fillText(txt[j],
+                  (Math.cos(s + (Math.PI / colours.length)) * sz) + w/2 - 5,
+                  (Math.sin(s + (Math.PI / colours.length)) * sz) + h/2 + 5);
+                c.closePath();
+              }
+              s += step;
+            }
+            t /= 2;
+          }
+          offset += speed;
+          c.restore();
+        }, 33);
+      });
+    </script>
+    <style>
+      body {
+        background: #1a1311;
+      }
+      canvas {
+        position: fixed;
+        top: 0;
+      }
+      #sonic {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+   <canvas id="canv" width="640" height="480"></canvas>
+  </body>
+</html>

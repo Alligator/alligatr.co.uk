@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+  <head>
+    <title>eblock</title>
+    <link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var c, ca;
+
+      $(function() {
+        ca = document.getElementById('canv');
+        c = ca.getContext('2d');
+
+        c.canvas.width  = window.innerWidth;
+        c.canvas.height = window.innerHeight;
+        var w = c.canvas.width;
+        var h = c.canvas.height;
+
+        var img_day = document.getElementById('day');
+        var img_night = document.getElementById('night');
+
+        // ugh hardcoded
+        // img_x.width/height is wrong size tho.
+        var imgw = 858;
+        var imgh = 526;
+
+        var img_ca = document.createElement('canvas');
+        var img_c = img_ca.getContext('2d');
+        img_c.canvas.width  = imgw;
+        img_c.canvas.height = imgh;
+
+        // get image data
+        var imgd_day;
+        var imgd_night;
+
+        var day_loaded = false;
+        var night_loaded = false;
+
+        img_day.onload = function() {
+          img_c.drawImage(img_day, 0, 0);
+          imgd_day = img_c.getImageData(0, 0, imgw, imgh);
+          day_loaded = true;
+        }
+
+        img_night.onload = function() {
+          img_c.drawImage(img_night, 0, 0);
+          imgd_night = img_c.getImageData(0, 0, imgw, imgh);
+          night_loaded = true;
+        }
+
+        c.font = '24px VT323';
+
+
+        setInterval(function() {
+          c.save();
+          c.clearRect(0, 0, w, h);
+
+          var date = new Date();
+          var time = date.toLocaleTimeString();
+          var t = date.getHours() * 60 + date.getMinutes();
+          var blend = 1 - Math.abs(t - 720) / 720 * 1;
+
+          if (day_loaded && night_loaded) {
+            var buffer = c.createImageData(imgd_day);
+            var dd = imgd_day.data;
+            var nd = imgd_night.data;
+
+            var invblend = 1.0 - blend;
+
+            var pixels = dd.length;
+            var bufa = buffer.data;
+
+            while (pixels--) {
+              bufa[pixels] = dd[pixels] * blend + nd[pixels] * invblend;
+            }
+            img_c.putImageData(buffer, 0, 0);
+
+            c.scale(2, 2);
+            c.drawImage(img_ca, w/4 - buffer.width/2, h/4 - buffer.height/2);
+
+            c.drawImage($('#tbg').get(0), w/2 - 138, h/2 - 70);
+            c.fillStyle = 'white';
+            c.fillText(time, w/2 - 120, h/2 - 40);
+          }
+
+          c.restore();
+        }, 500);
+      });
+    </script>
+    <style>
+      * {
+        padding: 0px;
+        margin: 0px;
+      }
+      body {
+        background: #1a1311;
+      }
+      canvas {
+        position: fixed;
+        top: 0;
+      }
+      img {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+   <canvas id="canv" width="640" height="480"></canvas>
+   <img id="day" src="day.png" />
+   <img id="night" src="night.png" />
+   <img id="tbg" src="time.png" />
+   <audio autoplay loop>
+     <source src="bgm.mp3" type="audio/mp3" />
+     <source src="bgm.ogg" type="audio/ogg" />
+      U suck
+   </audio>
+  </body>
+</html>
+

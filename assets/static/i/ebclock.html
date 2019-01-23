@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+  <head>
+    <title>eblock</title>
+    <link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="audiojs/audio.min.js"></script>
+    <script type="text/javascript">
+    audiojs.events.ready(function() {
+      var as = audiojs.createAll();
+    });
+
+    $(function() {
+      $('#time').toggle(function() {$('#bgm').get(0).pause();}, function() {$('#bgm').get(0).play();});
+
+      function update() {
+        var date = new Date();
+        var time = date.toLocaleTimeString();
+        var t = date.getHours() * 60 + date.getMinutes();
+        var blend = Math.abs(t - 720) / 720 * 1;
+        $('#night').css('opacity', blend);
+        $('#time').text( ('0'+date.getHours()).slice(-2) +':'+ ('0'+date.getMinutes()).slice(-2) +':'+ ('0'+date.getSeconds()).slice(-2) );
+      }
+
+      update();
+      setInterval(update, 500);
+    });
+    </script>
+    <style type="text/css">
+      * {
+        padding: 0px;
+        margin: 0px;
+      }
+
+      body {
+        background: url('http://alligatr.co.uk/i/ebclock/day.png') black no-repeat fixed 55% center;
+        background-size: 200% auto;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        -webkit-interpolation-mode: nearest-neighbor;
+      }
+
+      #night {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: url('http://alligatr.co.uk/i/ebclock/night.png') black no-repeat fixed 55% center;
+        background-size: 200% auto;
+        opacity: 0;
+      }
+
+      #time {
+        position: fixed;
+        bottom: 10%;
+        right: 10%;
+        width: 205px;
+        height: 74px;
+        padding-top: 20px;
+        padding-left: 35px;
+        background: url('http://alligatr.co.uk/i/ebclock/time.png') transparent no-repeat scroll center center;
+        background-size: 100% 100%;
+        font: 48px VT323;
+        color: white;
+        cursor: pointer;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -o-user-select: none;
+        user-select: none;
+      }
+
+      .audiojs {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>  
+    <div id="night"></div>
+    <div id="time"></div>
+    <audio id="bgm" src="ebclock/bgm.mp3" autoplay="autoplay" loop />
+  </body>
+</html>

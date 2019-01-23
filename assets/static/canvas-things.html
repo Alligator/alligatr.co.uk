@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>alligatr</title>
+    <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+          var c = [
+            '#b58900',
+            '#cb4b16',
+            '#dc322f',
+            '#d33682',
+            '#6c71c4',
+            '#268bd2',
+            '#2aa198',
+            '#859900'
+          ]
+          $('body').find('.rcolour').each(function(i) {
+            var rc = Math.floor(Math.random() * c.length)
+            $(this).css('color', c[rc]);
+        });
+      });
+    </script>
+    <style type="text/css">
+      /* http://meyerweb.com/eric/tools/css/reset/ {{{
+      v2.0b1 | 201101 
+      NOTE: WORK IN PROGRESS
+      USE WITH CAUTION AND TEST WITH ABANDON */
+
+      html, body, div, span, applet, object, iframe,
+      h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+      a, abbr, acronym, address, big, cite, code,
+      del, dfn, em, img, ins, kbd, q, s, samp,
+      small, strike, strong, sub, sup, tt, var,
+      b, u, i, center,
+      dl, dt, dd, ol, ul, li,
+      fieldset, form, label, legend,
+      table, caption, tbody, tfoot, thead, tr, th, td,
+      article, aside, canvas, details, figcaption, figure, 
+      footer, header, hgroup, menu, nav, section, summary,
+      time, mark, audio, video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+      }
+      /* HTML5 display-role reset for older browsers */
+      article, aside, details, figcaption, figure, 
+      footer, header, hgroup, menu, nav, section {
+        display: block;
+      }
+      body {
+        line-height: 1;
+      }
+      ol, ul {
+        list-style: none;
+      }
+      blockquote, q {
+        quotes: none;
+      }
+      blockquote:before, blockquote:after,
+      q:before, q:after {
+        content: '';
+        content: none;
+      }
+
+      /* remember to define visible focus styles! 
+      :focus {
+        outline: ?????;
+      } */
+
+      /* remember to highlight inserts somehow! */
+      ins {
+        text-decoration: none;
+      }
+      del {
+        text-decoration: line-through;
+      }
+
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
+      /* }}} */
+    body {
+      background: #000;
+    }
+
+    #main {
+      color: #b58900;
+      font-family: 'Oswald', sans-serif;
+      width: 500px;
+      text-align: justify;
+      font-size: 16pt;
+      text-transform: uppercase;
+    }
+
+    .center { margin: 0 auto; }
+    a, a:link {
+      text-decoration: none;
+      color: inherit;
+      /* ie7 hack */
+      //color: expression(this.parentNode.currentStyle['color']);
+    }
+    h1 {
+      font-size: 24pt;
+      font-weight: bold;
+    }
+
+    .yellow   { color: #b58900; }
+    .orange   { color: #cb4b16; }
+    .red      { color: #dc322f; }
+    .magenta  { color: #d33682; }
+    .violet   { color: #6c71c4; }
+    .blue     { color: #268bd2; }
+    .cyan     { color: #2aa198; }
+    .green    { color: #859900; }
+
+    small { font-size: 8pt; }
+    </style>
+  </head>
+  <body>
+    <div id="main" class="center">
+      <h1>ALLIGATR</h1>
+      <p class="cyan">LESS</p>
+      <p class="green">VOWELS</p>
+      <p class="magenta">MORE</p>
+      <p class="blue"><a href="i/index2.html">MODERN</a></p>
+      <br />
+
+      <p class="rcolour"><a href="i/80x24.html">80x24</a></p>
+      <p class="rcolour"><a href="i/geocities.html">geocities</a></p>
+      <p class="rcolour"><a href="i/pixel.html">pixel</a></p>
+      <p class="rcolour"><a href="i/cat.html">cat</a></p>
+      <p class="rcolour"><a href="i/sleep.html">sleep</a></p>
+      <p class="rcolour"><a href="i/gbc.html">gbc</a></p>
+      <p class="rcolour"><a href="i/wobble.html?a%20ducktorate%20in%20quack">wobble</a></p>
+      <p class="rcolour"><a href="i/lines.html">lines</a></p>
+      <p class="rcolour"><a href="i/hello.html">hello</a></p>
+      <p class="rcolour"><a href="i/colour.html">colour</a></p>
+      <p class="rcolour"><a href="i/duck.html">duck</a></p>
+      <p class="rcolour"><a href="i/ebclock.html">eblock <small>(props to sponge)</small></a></p>
+      <p class="rcolour"><a href="i/sig.html">sig</a></p>
+      <br />
+    </div>
+  </body>
+</html>
+<!-- vim: set foldmethod=marker: -->

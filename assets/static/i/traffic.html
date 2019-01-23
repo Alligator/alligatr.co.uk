@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+  <head>
+    <title>duck</title>
+    <link href='http://fonts.googleapis.com/css?family=Nova+Mono' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      function Driver(speed, lane, y) {
+        this.speed = speed;
+        this.lane = lane;
+        this.y = y;
+
+        this.update = function() {
+          this.y -= speed;
+        }
+      }
+
+      var drivers = [];
+      var car_length = 50;
+      var car_width = 25;
+
+      $(function() {
+        var ca = document.getElementById('canv');
+        var c = ca.getContext('2d');
+
+        c.canvas.width  = window.innerWidth;
+        c.canvas.height = window.innerHeight;
+        var w = c.canvas.width;
+        var h = c.canvas.height;
+
+        drivers.push(new Driver(1.5, 1, h));
+        drivers.push(new Driver(1.2, 1, h-100));
+
+        setInterval(function() {
+          // sort out drivers array
+          console.log(drivers);
+          drivers.sort(function(a, b) {
+            return a.speed - b.speed;
+          });
+
+          c.save();
+          c.clearRect(0, 0, w, h);
+
+          c.lineWidth = car_width;
+          c.strokeStyle = '#fff';
+          c.beginPath();
+          for (var i = 0; i < drivers.length; i++) {
+            c.moveTo(drivers[i].lane * 50 + car_width/2, drivers[i].y);
+            c.lineTo(drivers[i].lane * 50 + car_width/2, drivers[i].y + car_length);
+            drivers[i].update();
+          }
+          c.closePath();
+          c.stroke();
+
+          c.restore();
+        }, 1000);
+      });
+    </script>
+    <style>
+      body {
+        background: #000;
+      }
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+    </style>
+  </head>
+  <body>
+   <canvas id="canv" width="640" height="480"></canvas>
+  </body>
+</html>
+
+

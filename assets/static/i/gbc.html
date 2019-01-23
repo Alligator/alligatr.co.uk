@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <title>dancer man</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        $('body').mouseleave(function() {
+          $('#pug').animate({
+            opacity: 1
+          });
+        });
+
+        $('body').mouseenter(function() {
+          $('#pug').animate({
+            opacity: 0
+          });
+        });
+      });
+    </script>
+    <style type="text/css">
+      body {
+        background-image: url('gbc_comp.gif');
+      }
+
+      #pug {
+        width: 100%;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <img id="pug" src="pug.gif" alt="" />
+    <audio autoplay loop>
+      <source src="gbc_audio.ogg" type="audio/ogg" />
+      <source src="gbc_audio.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+  </body>
+</html>

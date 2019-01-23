@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style type="text/css">
+  body {
+    text-align: center;
+    background: #a59;
+  }
+
+  #alf {
+    margin-top: 50px;
+    border: 20px solid #f9d;
+    outline: 20px solid #d7b;
+  }
+
+  #a {
+    position: relative;
+    text-align: center;
+  }
+  #heart {
+    position: absolute;
+    top: 180px;
+    left: 40%;
+    margin-left: -50px;
+    -webkit-animation: hrt 5s infinite alternate;
+  }
+  #heart2 {
+    position: absolute;
+    top: 180px;
+    left: 60%;
+    margin-left: -50px;
+    -webkit-animation: hrt2 5s infinite alternate;
+  }
+
+  @-webkit-keyframes hrt {
+    from { opacity: 0; -webkit-transform:rotate(0deg);}
+    to   { opacity: 1; -webkit-transform:rotate(45deg);}
+  }
+  @-webkit-keyframes hrt2 {
+    from { opacity: 0; -webkit-transform:rotate(0deg);}
+    to   { opacity: 1; -webkit-transform:rotate(-45deg);}
+  }
+  </style>
+</head>
+<body>
+  <audio src="home.mp3" autoplay loop>
+    <p>?</p>
+  </audio>
+  <div id="a">
+    <img id="heart" src="alfheart.png" />
+    <img id="heart2" src="alfheart.png" />
+    <img id="alf" src="alf.jpg" />
+  </div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+  <div class="project">
+    <div class="project__body">
+      <div class="project__title">
+        {% if this.url|string|length > 0 %}
+        <a href="{{ this.url }}">{{ this.title }}</a>
+        {% else %}
+        {{ this.title }}
+        {% endif %}
+      </div>
+      <div class="project__year">
+        {{ this.year }}
+      </div>
+      {{ this.body }}
+
+      {% if this.technology|string|length > 0 %}
+        <p>{{ this.technology }}</p>
+      {% endif %}
+
+      {% if this.source|string|length > 0 %}
+        <a href="{{ this.source }}">Source</a>
+      {% endif %}
+    </div>
+    {% if this.image|length > 0 %}
+    <img class="project__image" src="{{ this.image }}">
+    {% endif %}
+  </div>

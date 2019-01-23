@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+  <head>
+    <title>duck</title>
+    <link href='http://fonts.googleapis.com/css?family=Nova+Mono' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var colours = [
+        [181, 137,   0],
+        [203,  75,  22],
+        [220,  50,  47],
+        [211,  54, 130],
+        [108, 113, 196],
+        [ 38, 139, 210],
+        [ 42, 161, 152],
+        [133, 153,   0],
+      ]
+
+      var txt;
+
+      $(function() {
+        var ca = document.getElementById('canv');
+        var c = ca.getContext('2d');
+
+        c.canvas.width  = window.innerWidth;
+        c.canvas.height = window.innerHeight;
+        var w = c.canvas.width;
+        var h = c.canvas.height;
+
+        // input
+        var inp = document.createElement('input');
+        inp.type = 'text';
+        inp.id = "textinput";
+        inp.value = 'pisser'
+        inp.style.position = 'absolute';
+        inp.style.top = (h/2).toString() + 'px';
+        inp.style.left = (w/2).toString() + 'px';
+        inp.style.opacity = '0';
+
+        $('body').append(inp);
+
+        var query = window.location.href;
+        var ind = query.indexOf('?')+1;
+        if (!ind) {
+          txt = 'pisser';
+        } else {
+          txt = decodeURI(query.substring(ind));
+        }
+
+        var lines = txt.length*2
+        var step = h*2 / lines;
+
+        c.lineWidth = step/2;
+        c.globalCompositeOperation = 'lighter';
+        c.textAlign = 'center';
+        c.font = step/4 + 'px Nova Mono';
+
+        setInterval(function() {
+          c.save();
+          c.clearRect(0, 0, w, h);
+
+          // mess w/ the colours
+
+          for (var i = 0, co = -1; i < h*2; i += step) {
+            c.strokeStyle = make_colour(++co % colours.length, 0.5);
+            c.beginPath();
+            c.moveTo(-50, i);
+            c.lineTo(w+50, i - step*2);
+            c.moveTo(-50, i);
+            c.lineTo(w+50, i - step*4);
+            c.stroke();
+            c.closePath();
+
+            c.strokeStyle = make_colour(++co % colours.length, 0.5);
+            c.beginPath();
+            c.moveTo(w+50, i);
+            c.lineTo(-50, i - step*2);
+            c.moveTo(w+50, i);
+            c.lineTo(-50, i - step*4);
+            c.stroke();
+            c.closePath();
+
+            c.strokeStyle = make_colour(++co % colours.length, 0.5);
+            c.beginPath();
+            c.moveTo(w+50, i);
+            c.lineTo(-50, i);
+            c.stroke();
+            c.closePath();
+          }
+
+          // text
+          for (var i = 0; i < txt.length; i++) {
+            c.fillStyle = 'rgba(255, 255, 255, 0.75)';
+            c.fillText(txt[i], w/2, i * (h/txt.length) + step/2 + step/16);
+            c.fillStyle = 'rgba(133, 153, 0, 0.5)';
+            c.fillText(txt[i], w/2 + 4, i * (h/txt.length) + step/2 + step/16);
+            c.fillStyle = 'rgba(220, 50, 47, 0.5)';
+            c.fillText(txt[i], w/2 - 4, i * (h/txt.length) + step/2 + step/16);
+          }
+
+          c.restore();
+        }, 33);
+      });
+
+      setInterval(function() {
+          c = txt.slice(0, 1);
+          txt = txt.substr(1, txt.length);
+          txt = txt + c;
+          console.log(txt);
+      }, 500);
+
+      var make_colour = function(c, o) {
+        return 'rgba(' +
+            colours[c][0] + ',' +
+            colours[c][1] + ',' +
+            colours[c][2] + ',' + o + ')';
+      }
+    </script>
+    <style>
+      body {
+        background: #000;
+      }
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+
+      input {
+        border: none;
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+   <canvas id="canv" width="640" height="480"></canvas>
+  </body>
+</html>
+
+

@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+  <head>
+    <title>give it time</title>
+    <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        var input = $('#inp').get(0);
+        var txt = "";
+        var t = 0;
+
+
+        var ca = document.getElementById('canv');
+        var c = ca.getContext('2d');
+        var timer;
+
+        c.canvas.width  = window.innerWidth - 10;
+        c.canvas.height = window.innerHeight - 10;
+        var w = c.canvas.width;
+        var h = c.canvas.height;
+
+        var query = window.location.href;
+        var ind = query.indexOf('?')+1;
+        if (!ind) {
+          txt = 'quack lyfe';
+        } else {
+          txt = decodeURI(query.substring(ind));
+        }
+
+        var f = 100;
+        c.font = f + 'px Oswald';
+        c.textAlign = 'center';
+
+        var o = '0.3';
+        var colors = [
+          'rgba(181, 137, 0, '   + o + ')',
+          'rgba(203, 75,  22, '  + o + ')',
+          'rgba(220, 50,  47, '  + o + ')',
+          'rgba(211, 54,  130, ' + o + ')',
+          'rgba(108, 113, 196, ' + o + ')',
+          'rgba(38,  139, 210, ' + o + ')',
+          'rgba(42,  161, 152, ' + o + ')',
+          'rgba(133, 153, 0, '   + o + ')'
+        ]
+
+        var sizeText = function() {
+          if (txt != "") {
+            var tw = c.measureText(txt).width;
+            f = f * (w/tw);
+            f = Math.floor(f/1.5);
+            c.font = f + 'px Oswald';
+          }
+        }
+
+        // sizeText();
+
+        setTimeout(function() {
+          setInterval(draw, 66);
+          setInterval(function() {
+            if (t < 1) t += 0.01;
+          }, 1500);
+        }, 100);
+
+        $(window).resize(function() {
+          c.canvas.width  = window.innerWidth - 10;
+          c.canvas.height = window.innerHeight - 10;
+          w = c.canvas.width;
+          h = c.canvas.height;
+          c.font = f + 'px Oswald';
+          c.textAlign = 'center';
+
+          draw();
+        });
+
+        var draw = function() {
+          txt = input.value;
+          sizeText();
+          input.focus();
+
+          c.clearRect (0, 0, w, h);
+
+          var r = Math.floor(Math.random() * colors.length);
+          var n = t*24;
+
+          for (var i = 0; i < colors.length; i++) {
+            c.fillStyle = colors[++r % colors.length];
+            c.fillText(txt, w/2 + (Math.random()*n)-5, h/2 + (Math.random()*n)-5);
+          }
+
+          if (Math.random() < t*10) {
+            for (var i = 1; i < Math.floor(t*20)+1; i++) {
+              slice();
+            }
+          }
+        }
+
+        // i am sorry
+        var slice = function() {
+          var s = Math.floor(Math.random() * f);
+          var dir = Math.floor(Math.random()*2);
+          var lh = 16;
+          for (var r = 0; r < lh; r++) {
+            var d = c.getImageData(0, (h/2 - s) + r , w, 1);
+            var db = d.data;
+            var buffer = [];
+            // copy data to buffer
+            for (var i = 0; i < db.length; i++) buffer[i] = db[i];
+            var offset = Math.floor(Math.sin(r * ((Math.PI) / lh)) * 2);
+            // offset it
+            for (var i = 0; i < offset; i++) {
+              if (dir) {
+                buffer = buffer.slice(4);
+              } else {
+                buffer = buffer.slice(0, buffer.length-4);
+                buffer = [0,0,0,0].concat(buffer);
+              }
+            }
+            // copy it back
+            for (var i = 0; i < db.length; i++) d.data[i] = buffer[i];
+            c.putImageData(d, 0, (h/2-s) + r);
+          }
+        }
+      });
+    </script>
+    <style type="text/css">
+      * {
+        margin: 0px;
+      }
+
+      html, body {
+        width:  100%;
+        height: 100%;
+      }
+
+      body {
+        font-family: 'Oswald', sans-serif;
+        background: #fdf6e3;
+      }
+
+      input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canv" width="640" height="480"></canvas>
+    <input type="text" id="inp" value="type" />
+  </body>
+</html>
+

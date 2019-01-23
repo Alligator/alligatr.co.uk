@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+  <head>
+    <title>why do they put the snooker on at 2am on weekdays i don</title>
+    <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        $('#sleep').find('span, div').each(function(i) {
+          var n = i % 8;
+          $(this).attr('id', 's' + n);
+        });
+        var t = setInterval(function() {
+          $('#sleep').find('span, div').each(function(i) {
+            var cl = $(this).attr('id').charAt(1);
+            var n = (parseInt(cl) + 1) % 8;
+            $(this).attr('id', 's' + n);
+          });
+        }, 500);
+      });
+    </script>
+    <style type="text/css">
+      body {
+        font-family: 'Oswald', sans-serif;
+        background: #034;
+      }
+
+      #sleep {
+        width: 160px;
+        text-align: justify;
+        line-height: 1em;
+        margin: 0 auto;
+        color: #d33682;
+      }
+
+      #sleep div {
+        text-align: center;
+      }
+
+      #s0  { color: #b58900; }
+      #s1  { color: #cb4b16; }
+      #s2  { color: #dc322f; }
+      #s3  { color: #d33682; }
+      #s4  { color: #6c71c4; }
+      #s5  { color: #268bd2; }
+      #s6  { color: #2aa198; }
+      #s7  { color: #859900; }
+
+      .sc {
+        -webkit-transition: color 0.5s linear;
+        -moz-transition: color 0.5s linear;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="sleep">
+      <span class="sc">help i want to sleep</span>
+      <span class="sc">sleep expert wanted</span>
+      <span class="sc">pls to make it sleep</span>
+      <span class="sc">S/€€P BED~TIME~ IT IS</span>
+      <span class="sc">i cant read any mor he</span>
+      <span class="sc">my eye wont focus</span>
+      <span class="sc">i keep reading the same sentence</span>
+      <span class="sc">i dont even know anymore</span>
+      <span class="sc">that hat</span>
+      <span class="sc">i know that hat</span>
+      <span class="sc">i would know that hat anywhere</span>
+      <span class="sc">now thats a hat i know</span>
+      <span class="sc">that brings back a hatful of memories</span>
+
+      <span class="sc" style="opacity: 1">z</span>
+      <div class="sc" style="opacity: 0.8">z</div>
+      <div class="sc" style="opacity: 0.7">z&nbsp;&nbsp;</div>
+      <div class="sc" style="opacity: 0.6">z&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      <div class="sc" style="opacity: 0.5">z&nbsp;&nbsp;</div>
+      <div class="sc" style="opacity: 0.4">z</div>
+      <div class="sc" style="opacity: 0.3">&nbsp;&nbsp;z</div>
+      <div class="sc" style="opacity: 0.2">&nbsp;&nbsp;&nbsp;&nbsp;z</div>
+      <div class="sc" style="opacity: 0.1">&nbsp;&nbsp;z</div>
+    </div>
+  </body>
+</html>
