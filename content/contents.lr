@@ -2,7 +2,7 @@ _model: page
 ---
 body:
 
-I'm Reece Selwood/alligator. I'm based in Kent in the UK and I do weird programming things.
+I'm **Reece Selwood/alligator**. I'm based in Kent in the UK and I do weird programming things.
 
 [CV](/cv)<br />
 [contact@alligatr.co.uk](contact@alligatr.co.uk)<br />
@@ -36,6 +36,8 @@ I've been running an unofficial viewers/donations tracker for the biannual [Game
 | 2015 | [AGDQ](https://irc.alligatr.co.uk/agdq15/) | [SGDQ](https://irc.alligatr.co.uk/sgdq15/) |
 | 2014 | [AGDQ](https://irc.alligatr.co.uk/agdq14/) | [SGDQ](https://irc.alligatr.co.uk/sgdq14/) |
 | 2013 | | [SGDQ](https://irc.alligatr.co.uk/sgdq/) |
+
+[Comparison of the donation total over time for all the marathons](http://irc.alligatr.co.uk/agdq-comparison/)
 #### project ####
 title: Hot Air
 ----
@@ -47,7 +49,7 @@ source: https://github.com/Alligator/awful-holiday-jam-2018
 ----
 image: hotair.png
 ----
-technology: Written in wren using [sponge's 2D game engine](https://github.com/sponge/sdlgame/).
+technology: Written in wren using [slate2d](https://github.com/sponge/slate2d).
 ----
 body: A balloon fight-ish arcade game about avoiding awkward family conversations at Christmas. Me and [sponge](http://d8d.org/)'s entry into the [Awful Holiday Jam 2018](https://itch.io/jam/awful-holiday-2018).
 #### project ####
@@ -61,7 +63,7 @@ source: https://github.com/sponge/sdlgame/tree/master/clive
 ----
 image: battlement.png
 ----
-technology: Written in wren using [sponge's 2D game engine](https://github.com/sponge/sdlgame/).
+technology: Written in wren using [slate2d](https://github.com/sponge/slate2d).
 ----
 body: The story of one fictional game developers career, told tower defense game by tower defense game. Me and [sponge](http://d8d.org/)'s entry into the [Awful Summer Jam 2018](https://itch.io/jam/awful-summer-jam-2018).
 #### project ####
