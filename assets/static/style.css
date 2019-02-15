@@ -1,8 +1,14 @@
 body {
-    font-family: sans-serif;
+    font-family: 'Inconsolata', 'Source Code Pro', 'Menlo', 'Consolas', monospace;
     width: 76ex;
     margin: 0 auto;
     line-height: 1.5;
+}
+
+h1, h2 {
+    font-weight: normal;
+    margin: 1.5rem 0;
+    padding: 0;
 }
 
 a {
@@ -21,8 +27,8 @@ a:hover {
     justify-content: space-between;
     padding: 1rem;
     margin: 1rem 0;
-    /* background-color: #ecf0f2; */
-    border: 2px solid #e7e7e7;
+    background-color: #f4f4f4;
+    border: 1px solid #e7e7e7;
     /* border-top: 1px solid #ccc; */
 }
 .project:last-child {
@@ -42,7 +48,7 @@ a:hover {
     margin-bottom: .5rem;
 }
 .project__year {
-    font-size: .8rem;
+    /* font-size: .8rem; */
 }
 
 .cv {
