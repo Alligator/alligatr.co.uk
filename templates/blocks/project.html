@@ -1,12 +1,12 @@
   <div class="project">
     <div class="project__body">
-      <div class="project__title">
+      <h3 class="project__title">
         {% if this.url|string|length > 0 %}
         <a href="{{ this.url }}">{{ this.title }}</a>
         {% else %}
         {{ this.title }}
         {% endif %}
-      </div>
+      </h3>
       <div class="project__year">
         {{ this.year }}
       </div>
