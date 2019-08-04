@@ -1,24 +1,13 @@
 <!doctype html>
-<meta charset="utf-8">
-<link rel="stylesheet" href="{{ '/static/style.css'|url }}">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>alligatr</title>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="{{ '/static/style.css'|url }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>alligatr</title>
+</head>
 <body>
   <header>
     <h1>alligatr</h1>
-    <nav>
-      <!-- <ul class="nav navbar-nav">
-        <li{% if this._path == '/' %} class="active"{% endif
-          %}><a href="{{ '/'|url }}">Welcome</a></li>
-        {% for href, title in [
-          ['/projects', 'Projects'],
-          ['/about', 'About']
-        ] %}
-          <li{% if this.is_child_of(href) %} class="active"{% endif
-            %}><a href="{{ href|url }}">{{ title }}</a></li>
-        {% endfor %}
-      </ul> -->
-    </nav>
   </header>
   <div class="page">
     {% block body %}{% endblock %}
