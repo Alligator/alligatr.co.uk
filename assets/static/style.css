@@ -1,10 +1,10 @@
 body {
-    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-family: 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
     font-size: 12pt;
-    width: 76ex;
+    max-width: 76ex;
     margin: 0 auto;
     padding: 0 1rem;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 h1 { font-size: 20pt; }
@@ -31,9 +31,6 @@ a:hover {
 }
 
 .project {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
     padding: 1rem;
     margin: 1rem 0;
     border: 1px solid #e7e7e7;
@@ -43,49 +40,48 @@ a:hover {
     /* border-bottom: 1px solid #ccc; */
 }
 .project__image {
-    display: inline-block;
+    display: block;
     width: 100px;
     min-width: 100px;
     height: 100px;
+    margin-left: 1rem;
 }
-.project__title {
+.project__header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 1rem;
 }
+.project__header h3 {
+    margin-bottom: .5rem;
+}
+
 .project__body p {
     margin-top: .5rem;
     margin-bottom: .5rem;
 }
-.project__year {
-    /* font-size: .8rem; */
-}
 
 .cv {
-    font-family: 'Georgia', serif;
-    font-size: 12pt;
+    font-family: 'Crimson Text', 'Georgia', serif;
+    font-size: 14pt;
+    line-height: 1.5;
     margin: 1rem auto;
 }
 @media print {
     .cv {
         font-size: 10pt;
-    }
-    .cv {
-        max-width: 76ex;
+        padding: 2rem 4rem;
     }
 }
 .cv header {
     text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 1rem;
 }
 .cv header .name {
-    font-size: 18pt;
+    font-size: 20pt;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     /* letter-spacing: .1rem; */
-}
-.cv h2 {
-    font-weight: normal;
-    font-size: 12pt;
-    margin-bottom: 0;
-    border-bottom: 1px solid #aaa;
-}
-.cv h2 + p {
-    margin-top: 0;
 }
 .experience {
     margin-bottom: 1rem;
@@ -100,4 +96,29 @@ a:hover {
 .experience__body ul {
     margin: 0;
     padding-left: 1rem;
+}
+
+.cv section {
+    display: flex;
+}
+
+.cv section h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10pt;
+    flex-shrink: 0;
+    flex-basis: 7em;
+    border-right: 1px solid black;
+    margin: 0;
+    padding-top: .4rem;
+    padding-right: 1rem;
+    text-transform: uppercase;
+    text-align: right;
+}
+
+.cv .section-content {
+    padding-left: 1rem;
+}
+
+.cv .section-content > p:first-child {
+    margin-top: 0;
 }
