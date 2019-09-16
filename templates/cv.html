@@ -1,25 +1,40 @@
 <!doctype html>
 <meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css?family=Crimson+Text:400,400i+Montserrat:500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ '/static/style.css'|url }}">
 <title>Reece Selwood - CV</title>
+
 <body>
   <div class="cv">
     <header>
       <div class="name">{{ this.name }}</div>
-      <div class="email">
+      <div>
         <a href="mailto:{{ this.email }}">{{ this.email }}</a>
+      </div>
+      <div>
         <a href="{{ this.github }}">GitHub</a>
       </div>
     </header>
 
-    <h2>Skills</h2>
-    {{ this.skills }}
+    <section>
+      <h2>Skills</h2>
+      <div class="section-content">
+        {{ this.skills }}
+      </div>
+    </section>
 
-    <h2>Experience</h2>
-    {{ this.experience }}
+    <section>
+      <h2>Experience</h2>
+      <div class="section-content">
+        {{ this.experience }}
+      </div>
+    </section>
 
-    <h2>Education</h2>
-    {{ this.education }}
+    <section>
+      <h2>Education</h2>
+      <div class="section-content">
+        {{ this.education }}
+      </div>
+    </section>
   </div>
 </body>
-
