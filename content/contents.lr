@@ -2,7 +2,7 @@ _model: page
 ---
 body:
 
-I'm **Reece Selwood/alligator**. I'm based in Kent in the UK and I do weird programming things.
+I'm **Reece Selwood** aka **alligator**. I'm based in Kent in the UK and I do weird programming things.
 
 [CV](/cv)<br />
 [contact@alligatr.co.uk](mailto:contact@alligatr.co.uk)<br />
@@ -10,6 +10,24 @@ I'm **Reece Selwood/alligator**. I'm based in Kent in the UK and I do weird prog
 ---
 projects:
 
+#### project ####
+title: talkbox
+----
+year: 2019
+----
+url: https://github.com/alligator/talkbox
+----
+source: https://github.com/alligator/talkbox
+----
+image: talkbox.png
+----
+technology: Written in JavaScript
+----
+body:
+
+A discord bot, designed to be simple to understand and easy to extend.
+
+It's based around plugins that add commands to the bot.Plugins can be added to and removed from the bot at run-time and it's pretty fault tolerant so a bad plugin won't take the whole bot down. This is to make adding new plugins easy and fast.
 #### project ####
 title: Games Done Quick Tracker
 ----
