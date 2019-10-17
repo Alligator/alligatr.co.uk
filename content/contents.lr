@@ -113,20 +113,6 @@ technology: Written in Lua, for the PICO-8 fantasy console.
 ----
 body: A driving game about a dad mostly yelling. My entry into the GitHub Game Jam 2017. It came 15th overall out of 206 entries.
 #### project ####
-title: Lake.js
-----
-year: 2012
-----
-url: http://alligatr.co.uk/lake.js/
-----
-source: https://github.com/Alligator/lake.js
-----
-image: 
-----
-technology: 
-----
-body: Someone said it would be funny to remake the old Java lake applet effect using JavaScript and the canvas, so I did the damn thing.
-#### project ####
 title: SVG Sparklines
 ----
 year: 2014
@@ -140,6 +126,20 @@ image:
 technology: 
 ----
 body: A tiny JavaScript library to render sparklines in HTML content.
+#### project ####
+title: Lake.js
+----
+year: 2012
+----
+url: http://alligatr.co.uk/lake.js/
+----
+source: https://github.com/Alligator/lake.js
+----
+image: 
+----
+technology: 
+----
+body: Someone said it would be funny to remake the old Java lake applet effect using JavaScript and the canvas, so I did the damn thing.
 #### project ####
 title: Other stuff
 ----

@@ -1,5 +1,5 @@
 body {
-    font-family: 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
+    font-family: 'Segoe UI', 'Helvetica', sans-serif;
     font-size: 12pt;
     max-width: 76ex;
     margin: 0 auto;
@@ -10,34 +10,30 @@ body {
 h1 { font-size: 20pt; }
 h2 { font-size: 16pt; }
 h3 {
+  font-family: 'Segoe UI Black', 'Segoe UI', 'Helvetica', sans-serif;
   font-size: 14pt;
   margin: 0 0 1rem 0;
-  font-weight: normal;
 }
 
 h1, h2 {
-    font-weight: normal;
+    font-family: 'Segoe UI Black', 'Segoe UI', 'Helvetica', sans-serif;
     margin: 1.5rem 0;
     padding: 0;
 }
 
 a {
     color: #1a79c6;
+    text-decoration: none;
 }
 
 a:hover {
     color: #33bbdf;
-    text-decoration: underline;
 }
 
 .project {
     padding: 1rem;
     margin: 1rem 0;
-    border: 1px solid #e7e7e7;
-    /* border-top: 1px solid #ccc; */
-}
-.project:last-child {
-    /* border-bottom: 1px solid #ccc; */
+    border: 2px solid #e7e7e7;
 }
 .project__image {
     display: block;
@@ -66,7 +62,7 @@ a:hover {
         color: white;
     }
     .project {
-        border: 1px solid #444;
+        border: 2px solid #444;
     }
     a {
         color: #3893dd;
