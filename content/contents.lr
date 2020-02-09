@@ -11,6 +11,20 @@ I'm **Reece Selwood** aka **alligator**. I'm based in Kent in the UK and I do we
 projects:
 
 #### project ####
+title: Games Done Quick Tracker
+----
+year: 2013 onwards
+----
+url: https://gdq.alligatr.co.uk/
+----
+source: https://github.com/alligator/agdq-tracker
+----
+image: 
+----
+technology: The UI is written in JavaScript, using d3 for charts. The data fetching parts are written in Python.
+----
+body: I've been running an unofficial viewers/donations tracker for the biannual [Games Done Quick](https://gamesdonequick.com/) marathons since 2013.
+#### project ####
 title: talkbox
 ----
 year: 2019
@@ -29,11 +43,39 @@ A discord bot, designed to be simple to understand and easy to extend.
 
 It's based around plugins that add commands to the bot.Plugins can be added to and removed from the bot at run-time and it's pretty fault tolerant so a bad plugin won't take the whole bot down. This is to make adding new plugins easy and fast.
 #### project ####
-title: Games Done Quick Tracker
+title: SVG Sparklines
 ----
-year: 2013 onwards
+year: 2014
 ----
-url: https://irc.alligatr.co.uk/agdq18/
+url: http://alligatr.co.uk/sparklines/
+----
+source: https://github.com/Alligator/sparklines
+----
+image: 
+----
+technology: 
+----
+body: A tiny JavaScript library to render sparklines in HTML content.
+#### project ####
+title: Lake.js
+----
+year: 2012
+----
+url: http://alligatr.co.uk/lake.js/
+----
+source: https://github.com/Alligator/lake.js
+----
+image: 
+----
+technology: 
+----
+body: Someone said it would be funny to remake the old Java lake applet effect using JavaScript and the canvas, so I did the damn thing.
+#### project ####
+title: Other stuff
+----
+year: 
+----
+url: 
 ----
 source: 
 ----
@@ -43,19 +85,14 @@ technology:
 ----
 body:
 
-I've been running an unofficial viewers/donations tracker for the biannual [Games Done Quick](https://gamesdonequick.com/) marathons since 2013.
+[Blog](http://blog.alligatr.co.uk/) - rarely updated.<br />
+[pizza.alligatr](http://pizza.alligatr.co.uk/) - experiments that don't fit anywhere.<br />
+[old alligatr](static/canvas-things.html) - even older experiments that don't fit anywhere.<br />
+---
+title: 
+---
+games:
 
-| Links |
-|------|-|-|
-| 2019 | [AGDQ](https://irc.alligatr.co.uk/agdq19/) |  [SGDQ](https://irc.alligatr.co.uk/sgdq19/)|
-| 2018 | [AGDQ](https://irc.alligatr.co.uk/agdq18/) | [SGDQ](https://irc.alligatr.co.uk/sgdq18/) |
-| 2017 | [AGDQ](https://irc.alligatr.co.uk/agdq17/) | [SGDQ](https://irc.alligatr.co.uk/sgdq17/) |
-| 2016 | [AGDQ](https://irc.alligatr.co.uk/agdq16/) | [SGDQ](https://irc.alligatr.co.uk/sgdq16/) |
-| 2015 | [AGDQ](https://irc.alligatr.co.uk/agdq15/) | [SGDQ](https://irc.alligatr.co.uk/sgdq15/) |
-| 2014 | [AGDQ](https://irc.alligatr.co.uk/agdq14/) | [SGDQ](https://irc.alligatr.co.uk/sgdq14/) |
-| 2013 | | [SGDQ](https://irc.alligatr.co.uk/sgdq/) |
-
-[Comparison of the donation total over time for all the marathons](http://irc.alligatr.co.uk/agdq-comparison/)
 #### project ####
 title: Hot Air
 ----
@@ -112,51 +149,3 @@ image: dad.png
 technology: Written in Lua, for the PICO-8 fantasy console.
 ----
 body: A driving game about a dad mostly yelling. My entry into the GitHub Game Jam 2017. It came 15th overall out of 206 entries.
-#### project ####
-title: SVG Sparklines
-----
-year: 2014
-----
-url: http://alligatr.co.uk/sparklines/
-----
-source: https://github.com/Alligator/sparklines
-----
-image: 
-----
-technology: 
-----
-body: A tiny JavaScript library to render sparklines in HTML content.
-#### project ####
-title: Lake.js
-----
-year: 2012
-----
-url: http://alligatr.co.uk/lake.js/
-----
-source: https://github.com/Alligator/lake.js
-----
-image: 
-----
-technology: 
-----
-body: Someone said it would be funny to remake the old Java lake applet effect using JavaScript and the canvas, so I did the damn thing.
-#### project ####
-title: Other stuff
-----
-year: 
-----
-url: 
-----
-source: 
-----
-image: 
-----
-technology: 
-----
-body:
-
-[Blog](http://blog.alligatr.co.uk/) - rarely updated.<br />
-[pizza.alligatr](http://pizza.alligatr.co.uk/) - experiments that don't fit anywhere.<br />
-[old alligatr](static/canvas-things.html) - even older experiments that don't fit anywhere.<br />
----
-title: 
