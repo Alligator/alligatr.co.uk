@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}{{ this.title }}{% endblock %}
+{% block header %}
+<h1>
+  <a href="{{ '/blog'|url }}">alligator's blog</a>
+</h1>
+{% endblock %}
+{% block body %}
+<h2>{{ this.title }}</h2>
+{{ this.date|dateformat('medium') }}
+<div class="blog-post">
+  {{ this.body }}
+</div>
+<a href="{{ '/blog'|url }}">blog index</a>
+{% endblock %}

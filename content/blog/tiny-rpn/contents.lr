@@ -1,0 +1,53 @@
+title: A tiny RPN calculator
+---
+body:
+
+I made a tweet sized rpn calculator, available
+[here](http://pizza.alligatr.co.uk/rpn.html). Here's the code with no
+formatting:
+
+```javascript
+function rpn(t,s){for(s=[],t=t.split(' '),i=0;c=t[i++];)s.push((n=parseFloat(c))?n:eval(s.splice(-2,1)[0]+c[0]+s.pop()));return s;}
+```
+
+Here's a breakdown of the code:
+
+    function rpn(t,s){
+
+Nothing much to see here. `t` is the input string and `s` is the stack,
+defined here for reasons shown later.
+
+    for(s=[],t=t.split(' '),i=0;c=t[i++];)
+
+This is the main loop, `s` is initialised and `t` is split into tokens.
+The tokens are iterated over and the current token is stored in `c`. This
+loop works because in javascript strings are &lsquo;truthy&rsquo;, so the
+loop will continue until c becomes undefined (which happens when i is larger
+than the length of the token list.)
+
+As an aside, note that the value of &lsquo;`a = 12`&rsquo; is `12` and the
+value of &lsquo;`var a = 12`&rsquo; is `undefined`. This is what allows
+&lsquo;`c=t[i++]`&rsquo; to work.
+
+    s.push(...);
+
+Something is always pushed to the stack, either a result or a new value.
+
+    (n=parseFloat(c))`<br />`?n:`<br />`eval(s.splice(-2,1)[0]+c[0]+s.pop())
+
+First, try and parse a float from the token, if this worked push it to
+the stack and continue the loop. Otherwise, `eval` the second topmost value
+on the stack, plus the first character of the current token, plus the
+topmost value on the stack and push the result to the stack.
+This means if the stack is `[1, 2]` and the current operator is `+` we run
+&lsquo;`eval('1+2')`&rsquo;.
+
+    return s;}
+
+Return the stack. This is why s needed to be defined as an argument to the
+function. If it was defined in the loop like our other variables it wouldn't
+be avilable here.
+
+There you have it, a tiny rpn calculator that's not very safe.
+---
+date: 2013-11-14

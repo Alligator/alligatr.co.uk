@@ -1,0 +1,44 @@
+title: a disorganised collection of thoughts about vue
+---
+body:
+
+I'm trying to learn vue, by rewriting a react application in it. Here are some disorganised thoughts.
+
+At first I thought it felt a bit more prescriptive than React, but on reflection that's not quite it. The surface area of the vue API seems quite large, so I don't think it's trying to force you to do things in a particular way. What it actually is, is that it feels more *magic* than React.
+
+JSX is actually fairly simple, rendering a component just compiles down to a function call. As a result of that, you can use regular JavaScript constructs. Want to loop over an array and render a component for each? Use map. Want to conditionally render something? Use a ternary. Those are *actual* loops and *actual* ternaries.
+
+Vue on the other hand, uses a set of custom attributes in the template to achieve the same thing. `v-for`, `v-if` and so on. The level of abstraction is useful for reducing boilerplate (think about the number of times you've had to write `{condtion && (stuff to render)}`) but comes at the cost of simplicity. What if my use case is weird and doesn't quite fit in with the set of attributes vue provides? I don't know if that will happen, but I *feel* like it's going to happen sooner or later, and then I don't know what the recourse is.
+
+------
+
+**Update** turns out [vue supports render functions](https://vuejs.org/v2/guide/render-function.html), for when you need to go hog wild, so I guess that would be the recourse.
+
+------
+
+Having said that, it quite often feels quite react-y and I imagine some of the same ideas and pattern will come into play. Components can be stateless or stateful, and they compose in similar ways. Of course this metaphor all breaks down when data binding enters the picture. I've had a fairly negative experience with data binding in the past (backbone, ugh, *knockout* double ugh) and I haven't used vue enough to say if it'll be any more positive.
+
+Actually, the very small amount of knockout I've used reminds me of vue in some ways. Custom attributes that express how certain things on an element should be bound to properties. Hmm.
+
+## Performance
+
+React is fast in the simple case. It's not hard to write *terribly* performing react code though. Keeping things performing well requires a little bit of careful thought.
+
+Vue, via it's explicit binding, knows all of the things that might cause a component to re-render, so it can basically implement a smart `shouldComponentUpdate` for every component. That should make it generally faster in a large application, but I'm just theorising here.
+
+## Composition
+
+We've all gotten (somewhat) used to the idea of presentational and container components in react as a Good Thing, even if we don't always actually follow the pattern. You can implement the same pattern in vue too, it has pure functional components, which enforce them being dumb presentation only components.
+
+The higher level patterns that exist in react for composition (compound components, render props, children as a function and so on) are more react-specific, but vue does have a concept similar to props.children in react called slots. I think you'd be able to implement compound components in quite similar way to react in vue.
+
+OK, actually the [named slots](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) look really interesting. That solves a bunch of the problems the patterns I mentioned before are aiming to solve. It's a bit odd, since the child component is still responsible for the *order* the slots are rendered in, which isn't the case with a compound component, but it's still a bit nicer than having to pass components in props.
+
+## Styling
+
+React doesn't care how you style things. That means you end up with inline styles, styled components, style objects and more. Vue (seemingly) has one way to apply styles.
+
+In vue you use style tags, that look a lot like CSS modules. They can be scoped to a particular component or applied globally and live alongside the component. This pattern is actually very close to what I've settled on as my preferred way of styling react components, which is interesting. I've settled on CSS modules and keeping all of the styles with the component, using class names to handle styling changes based on props.
+
+---
+date: 2019-11-23

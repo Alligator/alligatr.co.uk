@@ -1,0 +1,164 @@
+title: neovim tips from well wasted workdays
+---
+date: 2020-04-25
+---
+body:
+
+## productivity
+----
+Perform common tasks in less time.
+
+### use space as your leader
+This lets you hit the leader with both of your thumbs.
+```vim
+let mapleader = " "
+```
+
+I believe I learned about this from [this article](https://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/)
+which has some other good tips, namely mapping things to leader based key
+combinations:
+
+```vim
+nnoremap <Leader>w :w<CR>
+nnoremap <Leader>f :NERDTreeToggle<CR>
+```
+
+### create ad-hoc build/run mappings
+
+This naturally follows on from the previous tip. Often all I need as a
+build tool is an ad-hoc binding to run a shell command. I use `<Leader>m`
+for this:
+
+```
+nnoremap <Leader>m :!python %<CR>
+nnoremap <Leader>m :!make<CR>
+nnoremap <Leader>m :!npm run build<CR>
+```
+
+### use a key sequence instead of escape
+
+Escape is a long way away from the home row:
+
+```
+inoremap fd ^[
+```
+
+`jj` is often used for this, I prefer `fd` because it's faster to use
+two fingers to press two keys. The `^[` is inserted via `<c-v>escape`.
+
+### keep the cursor centered when jumping beteween paragrphs
+
+{ and } are great for hopping around blocks of code, with these mappings
+you keep the buffer centered on what you're looking at while doing so.
+
+```
+nnoremap { {zz
+nnoremap } }zz
+```
+
+## utility
+----
+Useful tidbits I've created or collected.
+
+### open windows explorer with the current file highlighted
+
+```vim
+function! OpenExplorer()
+    let path = expand('%:p')
+    let path = substitute(path, "/", "\\", "g")
+    execute "!start explorer /select," . path . "\r"
+endfunction
+
+if has("win32")
+    nnoremap <F11> :call OpenExplorer()<CR>
+endif
+```
+This was surprisingly tricky. It took much longer than it should have to
+discover I needed to add a trailing carriage return to the path for this to
+work.
+
+### send a command to a terminal in another buffer
+
+In the terminal buffer, run this to find the job id of the terminal:
+
+```
+:echo b:terminal_job_id
+```
+
+Then in any buffer, run this to send text to it:
+
+```
+:call jobsend(<job id>, "text")
+```
+
+Useful when combined with an ad-hoc mapping:
+
+```
+nnoremap <Leader>m :call jobsend(<job id>, "python main.py")<CR>
+```
+
+### run a command without changing the view of the current buffer
+
+A very simple but useful function inspired by emacs'
+[excursions](https://www.gnu.org/software/emacs/manual/html_node/elisp/Excursions.html):
+
+```
+function! ExcursionExec(cmd)
+    let l:winview = winsaveview()
+    execute a:cmd
+    call winrestview(l:winview)
+endfunction
+```
+
+I use this in a mapping that copies the current file to the system clipboard:
+
+```
+nnoremap <Leader>yf :call ExcursionExec('normal gg"+yG')<CR>
+```
+
+### format JSON
+
+Format json using nodejs:
+
+```
+command! FormatJson %!node -e "var fs = require('fs'); console.log(JSON.stringify(JSON.parse(fs.readFileSync(process.stdin.fd, 'utf-8')), null, 2));"
+```
+
+### keep the buffers equal size in diff mode
+
+Make vim behave a more like a other diff programs:
+
+```
+if &diff
+    set equalalways
+    au VimResized * wincmd =
+endif
+```
+
+### turn off the search highlight when you move
+
+No more `:nohlsearch`
+
+```
+noremap <expr> <Plug>(StopHL) execute('nohlsearch')
+noremap! <expr> <Plug>(StopHL) execute('nohlsearch')
+
+fu! StopHL()
+  if !v:hlsearch || mode() isnot 'n'
+    return
+  else
+    sil call feedkeys("\<Plug>(StopHL)", 'm')
+  endif
+endfu
+
+augroup SearchHighlight
+  au!
+  au CursorMoved * call StopHL()
+  au InsertEnter * call StopHL()
+augroup end
+```
+
+There are plugins to do this but this turns out to be all I needed. This
+is taken from [this GitHub issue](https://github.com/neovim/neovim/issues/5581).
+You can follow the thread there to understand how and why this works, and why
+all of it is neccessary.

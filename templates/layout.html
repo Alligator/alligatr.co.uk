@@ -3,11 +3,15 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="{{ '/static/style.css'|url }}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>alligatr</title>
+  <title>{% block title %}alligatr{% endblock %}</title>
 </head>
 <body>
   <header>
-    <h1>alligatr</h1>
+    {% block header %}
+    <h1>
+      <a href="{{ '/'|url }}">alligatr</a>
+    </h1>
+    {% endblock %}
   </header>
   <div class="page">
     {% block body %}{% endblock %}

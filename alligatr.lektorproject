@@ -3,3 +3,6 @@ name = alligatr
 
 [servers.ghpages]
 target = ghpages://Alligator/alligator.github.io?cname=alligatr.co.uk
+
+[packages]
+lektor-markdown-highlighter = 0.3.1

@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block title %}alligator's blog{% endblock %}
+{% block header %}
+<h1>
+  <a href="{{ '/blog'|url }}">alligator's blog</a>
+</h1>
+{% endblock %}
+{% block body %}
+  {% for post in this.children %}
+  <div>
+    {{ post.date|dateformat('YYYY-MM-dd') }}
+    &nbsp;
+    <a href="{{ post|url }}">
+      {{ post.title }}
+    </a>
+  </div>
+  {% endfor %}
+  <p>
+    <a href="{{ '/'|url }}">home</a>
+  </p>
+{% endblock %}
