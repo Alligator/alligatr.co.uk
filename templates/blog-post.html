@@ -5,11 +5,29 @@
   <a href="{{ '/blog'|url }}">alligator's blog</a>
 </h1>
 {% endblock %}
+
 {% block body %}
 <h2>{{ this.title }}</h2>
 {{ this.date|dateformat('medium') }}
 <div class="blog-post">
+
+  {% if this.toc %}
+  <h2>contents</h2>
+  <ul>
+  {% for item in this.body.toc recursive %}
+    <li>
+      <a href="#{{ item.anchor }}">{{ item.title }}</a>
+      {% if item.children %}
+      <ul>{{ loop(item.children) }}</ul>
+      {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+
   {{ this.body }}
 </div>
-<a href="{{ '/blog'|url }}">blog index</a>
+<p>
+  <a href="{{ '/blog'|url }}">blog index</a>
+</p>
 {% endblock %}
