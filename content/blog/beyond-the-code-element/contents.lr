@@ -1,0 +1,142 @@
+title: beyond the code element
+---
+body:
+
+While reading [the old new thing](https://devblogs.microsoft.com/oldnewthing/) I noticed that keyboard shortcuts in articles are shown using the `<kbd>` element, like so:
+
+```html
+<kbd>Alt</kbd> + <kbd>f4</kbd>
+```
+
+This element was new to me, so I looked at [the spec](https://html.spec.whatwg.org/multipage/text-level-semantics.html) and found there's a handful of useful elements for various computer-y things that, besides the `code` element, I'd never noticed before. Namely `kbd`, `var` and `samp`.
+
+At the time of writing, this blog doesn't have custom CSS for these elements beyond setting the font, so you will see them however your browser decides to render them.
+
+## kbd
+
+[Spec](https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-var-element)
+
+`kbd` represents user input. This is typically keyboard input, but could be other sorts of input, such as voice.
+
+Here's some example markup:
+
+```html
+Press <kbd>Alt</kbd> + <kbd>F4</kbd> to exit.
+```
+
+And the rendered result:
+
+Press <kbd>Alt</kbd> + <kbd>F4</kbd> to exit.
+
+## var
+
+[Spec](https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-var-element)
+
+`var` represents a variable. The spec has a fairly broad definition of this:
+
+> This could be an actual variable in a mathematical expression or programming context, an identifier representing a constant, a symbol identifying a physical quantity, a function parameter, or just be a term used as a placeholder in prose.
+
+Example markup:
+
+```html
+<var>foo</var> + <var>bar</var> = <var>baz</var>
+```
+
+Result:
+
+<var>foo</var> + <var>bar</var> = <var>baz</var>
+
+## samp
+
+[Spec](https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-samp-element)
+
+`samp` represents output from a program or system.
+
+
+Example markup
+
+```html
+The system will print <samp>Bad command or file name</samp>.
+```
+
+Result:
+
+The system will print <samp>Bad command or file name</samp>.
+
+## combinations
+
+These elements can be combined in interesting ways, for example `code` and `samp` elements can used to show input and output:
+
+```html
+<pre>
+<code>console.log('hello');</code>
+<samp>hello</samp>
+</pre>
+```
+
+By default the `code` and `samp` elements use a monospace font, so without extra styling this will look like a standard pre block:
+
+<pre>
+<code>console.log('hello');</code>
+<samp>hello</samp>
+</pre>
+
+Of course you can go nuts styling those elements if you so wish:
+
+<style>
+.styled-pre code {
+  color: lightpink;
+}
+.styled-pre code:before {
+  content: ' INPUT: '
+}
+
+.styled-pre samp {
+  color: lightgreen;
+}
+.styled-pre samp:before {
+  content: 'OUTPUT: '
+}
+</style>
+
+<pre class="styled-pre">
+<code>console.log('hello');</code>
+<samp>hello</samp>
+</pre>
+
+If the `kbd` element is nested inside of a `samp` element, it represents user input being echoed back by the system, as would happen at a command interpreter:
+
+```html
+<pre><samp>&gt; <kbd>wait</kbd>
+time passes...
+</samp></pre>
+```
+
+<pre><samp>&gt; <kbd>wait</kbd>
+time passes...
+</samp></pre>
+
+A `samp` nested inside a `kbd` element represents input based on system output, for example selecting a menu item being displayed by the system. This ends up being quite verbose, especially if there are multiple steps involved:
+
+```html
+<kbd><samp>File</samp></kbd> &gt; <kbd><samp>Open</samp></kbd>
+```
+
+So the spec recommends just using `kbd` instead:
+
+```html
+<kbd>File &gt; Open</kbd>
+```
+
+They both render similarly, although the ` > ` in the first example isn't in a monospace font, so it looks a little odd:
+
+<kbd><samp>File</samp></kbd> &gt; <kbd><samp>Open</samp></kbd>
+
+and just the `kbd` tag:
+
+<kbd>File &gt; Open</kbd>
+
+I always enjoy finding standard HTML elements to replace what would have previously been a div with a class.
+
+---
+date: 2020-06-06
