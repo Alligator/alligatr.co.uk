@@ -6,7 +6,7 @@
 </h1>
 {% endblock %}
 {% block body %}
-  {% for post in this.children %}
+  {% for post in this.children if post.date %}
   <div>
     {{ post.date|dateformat('YYYY-MM-dd') }}
     &nbsp;
@@ -15,7 +15,10 @@
     </a>
   </div>
   {% endfor %}
+
+  <p><a href="atom.xml">feed</a></p>
+
   <p>
-    <a href="{{ '/'|url }}">home</a>
+    <a href="{{ '/'|url }}">who?</a>
   </p>
 {% endblock %}
