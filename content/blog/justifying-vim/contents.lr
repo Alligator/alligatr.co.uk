@@ -1,0 +1,59 @@
+title: justifying vim
+---
+body:
+
+ideas
+- vim: a place for virtual pacing
+- stringing together many small satisfying actions
+  - lots of tiny pleasure centre pokes
+  - focus quadrants?
+  - zen games
+- my hose hanging from a table
+
+Say you want to turn a hashmap of key-value pairs into a URL query string, like so:
+
+```javascript
+// input
+{ "name": "alligator", "status": "sleepy" }
+
+// output
+"name=alligator&status=sleepy"
+```
+
+Ignoring the fiddly URL escaping bit, think about how you'd do this in your programming language of choice. I suspect you thought of a way pretty quickly. For many of us this is code we've already written, perhaps not to solve this exact problem, but to solve a hundred other similar problems.
+
+Here is the version that fell out of my fingers:
+
+```javascript
+Object.keys(pairs)
+  .map(key => `${key}=${pairs[key]}`)
+  .join('&');
+```
+
+I do mean *fell out of my fingers* too, I thought no more about the individual characters in that solution while typing it than you did the individual characters in this sentence while reading it.
+
+This is why I believe vim is to the code as the washing up is to the podcast. It's giving your brain *just enough* to get on with to stop you from wandering.
+
+## vim is the good enough solution
+Vim gives you a set of tools. Some of them are imperfect, or weird, or seemingly useless. You can use as many or as few of them as you like. These tools range from micro (e.g. moving around using complex motions) to macro (e.g. macros, amusingly).
+
+A little while ago, I gave my dad a hand concreting a base for his new shed. We needed to fill buckets with water to mix the concrete, so here's what we rigged up:
+
+It's a hose hanging from a table, at the right height to just hang inside the bucket. The attachment on the end of the hose has a locking trigger, you can turn it on to start filling, wander away to prepare the rest of the mix, then come back and turn it off when the bucket is full.
+
+When I look at my vimrc, I see many hoses hanging from tables. Quick ad-hoc solutions that solved a specific problem as best as possible with the tools available. Watch any craftsman working and you'll see plenty of these sorts of solutions. Offcuts of wood and metal used to make guides and jigs and various other things.
+
+One of my favourites are ad-hoc build/run mappings, that only like for as long as that vim session:
+```
+nmap <Leader>m :!python %<CR>
+nmap <Leader>m :!make<CR>
+nmap <Leader>m :!npm run start<CR>
+```
+
+## references
+http://herebeseaswines.net/essays/2020-05-22-hagoromo-chalks-progress-and-vim
+
+---
+date: 2020-05-24
+---
+_hidden: yes
