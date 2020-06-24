@@ -1,0 +1,63 @@
+title: k, z but smaller
+---
+body:
+
+Maybe you've heard of [z](https://github.com/rupa/z) or [zoxide](https://github.com/ajeetdsouza/zoxide). These keep track of frequently visited directories and provide a command to jump to them. For example, if you often navigate to `/var/www`, `z www` will take you there from anywhere in the filesystem.
+
+While looking into zoxide, I saw the bash function in [this comment](https://lobste.rs/s/gsivtu/zoxide_new_cd_command_written_rust_learns#c_p6woex) that does *almost* the same thing. I've had it in my bashrc ever since. Turns out all I needed was thirteen lines of bash; [worse is better](https://www.jwz.org/doc/worse-is-better.html) rears its ugly head again.
+
+Here's the function:
+
+```sh
+k() {
+	if [ -z $1 ]; then
+		echo $PWD >> ~/.k
+	else
+		K=~/.k
+		case $1 in
+		clean)	sort $K | uniq > ${K}.tmp && mv ${K}.tmp ${K};;
+		rm)	sed -i -E "\#^${PWD}\$#d" ${K};;
+		ls)	cat ${K};;
+		*)	cd "$(grep -e "$1" ${K} | head -n 1)";;
+		esac
+	fi
+}
+```
+
+Used like so:
+```
+go to some directory
+  $ cd /var/www
+
+add it to the list
+  $ k
+
+go somewhere else
+  $ cd /
+
+go back to the saved directory
+  $ k www
+  $ pwd
+  /var/www
+
+show the saved directories
+  $ k ls
+  /var/www
+
+remove a saved directory
+  $ k rm /var/www
+```
+
+I only navigate to handful of directories regularly, so building the list myself over time is no big deal.
+
+For fun, here's a comparison of the lines of code in k, z and zoxide (as reported by cloc):
+
+tool   | loc
+-------|------
+k      | 13 (shell)
+z      | 191 (shell)
+zoxide | 1093 (rust), 110 (shell)
+
+---
+date: 2020-06-24
+
