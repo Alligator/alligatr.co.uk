@@ -40,8 +40,12 @@ pre {
 }
 
 hr {
-  border: 1px solid #ccc;
+  border: 1px solid #888;
   height: 0px;
+}
+
+ul {
+  padding-left: 1.2rem;
 }
 
 .project {
@@ -75,6 +79,20 @@ hr {
 
 img {
   max-width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+}
+th {
+  border-bottom: 1px solid #555;
+}
+th, td {
+  padding: .25rem .5rem;
+  text-align: left;
+}
+td {
+  border-bottom: 1px solid #444;
 }
 
 /* syntax highlighting */
