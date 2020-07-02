@@ -48,7 +48,7 @@ remove a saved directory
   $ k rm /var/www
 ```
 
-Saved directories are stored `~/.k`. This list must be built manually by running the `k` command in directories you want to save, but I didn't find this difficult. There's only a handful of directories I need quick access to.
+Saved directories are stored in `~/.k`. This list must be built manually by running the `k` command in directories you want to save, but I didn't find this difficult. There's only a handful of directories I need quick access to.
 
 Finally, a comparison of the lines of code in k, z and zoxide (as reported by cloc):
 
