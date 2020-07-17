@@ -2,7 +2,7 @@ title: k, z but smaller
 ---
 body:
 
-You may heard of [z](https://github.com/rupa/z) or [zoxide](https://github.com/ajeetdsouza/zoxide). These tools keep track of frequently visited directories and provide a command to jump to them. For example, if you are often in `/var/www` then executing `z www` will take you there from any directory.
+You may have heard of [z](https://github.com/rupa/z) or [zoxide](https://github.com/ajeetdsouza/zoxide). These tools keep track of frequently visited directories and provide a command to jump to them. For example, if you are often in `/var/www` then executing `z www` will take you there from any directory.
 
 I present a tiny shell script alternative to these, `k`:
 
