@@ -22,7 +22,7 @@ k() {
 }
 ```
 
-I've also created a fish version, available in [this gist](https://gist.github.com/Alligator/11e5bb01c12c8ac8b74824d54d1ee560) along with the original.
+I've also created fish and (somewhat limited) batch script versions, available in [this gist](https://gist.github.com/Alligator/11e5bb01c12c8ac8b74824d54d1ee560) along with the original.
 
 I can take no credit for this, I discovered it in [this lobste.rs comment](https://lobste.rs/s/gsivtu/zoxide_new_cd_command_written_rust_learns#c_p6woex) and have had it in my bashrc ever since. Sometimes all you really need is thirteen lines of bash.
 
