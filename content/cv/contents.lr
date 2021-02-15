@@ -7,20 +7,34 @@ email: contact@alligatr.co.uk
 experience:
 
 #### cv_experience ####
-jobtitle: Front End Developer
+jobtitle: Senior Software Engineer
 ----
-place: MDSL, Tunbridge Wells
+place: Calero MDSL, Tunbridge Wells
 ----
-from: 2014
+from: 2020
 ----
 to: Present
 ----
 body:
 
-- Started as a front-end developer, eventually progressing to a full stack developer.
-- Worked on all areas of a React, ASP.NET and SQL Server stack.
+I became a Senior Software Engineer at Calero MDSL in early 2020. I also moved to a different project, and worked on an azure-hosted project with a TypeScript + React frontend, and a C# microservice based backend.
+- Helped to define and improve development processes.
+- Mentored junior developers.
+- Became PSM1 certified as a scrum master.
+#### cv_experience ####
+jobtitle: Software Engineer
+----
+place: Calero MDSL, Tunbridge Wells
+----
+from: 2014
+----
+to: 2020
+----
+body:
+
+I started as a front-end developer and eventually progressed to a full stack developer, working on all areas of a React, ASP.NET and SQL Server stack.
 - Worked as part of a 5-7 person team implementing new features and supporting a large existing codebase.
-- Followed agile development practices, and helped to improve these practices within the team.
+- Followed agile development practices, and helped improve them within the team, eventually serving as scrum master on multiple teams.
 #### cv_experience ####
 jobtitle: VPN Router Technician
 ----
@@ -32,7 +46,7 @@ to: 2013
 ----
 body:
 
-- Solved VPN related issues on DD-WRT and Tomato based routers on a daily basis.
+- Solved VPN related issues on DD-WRT and Tomato based routers.
 - Worked directly with customers over web chat, remote desktop and Skype calls
 ---
 education:
@@ -49,7 +63,7 @@ to: 2014
 body:
 
 - Graduated with distinction.
-- Dissertation: *Visualising Student Satisfaction.* Created an interactive, web-based visualisation to display textual comments from the National Student Survey. Created using Java, JavaScript and d3js.
+- Dissertation: *Visualising Student Satisfaction.* An interactive, web-based visualisation to display and group comments from the National Student Survey. Created using Java, JavaScript and d3js.
 #### cv_experience ####
 jobtitle: BSc (Hons) Computer Science
 ----
@@ -67,8 +81,6 @@ body:
 skills:
 
 I work in JavaScript, React, Redux, Jest, C#, ASP.NET and SQL Server on a daily or near daily basis.
-I am comfortable in a wide variety of languages and have written side projects in Python, F# and C.
-
-I'm also a big fan of logic programming, specifically constraint logic programming using Prolog and clpfd.
+I am comfortable in a wide variety of languages and have written side projects in Go, Rust, Python, and C.
 ---
 github: https://github.com/alligator/
