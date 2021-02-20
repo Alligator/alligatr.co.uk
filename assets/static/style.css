@@ -103,6 +103,9 @@ pre, code {
   font-weight: bold;
   color: #ddd;
 }
-.s1, .mi {
+.s1, .mi, .s, .ss, .s2 {
   color: #fff;
+}
+.p, .c1, .c2 {
+  color: #888;
 }

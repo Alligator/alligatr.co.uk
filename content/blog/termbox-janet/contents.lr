@@ -1,0 +1,39 @@
+title: termbox-janet
+---
+body:
+
+I've written some termbox bindings for Janet. If you don't know what either of those are, [termbox](https://github.com/termbox/termbox) is a small library for building text-based user interfaces, and [Janet](https://janet-lang.org) is a pragmatic lisp-like programming language with good native C code interoperability.
+
+You can find them at [termbox-janet](https://github.com/alligator/termbox-janet).
+
+They are essentially complete, bar a couple of functions I haven't found much use for.
+
+Here's a minimal example:
+```python
+(import termbox :as tb)
+
+(tb/init)
+
+(tb/put-string 1 1 "hello, world")
+(tb/present)
+
+# block until an event happens
+(tb/poll-event)
+
+(tb/shutdown)
+```
+
+More examples are in the test directory of the repo [here](https://github.com/Alligator/termbox-janet/tree/main/test).
+
+Writing bindings for Janet is a delight. The documentation could do with some work, but plenty of native modules are on GitHub to look through. The API provides lots of useful functions and I can usually express what I want in at most a couple of calls.
+
+Some useful examples:
+
+[sqlite3](https://github.com/janet-lang/sqlite3)
+<br />
+[circlet](https://github.com/janet-lang/circlet) - example of a Janet module embedded in a native one.
+<br />
+[janet-uri](https://github.com/andrewchambers/janet-uri) - example of a native module re-exported from a Janet one.
+
+---
+date: 2021-02-20
