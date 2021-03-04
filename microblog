@@ -1,0 +1,32 @@
+#!/usr/bin/env janet
+(import sh)
+
+(def editor (get (os/environ) "EDITOR" "vim"))
+(def file (string/replace "\n" "" (sh/$< mktemp)))
+
+(def pre-stat (os/stat file))
+(sh/$ ,editor ,file)
+(def post-stat (os/stat file))
+
+(if (= (pre-stat :modified) (post-stat :modified))
+  (do
+    (print "file not modified, aborting")
+    (sh/$ rm ,file)
+    (os/exit 0)))
+
+(def date (sh/$< date -I))
+
+(def post
+  (string "#### microblog ####\n"
+          "date: " date
+          "----\n"
+          "body: " (slurp file)))
+
+(def blog-content (slurp "content/blog/contents.lr"))
+(def split-point (+ (string/find "microblog: \n" blog-content) 12))
+(def before (string/slice blog-content 0 split-point))
+(def after (string/slice blog-content split-point -1))
+
+(spit "content/blog/contents.lr" (string before post after))
+
+(sh/$ rm ,file)
