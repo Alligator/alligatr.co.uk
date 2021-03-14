@@ -4,22 +4,7 @@ microblog:
 #### microblog ####
 date: 2021-03-08
 ----
-body: A friend showed me an interesting feature of [this language](https://github.com/kdl-org/kdl#comments), comments that remove the next syntactic element.
-
-I thought this was a cool idea so I implemented it in [my toy lisp](https://github.com/Alligator/elysp). `#-` comments out the next element, so multi-line function definitions can be removed with one comment:
-
-```
-#- (def add-two (x)
-  (+ x 1))
-```
-
-or single list items can be removed inline:
-
-```
-(+ 1 #- 2 3)
-becomes
-(+ 1 3)
-```
+body: A friend showed me an interesting feature of [this language](https://github.com/kdl-org/kdl#comments), comments that remove the next syntactic element. I thought this was a cool idea so I implemented it in my toy lisp and called them "syntactic comments". [Info here](https://github.com/Alligator/elysp#syntactic-comments).
 
 More langauges need this thing.
 #### microblog ####
