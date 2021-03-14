@@ -1,0 +1,110 @@
+title: narrowing discriminated unions in typescript
+---
+body:
+
+<style>
+mark {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+</style>
+
+Here is a solution to a problem I've had a few times in TypeScript. I have a discriminated union:
+
+```typescript
+enum ObjKind {
+  String,
+  Number,
+}
+
+type ObjString = {
+  kind: ObjKind.String;
+  str: string;
+}
+
+type ObjNumber = {
+  kind: ObjKind.Number;
+  num: number;
+}
+
+type Obj = ObjString | ObjNumber;
+```
+
+and I want a function `checkObj` that, if called like this:
+
+```typescript
+const someObj1: Obj = ...;
+const someObj2: Obj = ...;
+const str = checkObj(someObj1, ObjKind.String);
+const num = checkObj(someObj2, ObjKind.Number);
+```
+
+returns the correct type from the union. That is, I want `str` to be an `ObjString` and `num` to be an `ObjNumber`.
+
+## the first attempt
+
+This version of `checkObj` does **not** do this, but we'll build on it:
+
+```typescript
+function checkObj(obj: Obj, kind: ObjKind): Obj {
+  if (obj.kind !== kind) {
+    throw new Error('type mismatch!');
+  }
+  return obj;
+}
+```
+
+This checks the type, but returns an `Obj`. To get the correct type, the caller needs to add a type assertion:
+
+```typescript
+const str = checkObj(someObj, ObjKind.String) as ObjString;
+```
+
+That relies on manually matching the `ObjKind` to the assertion, how do we get the type checker to do this for us?
+
+## the solution
+
+To do this, we need to change the signature of the function. First we move `ObjKind` into a type parameter:
+
+<pre>
+function checkObj<mark>&lt;K extends ObjKind&gt;</mark>(
+  obj: Obj,
+  <mark>kind: K</mark>,
+)
+</pre>
+
+This allows us to use it in the return type, which becomes this:
+
+<pre>
+function checkObj&lt;K extends ObjKind&gt;(
+  obj: Obj,
+  kind: K,
+): <mark>Extract&lt;Obj, { kind: K }&gt;</mark> {
+</pre>
+
+[Extract](https://www.typescriptlang.org/docs/handbook/utility-types.html#extracttype-union) is a utility type that will get a type from a union that can be assigned to another type. We give it `Obj`, the union we want to extract a type from, and `{ kind: K }`, the type we want to extract. This will give us any type in the union where the kind parameter is set to K.
+
+All that's left to do is add a type assertion on the return value and we're done:
+
+<pre>
+return obj <mark>as Extract&lt;Obj, { kind: K }&gt;</mark>;
+</pre>
+
+Here's the finished function:
+
+```typescript
+function checkObj<K extends ObjKind>(
+  obj: Obj,
+  kind: K,
+): Extract<Obj, { kind: K }> {
+  if (obj.kind !== kind) {
+    throw new Error('type mismatch!');
+  }
+  return obj as Extract<Obj, { kind: K }>;
+}
+```
+
+Hope that helps someone. Usually when I see types like this in TypeScript my eyes glaze over, but it was worth persisting a little to make more use of the type checker.
+
+---
+date: 2021-03-13
