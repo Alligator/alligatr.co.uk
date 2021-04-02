@@ -7,8 +7,10 @@
 {% endblock %}
 {% block body %}
   {% for post in this.children if post.date %}
-  <div>
-    {{ post.date|dateformat('YYYY-MM-dd') }}
+  <div style="display: flex">
+    <code style="margin-right: 1rem">
+      {{ post.date|dateformat('YYYY-MM-dd') }}
+    </code>
     &nbsp;
     <a href="{{ post|url }}">
       {{ post.title }}
@@ -16,8 +18,8 @@
   </div>
   {% endfor %}
 
-  <h2>microblog</h2>
-  {{ this.microblog }}
+  {# <h2>microblog</h2> #}
+  {# {{ this.microblog }} #}
 
   <p><a href="atom.xml">feed</a></p>
 
