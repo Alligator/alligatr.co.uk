@@ -3,8 +3,15 @@
 echo -n "title: "
 read -r title
 
-echo -n "slug: "
-read -r slug
+slug=$(echo "$title" | sed "s/ /-/g")
+echo "slug will be $slug"
+
+echo -n "is this ok? (y/n) "
+read -r ans
+
+if [ "$ans" = "n" ]; then
+  exit
+fi
 
 dt=$(date -I)
 mkdir "content/blog/$slug"
