@@ -1,0 +1,38 @@
+title: Obsidian and approaching notes like code
+---
+body:
+
+Over time source code grows larger than can be held in one person's head. When that happens, we rely less on hierarchies like files and folders and instead navigate via connections between files. We use tools provided by the editor or IDE[^ed] to jump from invocations to declarations, variables to types among others.
+
+[^ed]: Even if you use an editor without these features, you probably still use these concepts and do the navigation manually.
+
+I use [Obsidian](https://obsidian.md/) for note-taking and it dawned on me that this connection based navigation is its exact approach to notes. It's like an IDE for notes.
+
+## Navigating via connections
+
+Obsidian, like code editors and IDEs, has tools to jump around via explicit and implicit connections. In editors we have **go to definition**, **go to type definition** and **find references** among others. In Obsidian we have **links**, **linked mentions** and **unlinked mentions**.
+
+> Following a link is like go to definition. It follows a direct connection from one note to another.
+
+> Following a linked mention is like find references. It finds other notes that reference the current one.
+
+> Following unlinked mentions don't have a direct analogue, but is also like find all references. It finds notes that mention the current note's name without explicitly linking to it.
+
+Links are direct connections from the current note to others. Following a link is like using go to definition.
+
+Linked mentions are direct connections from other notes to the current one, they are the inverse of links. Following a linked mentioned is like using find references.
+
+Unlinked mentions are instances of other notes mentioning the name of the current note, without using a link. They don't have a direct analogue to a code editor feature, but are a variation of find references.
+
+These tools find connections we didn't know were there. In code it might be from display logic to business logic to the database. In Obsidian it might be from a newly created note to existing notes via unlinked mentions. The connections aren't obvious from the hierarchy of files and folders, they emerge as we navigate around.
+
+## User Interface
+
+In a recent episode of [Cortex](https://www.relay.fm/cortex/) one of the hosts, Myke, said Obsidian's UI looks like nothing he's ever seen. This surprised me, as it looks a lot like the current crop of GUI based code editors (VS Code, Sublime, Atom). If you're not a programmer that style of UI would be alien to you.
+
+Obsidian borrows common features from these editors and puts them in a different context. Fuzzy file name matching, a command palette, fast and expression global search, a plugin ecosystem, tabbed and split windows to name a few.
+
+A plethora of useful features are confined to code editors, I wonder what other good ideas are waiting to be applied to note-taking. Static analysis to find deep connections? Navigation with fuzzy matching to specific types of content like headings, paragraphs and quotes? LSP support for English? ...Maybe skip that last one.
+
+---
+date: 2021-04-02
