@@ -12,12 +12,6 @@ I use [Obsidian](https://obsidian.md/) for note-taking and it dawned on me that 
 
 Obsidian, like code editors and IDEs, has tools to jump around via explicit and implicit connections. In editors we have **go to definition**, **go to type definition** and **find references** among others. In Obsidian we have **links**, **linked mentions** and **unlinked mentions**.
 
-> Following a link is like go to definition. It follows a direct connection from one note to another.
-
-> Following a linked mention is like find references. It finds other notes that reference the current one.
-
-> Following unlinked mentions don't have a direct analogue, but is also like find all references. It finds notes that mention the current note's name without explicitly linking to it.
-
 Links are direct connections from the current note to others. Following a link is like using go to definition.
 
 Linked mentions are direct connections from other notes to the current one, they are the inverse of links. Following a linked mentioned is like using find references.
