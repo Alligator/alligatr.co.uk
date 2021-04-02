@@ -93,6 +93,12 @@ th, td {
 }
 td {
   border-bottom: 1px solid #444;
+  vertical-align: top;
+}
+sup {
+  vertical-align: baseline;
+  position: relative;
+  top: -0.4em;
 }
 
 /* syntax highlighting */
