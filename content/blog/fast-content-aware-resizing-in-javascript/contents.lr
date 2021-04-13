@@ -7,7 +7,11 @@ td { text-align: right; }
 
 Seam carving is a content-aware image resizing algorithm, and I've been working on a [JavaScript implementation of it](https://github.com/Alligator/seam-carving/tree/main). It's as fast an I can make it while still using a naïve algorithm. Well as fast as I can make it for now anyway.
 
-I want to document how I did that, since I found some interesting things along the way. I won't go into how seam carving works here; if you want to read about it [the wikipedia page](https://en.wikipedia.org/wiki/Seam_carving) does a good enough job.
+Here's some sample output, the original is on the left, the resized version is on the right:
+
+![](seam-carving-example.jpg)
+
+This article is about optimising the code, so I won't go into how seam carving works. If you want to read about it [the wikipedia page](https://en.wikipedia.org/wiki/Seam_carving) does a good enough job.
 
 ## seam-carving-js
 
@@ -54,7 +58,7 @@ image | time | speed increase
 dog.jpg | 2258 ms | 1.02x
 castle.jpg | 13852 ms | 1.01x
 
-I think this might be TurboFan optimizing the small functions sooner than it would optimize the big main function. Or perhaps it can be more selective with what it optimizes, rather than doing the whole thing.
+I think this might be TurboFan optimising the small functions sooner than it would optimise the big main function. Or perhaps it can be more selective with what it optimises, rather than doing the whole thing.
 
 ## Array.copyWithin
 
