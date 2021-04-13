@@ -2,11 +2,11 @@ title: Obsidian and approaching notes like code
 ---
 body:
 
-Over time source code grows larger than can be held in one person's head. When that happens, we rely less on hierarchies like files and folders and instead navigate via connections between files. We use tools provided by the editor or IDE[^ed] to jump from invocations to declarations, variables to types among others.
+Over time source code grows larger than can be held in one person's head. When that happens, we rely less on hierarchies like files and folders and instead navigate via connections between files. We use tools provided by the editor or IDE[^ed] to jump from callers to callees, variables to types, declarations to references, and so on.
 
 [^ed]: Even if you use an editor without these features, you probably still use these concepts and do the navigation manually.
 
-I use [Obsidian](https://obsidian.md/) for note-taking and it dawned on me that this connection based navigation is its exact approach to notes. It's like an IDE for notes.
+I use [Obsidian](https://obsidian.md/) for note-taking and it dawned on me that this connection based navigation is also it's approach to notes. It's like an IDE for notes.
 
 ## Navigating via connections
 
