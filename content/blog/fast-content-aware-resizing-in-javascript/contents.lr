@@ -1,0 +1,120 @@
+title: Fast content aware resizing in JavaScript
+---
+body:
+<style>
+td { text-align: right; }
+</style>
+
+Seam carving is a content-aware image resizing algorithm, and I've been working on a [JavaScript implementation of it](https://github.com/Alligator/seam-carving/tree/main). It's as fast an I can make it while still using a naïve algorithm. Well as fast as I can make it for now anyway.
+
+I want to document how I did that, since I found some interesting things along the way. I won't go into how seam carving works here; if you want to read about it [the wikipedia page](https://en.wikipedia.org/wiki/Seam_carving) does a good enough job.
+
+## seam-carving-js
+
+I didn't set out to write a seam carving library, I only wanted to use one. I run a discord bot that (among other things) lets users manipulate images, and I wanted a content-aware resize command. It's written in JavaScript and uses node-canvas to manipulate images, so I found [seam-carving-js](https://github.com/mfbx9da4/seam-carving-js), which is also written in JavaScript and works with canvases.
+
+It does the job, but it's slow and memory hungry. My bot runs on a VPS with a gig of memory, and eating up half a gig to process one image causes a lot of thrashing. I attempted [a hack](https://github.com/Alligator/seam-carving-js/commit/05c4c87befa57dfe5a87de008ccc1fff39468118) to help the memory usage, but it didn't do much.
+
+Here's some benchmarks to show how slow it is, I reduced the width of two images by half:
+
+image | size |  time
+------|------|------
+dog.jpg | 800x524 |  38732 ms
+castle.jpg | 1428x968 | 171990 ms
+
+Almost **three minutes** for castle.jpg. I know my Intel i5 4670K is getting on a bit but surely we can do better.
+
+
+## First implementation
+
+The [first pass](https://github.com/Alligator/seam-carving/blob/27d8e2cc91f586a63a4fbdb489a6977351fcd6f1/index.ts) was a straightforward implementation of the algorithm. I used typed arrays everywhere and created them with the correct size before the main loop to avoid allocating memory. This worked quite well, here are the benchmarks:
+
+image | time | speed increase
+------|------|------------
+dog.jpg | 2491 ms | 15.6x
+castle.jpg | 14630 ms | 11.8x
+
+Memory usage was also low enough to be not noticeable. This was pretty good, but I still thought 15 seconds was too long for castle.jpg.
+
+## Mutation is (sometimes) good
+
+Despite trying to avoid allocation, one instance slipped through the net. I fixed that by [re-using an array](https://github.com/Alligator/seam-carving/commit/a42c31c59a5fd910884b12778579100018d5c1e9) instead of allocating a new one, which offered a small performance benefit:
+
+image | time | speed increase
+------|------|------------
+dog.jpg | 2323 ms | 1.07x
+castle.jpg | 14027 ms | 1.04x
+
+## Many small functions
+
+I then [split the main loop](https://github.com/Alligator/seam-carving/commit/51201de5263c9a7fe10b3456280fdc1ebf96714a) into a set of small functions. This was mainly to help with debugging and profiling, but it did give a tiny performance increase:
+
+image | time | speed increase
+------|------|------------
+dog.jpg | 2258 ms | 1.02x
+castle.jpg | 13852 ms | 1.01x
+
+I think this might be TurboFan optimizing the small functions sooner than it would optimize the big main function. Or perhaps it can be more selective with what it optimizes, rather than doing the whole thing.
+
+## Array.copyWithin
+
+Once the algorithm has decided which seam to get rid of, those pixels need to be removed, one per row in the image. I do this in place in the array of pixels and every time one is removed the rest of the array needs to shuffle along to close that the. I originally did this using a loop that copies each pixel to it's new location, skipping removed ones.
+
+After running out of ideas and staring at the TypedArray docs on MDN, I found [Array.copyWithin](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/copyWithin). It's like `memmove()` and lets you shift data around in an array. Using that, I avoid looping over every pixel and instead only loop over every row, copying the left half of the row, skipping the removed pixel, then copying the right half.
+
+I [changed](https://github.com/Alligator/seam-carving/commit/435e8f87ef825ca0b3365eecb715af97997fbc29) two [loops](https://github.com/Alligator/seam-carving/commit/02001c02dcf7012938f888d235cc84db63d8b1f1) to use copyWithin. It made quite a difference:
+
+image | time | speed increase
+------|------|------------
+dog.jpg | 890 ms | 2.53x
+castle.jpg | 6029 ms | 2.30x
+
+Finally under a second for something. An arbitrary goal, but being able to say "...in under a second" feels good. The version of dog.jpg from the commit messages was larger, which is why the time here is different.
+
+## Going branchless
+
+The Chrome devtools line-level profiling showed that some lines using `Math.min` and `Math.max` used up a lot of time. These lines are in the middle of the hottest loop in the library, and my assumption was they cause lots of branches (and branch misses). I know that min and max of two numbers can be compiled to one instruction with no branches, but I don't know if v8 can do that.
+
+I decided to [make the branchless versions myself](https://github.com/Alligator/seam-carving/commit/e8f077201fb7d166955ac55b4da96f77bbb70c40) instead.
+
+This is how they work, given x and y:
+
+1. Calculate `x - y`
+2. Right shift that `(1 - size of the number)` times. 31 in this case.
+  - If x &gt; y, the result will be 0
+  - if x &lt; y, the result will be have all it's bit set to 1
+  - This works by shifting out everything but the sign bit, and the sign bit is preserved when right shifting a negative number
+3. Bitwise AND that with x - y
+  - If x &gt; y, the result is `(x - y) & 0`, or 0
+  - If x &lt; y, the result is <code>(x - y) & (2<sup>32</sup> - 1)</code>, or `x - y`
+4. To find the minimum, add y
+  - If x &gt; y, the result is `y + 0`, or y
+  - If x &lt; y, the result is `y + (x - y)`, or x
+5. To find the maximum, subtract x
+  - If x &gt; y, the result is `x - 0`, or x
+  - If x &lt; y, the result is `x - (x - y)`, or y
+
+These only work on 32 bit integers. I'm using `Uint32Array` everywhere, so I don't have to worry about other types sneaking in.
+
+Here's the benchmark afterwards:
+
+image | time | speed increase
+------|------|------------
+dog.jpg | 618 ms | 1.44x
+castle.jpg | 3816 ms | 1.58x
+
+It worked quite well.
+
+## End
+
+That's where it stands right now. I've made this look like a smooth process, but rest assured most of my ideas made it slower rather than faster, and had to be abandoned. 
+
+Here's a comparison between the original library that started this and mine:
+
+image | original | mine | speed increase
+------|----------|-----|------
+dog.jpg | 38732 ms | 618 ms | 62.67x
+castle.jpg | 171990 ms | 3816 ms | 45.07x
+
+---
+date: 2021-04-13

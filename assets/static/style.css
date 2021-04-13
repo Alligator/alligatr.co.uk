@@ -32,6 +32,10 @@ pre, code, kbd, samp {
   font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
 }
 
+code {
+  line-height: 1; /* stop inline code blocks changing line heights */
+}
+
 pre {
   font-size: 12pt;
   padding: 7px 12px;
