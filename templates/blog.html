@@ -7,7 +7,7 @@
 {% endblock %}
 {% block body %}
   {% for post in this.children if post.date %}
-  <div style="display: flex">
+  <div style="display: flex; align-items: baseline;">
     <code style="margin-right: 1rem">
       {{ post.date|dateformat('YYYY-MM-dd') }}
     </code>
