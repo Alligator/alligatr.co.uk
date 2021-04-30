@@ -17,10 +17,10 @@ to: Present
 ----
 body:
 
-I became a Senior Software Engineer at Calero MDSL in early 2020. I also moved to a different project, and worked on an azure-hosted project with a TypeScript + React frontend, and a C# microservice based backend.
+I became a Senior Software Engineer at Calero MDSL in early 2020. I also moved to a new team, working on an Azure-hosted project with a TypeScript and React frontend, and a C# microservice based backend.
 - Helped to define and improve development processes.
 - Mentored junior developers.
-- Became PSM1 certified as a scrum master.
+- Became PSM I certified as a Scrum Master.
 #### cv_experience ####
 jobtitle: Software Engineer
 ----
@@ -32,9 +32,9 @@ to: 2020
 ----
 body:
 
-I started as a front-end developer and eventually progressed to a full stack developer, working on all areas of a React, ASP.NET and SQL Server stack.
+I started as a frontend developer and progressed to a full-stack developer, working on all areas of a React, ASP.NET and SQL Server stack.
 - Worked as part of a 5-7 person team implementing new features and supporting a large existing codebase.
-- Followed agile development practices, and helped improve them within the team, eventually serving as scrum master on multiple teams.
+- Followed agile development practices and helped improve them within the team, eventually serving as Scrum Master.
 #### cv_experience ####
 jobtitle: VPN Router Technician
 ----
@@ -44,10 +44,7 @@ from: 2012
 ----
 to: 2013
 ----
-body:
-
-- Solved VPN related issues on DD-WRT and Tomato based routers.
-- Worked directly with customers over web chat, remote desktop and Skype calls
+body: - Worked directly with customers over web chat and remote desktop to solve VPN related issues on routers.
 ---
 education:
 
@@ -80,7 +77,21 @@ body:
 ---
 skills:
 
-I work in JavaScript, React, Redux, Jest, C#, ASP.NET and SQL Server on a daily or near daily basis.
-I am comfortable in a wide variety of languages and have written side projects in Go, Rust, Python, and C.
+Hey, I'm Reece, a software developer based in Kent in the UK. I work in JavaScript, TypeScript, React, Jest, C# and SQL Server on a daily or near daily basis. I'm also a PSM I certified Scrum Master.
+
+After working on corporate software for the last six years, I'm interested in a role where the software I help create has a positive impact on the world.
+
+I am comfortable in a wide variety of languages and have written side projects in Go, Rust, Python, C and others.
 ---
 github: https://github.com/alligator/
+---
+interests:
+
+### Programming Languages
+I wrote my own language in the summer of 2020 as a learning exercise and have since written another. I find all parts of that process fascinating and want to continue learning and experimenting with my own languages.
+
+### Rubik's Cube Speedsolving
+I've known how to solve a Rubik's cube for years, but recently started trying to do it quickly. I'm still not that fast but it's a work in progress.
+
+### Music
+I play guitar and bass and enjoy jamming with friends.

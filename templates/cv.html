@@ -11,13 +11,13 @@
       <div>
         <a href="mailto:{{ this.email }}">{{ this.email }}</a>
       </div>
-      <div>
+      <div class="noprint">
         <a href="{{ this.github }}">GitHub</a>
       </div>
     </header>
 
     <section>
-      <h2>Skills</h2>
+      <h2>Bio</h2>
       <div class="section-content">
         {{ this.skills }}
       </div>
@@ -34,6 +34,14 @@
       <h2>Education</h2>
       <div class="section-content">
         {{ this.education }}
+      </div>
+    </section>
+
+    <br />
+    <section>
+      <h2>Interests</h2>
+      <div class="section-content">
+        {{ this.interests }}
       </div>
     </section>
   </div>
