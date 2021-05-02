@@ -81,6 +81,18 @@ ul {
   margin-bottom: 1rem;
 }
 
+.blog-index__post {
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 600px) {
+  .blog-index__post {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 0;
+  }
+}
+
 img {
   max-width: 100%;
 }
@@ -103,6 +115,11 @@ sup {
   vertical-align: baseline;
   position: relative;
   top: -0.4em;
+}
+time {
+  display: block;
+  margin-right: .5rem;
+  word-break: keep-all;
 }
 
 /* syntax highlighting */

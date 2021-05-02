@@ -7,11 +7,10 @@
 {% endblock %}
 {% block body %}
   {% for post in this.children if post.date %}
-  <div style="display: flex; align-items: baseline;">
-    <code style="margin-right: 1rem">
+  <div class="blog-index__post">
+    <time datetime="{{ post.date|dateformat('YYYY-MM-dd') }}">
       {{ post.date|dateformat('YYYY-MM-dd') }}
-    </code>
-    &nbsp;
+    </time>
     <a href="{{ post|url }}">
       {{ post.title }}
     </a>
