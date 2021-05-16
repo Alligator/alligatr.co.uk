@@ -62,7 +62,7 @@ I think this might be TurboFan optimising the small functions sooner than it wou
 
 ## Array.copyWithin
 
-Once the algorithm has decided which seam to get rid of, those pixels need to be removed, one per row in the image. I do this in place in the array of pixels and every time one is removed the rest of the array needs to shuffle along to close that the. I originally did this using a loop that copies each pixel to it's new location, skipping removed ones.
+Once the algorithm has decided which seam to get rid of, those pixels need to be removed, one per row in the image. I do this in place in the array of pixels and every time one is removed the rest of the array needs to shuffle along to close the gap. I originally did this using a loop that copies each pixel to it's new location, skipping removed ones.
 
 After running out of ideas and staring at the TypedArray docs on MDN, I found [Array.copyWithin](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/copyWithin). It's like `memmove()` and lets you shift data around in an array. Using that, I avoid looping over every pixel and instead only loop over every row, copying the left half of the row, skipping the removed pixel, then copying the right half.
 
@@ -86,7 +86,7 @@ This is how they work, given x and y:
 1. Calculate `x - y`
 2. Right shift that `(1 - size of the number)` times. 31 in this case.
   - If x &gt; y, the result will be 0
-  - if x &lt; y, the result will be have all it's bit set to 1
+  - if x &lt; y, the result will be have all it's bits set to 1
   - This works by shifting out everything but the sign bit, and the sign bit is preserved when right shifting a negative number
 3. Bitwise AND that with x - y
   - If x &gt; y, the result is `(x - y) & 0`, or 0
