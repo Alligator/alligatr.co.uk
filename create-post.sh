@@ -3,7 +3,7 @@
 echo -n "title: "
 read -r title
 
-slug=$(echo "$title" | sed "s/ /-/g")
+slug=$(echo "$title" | tr A-Z a-z | sed "s/ /-/g")
 echo "slug will be $slug"
 
 echo -n "is this ok? (y/n) "
