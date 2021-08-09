@@ -1,0 +1,55 @@
+title: Suspicious optional chaining
+---
+body:
+
+I'm seeing a worrying pattern in TypeScript code in my day job: suspicious optional chaining. Consider this code that returns a user's name:
+
+```typescript
+function getName(userId: number): string {
+  const response = fetchUser(userId);
+  return response?.user?.name ?? 'Anonymous';
+}
+```
+
+This code seems very suspicious of it's data. Is the result from `fetchUser` really that untrustworthy, or did the developer use optional chaining every time *just in case*? We have no way of knowing without more information.
+
+Also, every optional chaining operator adds an implicit conditional, and this code has one answer to every else branch: return `'Anonymous'`. Is that always the correct behaviour? What if `response` is null, what if `user` is null? Again we have no way of knowing for sure.
+
+This suspicious code has become… suspicious.
+
+Let's rewrite this without optional chaining, starting with the first optional chaining operator.
+
+```typescript
+function getName(userId: number): string {
+  const response = fetchUser(userId);
+
+  if (response) {
+    return response.user?.name ?? 'Anonymous';
+  }
+}
+```
+
+What should we do if that condition isn't true? Is `response` ever falsy? We need to look at `fetchUser` to know. Let's say we do and it always returns a response, but if the user wasn't found the `user` property is null. We can adjust our condition to check for this.
+
+What about `name`? Do users always have a name? Let's say we check the API documentation and users can be anonymous, in which case their name is null. This confirms that `name` is always present but, if it's null, returning `'Anonymous'` is the correct behaviour.
+
+Armed with this information we can write this:
+
+```typescript
+function getName(userId: number): string {
+  const response = fetchUser(userId);
+
+  if (response.user) {
+    return response.user.name ?? 'Anonymous';
+  }
+
+  throw new Error('User not found');
+}
+```
+
+This code is more in control of it's data. It knows which conditions need to be checked. We didn't set out to write code that does this, but were led to do so by removing the conditional chaining operators.
+
+Defaulting to conditional chaining “just in case” makes the code worse, both when it's written and later when it's read. For dynamic or user supplied data it can be useful, but with a well defined data model, it obscures details and puts a burden on the next developer to re-discover those details. Be kind to the next person who has to read your code, and optionally chain responsibly.
+
+---
+date: 2021-08-09
