@@ -1,0 +1,123 @@
+title: Render an SVG that uses external fonts to a canvas
+---
+body:
+
+Say, have you ever needed to render an inline SVG that uses an external font to a canvas? Of course you have, and this article will tell you how to do it without the fonts breaking.
+
+### tl;dr
+
+If you just want to solve the problem:
+
+1. Embed any styles into the SVG directly (no CSS)
+2. Create a data URL for the font file you want to use. See how I did this [here](#creating-a-data-url-for-the-font)
+3. In the stylesheet where the font is declared, replace the font's URL with the data URL.
+4. Embed your stylesheet in the SVG in a `<style>` tag inside a `<defs>` tag
+5. Render the SVG to the canvas (see below if you don't know how to do that).
+
+
+### The problem
+
+For my [💯 generator](https://pizza.alligatr.co.uk/100.html) I wanted the option to turn the generated SVG into a nice copyable and shareable PNG.
+
+The "standard" way to do this in the browser is the following:
+
+1. Turn the SVG into a data URL
+2. Stuff that data url into an `Image` object
+3. Create a canvas element and draw the image on it using `canvas.drawImage()`
+4. Turn the canvas into a PNG data URL using `canvas.toDataURL('image/png')`
+5. Stuff that data URL into an `<img>` element and append it to the page.
+
+A simple, not convoluted at all, 5 step process.
+
+Here is what the image should have been:
+
+!["normal" in a cursive font with two underlines](normal.png)
+
+and instead this was the result:
+
+!["norm" in a serif font with two underlines](norm.png)
+
+Hmm. This is anything but the norm.
+
+The issue here is that external styles aren't applied to SVGs in an img tag. The font is loaded from Google fonts via a stylesheet. For that to work, if the SVG is in an img tag, the *stylesheet itself* needs to be embedded inside the SVG.
+
+There's more than that however, an SVG in an img tag has to be *standalone*, it can't request external resources, including that font. The *font itself* also needs to be embedded inside the stylesheet. To do that we first need to turn the font file into a data URL.
+
+### Creating a data URL for the font
+
+I used this script in the Firefox console to do this:
+
+```js
+resp = await fetch('https://fonts.gstatic.com/s/ranga/v8/C8cg4cYisGb28qY-AygW43w.woff2');
+blob = await resp.blob();
+f = new FileReader();
+f.addEventListener('load', () => console.log(f.result));
+f.readAsDataURL(blob);
+```
+
+Replace the URL in `fetch()` with the URL to your font.
+
+### Embedding the font in the stylesheet
+
+This is easy, replace the URL in the `url()` call:
+
+```html
+<style>
+  @font-face {
+    font-family: 'Ranga';
+    /* .. */
+    src: url(data:font/woff2;base64,....) format('woff2');
+  }
+</style>
+```
+
+### Embedding the stylesheet in the SVG
+
+This is easy too, add it to SVG inside a `<defs>` tag:
+```html
+<svg xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @font-face { /* ... */ }
+    </style>
+  </defs>
+  rest of SVG here...
+</svg>
+```
+
+### And the rest
+
+Now we're clear to do the rest of steps above:
+
+```js
+// convert the SVG to a data URL
+const svgText = new XMLSerializer().serializeToString(svgElement);
+const dataUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgText)}`;
+
+// create an image for that data URL
+const img = new Image();
+img.src = dataUrl;
+
+img.onload = () => {
+  // create a canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = svg.getBoundingClientRect().width;
+  canvas.height = svg.getBoundingClientRect().height;
+
+  // draw the image on to the canvas
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0);
+
+  // do something with the canvas
+  // e.g. turn it into a PNG and add it to the document:
+  const pngUrl = canvas.toDataURL('image/png');
+  const imgElement = document.createElement('img');
+  imgElement.src = pngUrl;
+  document.body.appendChild(imgElement);
+};
+```
+
+Enjoy. I hope that saved you a wasted evening's hacking.
+
+---
+date: 2021-08-24
