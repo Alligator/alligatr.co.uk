@@ -136,6 +136,20 @@ pre, code {
 .s1, .mi, .s, .ss, .s2 {
   color: #fff;
 }
-.p, .c1, .c2 {
+.p, .c1, .c2, .c {
   color: #888;
 }
+.gi {
+  color: darkseagreen;
+}
+.gd {
+  color: palevioletred;
+}
+
+details {
+  border-left: 4px solid #666;
+  background-color: #2c2c2c;
+  padding: 1rem;
+}
+
+summary { cursor: pointer; }

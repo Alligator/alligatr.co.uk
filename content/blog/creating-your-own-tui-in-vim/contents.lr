@@ -1,0 +1,398 @@
+title: Creating your own TUI in Vim
+---
+body:
+
+Creating a <abbr title="Text-based User Interface">TUI</abbr> in Vim isn't hard, but isn't well documented. After poring over some popular plugins I think I know how to do it. Once you read this, I hope you will too.
+
+
+We're going to create a git log viewer called `slog`. When a user runs the command `:Slog`, a window will appear showing a list of commits for the git repository in the current directory. Pressing enter on a commit will show the message and diff for that commit. Pressing enter again will return to the list of commits. Pressing `q` will close the window.
+
+It looks like this:
+
+<video controls width="100%">
+  <source src="slog.mp4" type="video/mp4">
+</video>
+
+## Prerequisites
+
+I assume you know Vim quite well, and you know some vimscript, the sort of stuff you'd write in a vimrc. I also assume you know how to use Vim's help, but I'll tell you the help command you need when it's not obvious.
+
+An *exceedingly* useful help page is `:h vim-functions`, an easy to scan list of Vim's built in functions.
+
+<details>
+  <summary>What are these boxes?</summary>
+  <p>
+    To keep this article skim-friendly, I'll put things you might like to know but don't <em>need</em> to know in these boxes. The title will tell you what's explained within.
+  </p>
+</details>
+
+## Setup
+
+Create a file called `slog.vim` somewhere and start writing. Nothing else to it.
+
+## Creating the entry-point
+
+We start with a function that will be our entry-point and a command, `Slog`, that calls it.
+
+```vim
+" the s: makes this function local to this script
+" see :h s:var
+function! s:slog()
+  echo 'hello, world'
+endfunction
+
+command! -nargs=0 Slog call s:slog()
+```
+
+To test it, source the file with `:source %` and run `:Slog`. You should see `hello, world` at the bottom of your window.
+
+## Creating the window
+
+Next we add a function that creates a window.
+
+```vim
+function! s:create_window()
+  " create a new window on the right that's 80 columns wide
+  vertical botright 80new
+
+  " stop the user from editing the buffer
+  setlocal nomodifiable
+
+  " tell Vim this is a temporary buffer not backed by a file
+  setlocal buftype=nofile bufhidden=wipe noswapfile
+
+  " no line numbers, no wrapping, highlight the current line
+  setlocal nonumber cursorline nowrap nospell
+
+  " set the file name of the buffer
+  file [slog]
+endfunction
+```
+
+The set of options starting with `buftype` make this a “special buffer”—a buffer that shows something other than a file (see <code><a href="https://vimhelp.org/windows.txt.html#special-buffers">:h special-buffers</a></code>.)
+
+We call this in `s:slog`:
+
+```vim
+function! s:slog()
+  call s:create_window()
+endfunction
+```
+
+When you run the command, you should see a nice new empty window to the right of your current one.
+
+## Adding content
+
+To display the list of commits, we'll have git do the heavy lifting. This function displays the output of `git log` and a title:
+
+```vim
+function! s:show_commits()
+  " let us modify the buffer
+  setlocal modifiable
+
+  " write the title
+  call append(0, 'Slog')
+
+  " write the log messages
+  silent! read !git log -100 --oneline
+
+  " move the cursor to the first message
+  call cursor(3, 0)
+
+  setlocal nomodifiable
+endfunction
+```
+
+<details>
+  <summary><code>silent!</code></summary>
+  <p>
+    <code>silent!</code> is used to hide the <code>X more lines</code> message you see after a <code>:read</code> command.
+  </p>
+</details>
+
+It goes below `create_window` in `s:slog`.
+
+```vim
+function! s:slog()
+  call s:create_window()
+  call s:show_commits()
+endfunction
+```
+
+If you `:cd` to a git repository and run the command, you should see a list of commits in the new window.
+
+## Opening a commit
+
+To make our commit list interactive, we add some buffer-local mappings:
+
+```vim
+function! s:add_mappings()
+  nmap <silent> <buffer> q :bd<CR>
+  nmap <silent> <buffer> <Enter> :call <SID>handle_enter()<CR>
+endfunction
+```
+
+<details>
+  <summary><code>&lt;SID&gt;</code></summary>
+  <p>
+    The <code>&lt;SID&gt;</code> in the second mapping is how we call a script-local function from outside a script. When the user presses enter and this mapping runs, our script will have long since finished, so <code>s:</code> won't work.
+  </p>
+  <p>
+    Script local variables and functions can still be used outside of a script, but their names are mangled to stop clashes. For example, in my current Vim session our <code>s:create_window</code> function is actually named <code>&lt;SNR&gt;108_create_window()</code>. You can see what script functions you have by entering <code>:call &lt;SNR&gt;</code> then pressing tab to see the available options.
+  </p>
+  <p>
+    Vim replaces <code>&lt;SID&gt;</code> in the mapping with the mangled prefix, so it can still find the function after the script has finished.
+  </p>
+  <p>See <code><a href="https://vimhelp.org/map.txt.html#%3CSID%3E">:h &lt;SID&gt;</a></code>.</p>
+</details>
+
+The first makes `q` close the buffer. The second makes pressing enter call a function we haven't defined yet, `handle_enter`.
+
+Here it is:
+
+```vim
+function! s:handle_enter()
+  setlocal modifiable
+
+  " get the commit hash by splitting the current line on spaces
+  let hash = split(getline('.'))[0]
+
+  " clear the buffer using the black-hole register
+  " see :h "_
+  silent! normal! gg"_dG
+
+  " show the commit
+  execute 'silent read !git show ' . hash
+
+  " move the cursor to the top
+  call cursor(1, 0)
+
+  " take advantage of vim's built in git syntax highlighting
+  setfiletype git
+
+  setlocal nomodifiable
+endfunction
+```
+
+<details>
+  <summary>Why is <code>execute</code> used?</summary>
+  <p>
+    We need to pass our hash to <code>git show</code>, but everything after the ! in <code>read !</code> is passed as-is to the shell. We work around this by make the command a string, concatenating the hash on to it, and using <code>execute</code> to, uh, execute it.
+  </p>
+</details>
+
+This gets the commit hash from the current line and uses `git show` to show information about commit in the buffer.
+
+It joins the crowd in `s:slog`.
+
+```vim
+function! s:slog()
+  call s:create_window()
+  call s:add_mappings()
+  call s:show_commits()
+endfunction
+```
+
+Now pressing enter on a commit should show it's message and diff, and q should close the window. Pressing enter while looking at a commit causes an error. Let's fix that by going back to the list of commits instead.
+
+## Going back to the commit list
+
+We can store whether or not we're looking at a commit in a variable. This is declared at the top of `create_window`:
+
+```vim
+function! s:create_window()
+  let s:viewing_commit = v:false
+  ...
+endfunction
+```
+
+<details>
+  <summary>boolean values</summary>
+  <p>
+    Before Vim 8 vimscript had no boolean values, 0 was false and anything else was true. Vim 8 added a boolean type and the special variables <code>v:false</code> and <code>v:true</code>.
+  </p>
+  <p>
+    If you want your script to work in Vim 7, use 0 and 1 instead of <code>v:false</code> and <code>v:true</code>.
+  </p>
+</details>
+
+We check this in `handle_enter`. If it's true we show the list of commits, if it's false we show a single commit.
+
+```vim
+function! s:handle_enter()
+  setlocal modifiable
+
+  if s:viewing_commit
+    " show the list of commits
+
+    silent! normal! gg"_dG
+    call s:show_commits()
+    let s:viewing_commit = v:false
+  else
+    " show a single commit (same code as before)
+
+    " get the commit hash
+    let hash = split(getline('.'))[0]
+
+    " clear the buffer using the black-hole register
+    silent! normal! gg"_dG
+
+    " show the commit
+    execute 'silent read !git show ' . hash
+
+    " move the cursor to the top
+    call cursor(1, 0)
+
+    " take advantage of vim's built in git syntax highlighting
+    setfiletype git
+
+    let s:viewing_commit = v:true
+  endif
+
+  setlocal nomodifiable
+endfunction
+
+```
+
+You should now return to the list of commits if you press enter while looking at a commit.
+
+## Syntax highlighting
+
+We can add some colour to the list of commits by declaring our own syntax highlighting for the buffer. This function will highlight the title and the commit hashes:
+
+```vim
+function! s:add_syntax()
+  " clear any highlighting from the buffer
+  syn clear
+
+  " match the first line of the buffer
+  " see :h /\%l
+  syn region slogTitle start=/\%1l/ end=/\%2l/
+
+  " match a commit hash
+  syn match slogCommit /[a-f0-9]\{7}/
+
+  " link the groups created above to some built-in ones
+  hi def link slogTitle Title
+  hi def link slogCommit Constant
+endfunction
+```
+
+It's added to the bottom of `show_commits`:
+
+```vim
+function! s:show_commits()
+  ...
+  call s:add_syntax()
+endfunction
+```
+
+Looking at examples is the best way to see what can done with syntax highlighting, here's the syntax in a couple of popular plugins:
+
+- [gundo.vim](https://github.com/sjl/gundo.vim/blob/c5efef192b975b8e7d5fa3c6db932648d3b76323/autoload/gundo.vim#L166)
+- [vim-plug](https://github.com/junegunn/vim-plug/blob/c9971346bb486ccff354aaee8606cc0d2d5a0c97/plug.vim#L804)
+
+## Wrapping it up
+
+That's it! Now you know how to show your own stuff in a Vim buffer and run things when someone interacts with it.
+
+Here are the plugins I looked at a lot while writing this:
+
+- [vim-plug](https://github.com/junegunn/vim-plug)
+- [gv.vim](https://github.com/junegunn/gv.vim)
+- [vim-peekaboo](https://github.com/junegunn/vim-peekaboo)
+- [gundo.vim](https://github.com/sjl/gundo.vim)
+
+And Steve Losh's [Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/) was usually open somewhere. If you haven't read it, you should.
+
+Here's the full code for `slog.vim`:
+
+```vim
+function! s:create_window()
+  let s:viewing_commit = v:false
+
+  " create a new window on the right that's 80 columns wide
+  vertical botright 80new
+  setlocal nomodifiable
+
+  " tell vim this is a temporary buffer not backed by a file
+  setlocal buftype=nofile bufhidden=wipe noswapfile
+
+  " no line numbers, no wrapping, highlight the current line
+  setlocal nonumber cursorline nowrap nospell
+
+  " set the current file name
+  file [slog]
+endfunction
+
+function! s:add_mappings()
+  nmap <silent> <buffer> q :bd<CR>
+  nmap <silent> <buffer> <Enter> :call <SID>handle_enter()<CR>
+endfunction
+
+function! s:add_syntax()
+  syn clear
+
+  syn region slogTitle start=/\%1l/ end=/\%2l/
+  syn match slogCommit /[a-f0-9]\{7}/
+
+  hi def link slogTitle Title
+  hi def link slogCommit Constant
+endfunction
+
+function! s:show_commits()
+  setlocal modifiable
+
+  " write the title
+  call append(0, 'Slog')
+
+  " write the log messages
+  silent! read !git log -100 --oneline
+
+  " move the cursor to the first message
+  call cursor(3, 0)
+
+  setlocal nomodifiable
+  call s:add_syntax()
+endfunction
+
+function! s:handle_enter()
+  setlocal modifiable
+
+  if s:viewing_commit
+    " clear the buffer using the black-hole register
+    silent! normal! gg"_dG
+    call s:show_commits()
+    let s:viewing_commit = v:false
+  else
+    " get the commit hash
+    let hash = split(getline('.'))[0]
+
+    " clear the buffer using the black-hole register
+    silent! normal! gg"_dG
+
+    " show the commit
+    execute 'silent read !git show ' . hash
+
+    " move the cursor to the top
+    call cursor(1, 0)
+
+    " take advantage of vim's built in git syntax highlighting
+    setfiletype git
+
+    let s:viewing_commit = v:true
+  endif
+
+  setlocal nomodifiable
+endfunction
+
+function! s:slog()
+  call s:create_window()
+  call s:add_mappings()
+  call s:show_commits()
+endfunction
+
+command! -nargs=0 Slog call s:slog()
+```
+---
+date: 2021-10-14
