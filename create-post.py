@@ -6,6 +6,7 @@ from datetime import datetime
 title = input('title: ')
 
 slug = title.lower().replace(' ', '-')
+slug = re.sub('[^a-z-]', '', slug)
 print(f'slug will be {slug}')
 if input('is this ok? (y/n) ') != 'y':
     sys.exit(0)
