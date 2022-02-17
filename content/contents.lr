@@ -55,6 +55,20 @@ technology: JavaScript
 ----
 body: A discord bot, designed to be simple to understand and easy to extend. Written in JavaScript.
 #### project ####
+title: stron
+----
+year: 2022
+----
+url: https://github.com/Alligator/stron
+----
+source: https://github.com/Alligator/stron
+----
+image: 
+----
+technology: Go
+----
+body: A CLI tool to show the structure of JSON, in a [gron](https://github.com/tomnomnom/gron/issues?q=order) inspired format. Written in go.
+#### project ####
 title: Lake.js
 ----
 year: 2012
@@ -68,20 +82,6 @@ image:
 technology: JavaScript
 ----
 body: Someone said it would be funny to remake the old Java lake applet effect using JavaScript and the canvas, so I did the damn thing.
-#### project ####
-title: stron
-----
-year: 2022
-----
-url: https://github.com/Alligator/stron
-----
-source: https://github.com/Alligator/stron
-----
-image: 
-----
-technology: Go
-----
-body: A CLI tool to show the structure of JSON in a [gron](https://github.com/tomnomnom/gron/issues?q=order) inspired format. Written in go.
 ---
 title: 
 ---
@@ -142,7 +142,7 @@ image: dad.png
 ----
 technology: Written in Lua, for the PICO-8 fantasy console.
 ----
-body: A driving game about a dad mostly yelling. My entry into the GitHub Game Jam 2017. It came 15th overall out of 206 entries.
+body: A driving game about a dad who yells a lot. My entry into the GitHub Game Jam 2017. It placed 15th out of 206 entries.
 ---
 tools:
 
