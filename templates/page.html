@@ -6,6 +6,21 @@
   {{ this.body }}
   <h2>Projects</h2>
   {{ this.projects }}
+  <div class="project">
+    Others
+    <table>
+      <thead>
+        <tr>
+          <th>name</th>
+          <th>tech</th>
+          <th>description</th>
+        </tr>
+      </thead>
+      <tbody>
+      {{ this.tools }}
+      </tbody>
+    </table>
+  </div>
   <h2>Games</h2>
   {{ this.games }}
 {% endblock %}

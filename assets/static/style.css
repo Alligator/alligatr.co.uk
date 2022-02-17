@@ -60,6 +60,9 @@ ul {
   margin-top: 0;
   padding-left: 1rem;
 }
+.project table {
+  margin: 0 0 0 1rem;
+}
 .project__image {
   display: block;
   width: 100px;
@@ -153,3 +156,5 @@ details {
 }
 
 summary { cursor: pointer; }
+
+.page { margin-bottom: 1rem; }

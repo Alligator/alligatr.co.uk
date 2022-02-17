@@ -23,9 +23,23 @@ source: https://github.com/alligator/agdq-tracker
 ----
 image: 
 ----
-technology: The UI is written in JavaScript, using d3 for charts. The data fetching parts are written in Python.
+technology: JavaScript (Svelte, d3, uPlot) and Python
 ----
-body: I've been running an unofficial viewers/donations tracker for the biannual [Games Done Quick](https://gamesdonequick.com/) marathons since 2013.
+body: An unofficial viewer and donation count tracker for the biannual [Games Done Quick](https://gamesdonequick.com/) marathons. Run since 2013.
+#### project ####
+title: seam-carving
+----
+year: 2021
+----
+url: https://github.com/Alligator/seam-carving
+----
+source: https://github.com/Alligator/seam-carving
+----
+image: 
+----
+technology: TypeScript
+----
+body: A [seam carving](https://en.wikipedia.org/wiki/Seam_carving) library for JavaScript. I have written about this [here](http://alligatr.co.uk/blog/fast-content-aware-resizing-in-javascript/).
 #### project ####
 title: talkbox
 ----
@@ -37,23 +51,9 @@ source: https://github.com/alligator/talkbox
 ----
 image: talkbox.png
 ----
-technology: Written in JavaScript
+technology: JavaScript
 ----
-body: A discord bot, designed to be simple to understand and easy to extend.
-#### project ####
-title: SVG Sparklines
-----
-year: 2014
-----
-url: http://alligatr.co.uk/sparklines/
-----
-source: https://github.com/Alligator/sparklines
-----
-image: 
-----
-technology: 
-----
-body: A tiny JavaScript library to render sparklines in HTML content.
+body: A discord bot, designed to be simple to understand and easy to extend. Written in JavaScript.
 #### project ####
 title: Lake.js
 ----
@@ -65,26 +65,23 @@ source: https://github.com/Alligator/lake.js
 ----
 image: 
 ----
-technology: 
+technology: JavaScript
 ----
 body: Someone said it would be funny to remake the old Java lake applet effect using JavaScript and the canvas, so I did the damn thing.
 #### project ####
-title: Other stuff
+title: stron
 ----
-year: 
+year: 2022
 ----
-url: 
+url: https://github.com/Alligator/stron
 ----
-source: 
+source: https://github.com/Alligator/stron
 ----
 image: 
 ----
-technology: 
+technology: Go
 ----
-body:
-
-[pizza.alligatr](http://pizza.alligatr.co.uk/) - experiments that don't fit anywhere.<br />
-[old alligatr](static/canvas-things.html) - even older experiments that don't fit anywhere.<br />
+body: A CLI tool to show the structure of JSON in a [gron](https://github.com/tomnomnom/gron/issues?q=order) inspired format. Written in go.
 ---
 title: 
 ---
@@ -146,3 +143,110 @@ image: dad.png
 technology: Written in Lua, for the PICO-8 fantasy console.
 ----
 body: A driving game about a dad mostly yelling. My entry into the GitHub Game Jam 2017. It came 15th overall out of 206 entries.
+---
+tools:
+
+#### experiment ####
+name: gordle
+----
+description: terminal wordle
+----
+url: https://github.com/Alligator/gordle
+----
+technology: go
+#### experiment ####
+name: qj
+----
+description: query JIRA from the terminal
+----
+url: https://github.com/Alligator/qj
+----
+technology: go
+#### experiment ####
+name: focus
+----
+description: a mac app to help me focus
+----
+url: https://github.com/Alligator/focus
+----
+technology: swift
+#### experiment ####
+name: nimi pi toki pona
+----
+description: toki pona to english dictionary
+----
+url: https://github.com/Alligator/nimi-pi-toki-pona
+----
+technology: C
+#### experiment ####
+name: slider
+----
+description: a tiny tool for creating slideshows
+----
+url: https://github.com/Alligator/slider
+----
+technology: C
+#### experiment ####
+name: jtermbox
+----
+description: termbox bindings for janet
+----
+url: https://github.com/Alligator/jtermbox
+----
+technology: C, janet
+#### experiment ####
+name: rss
+----
+description: generate static HTML from RSS feeds
+----
+url: https://github.com/Alligator/rss
+----
+technology: python
+#### experiment ####
+name: accent.vim
+----
+description: my vim colourscheme
+----
+url: https://github.com/Alligator/accent.vim
+----
+technology: vimscript
+#### experiment ####
+name: 100 generator
+----
+description: text to 💯
+----
+url: https://pizza.alligatr.co.uk/100.html
+----
+technology: web
+#### experiment ####
+name: dither
+----
+description: a tool to play with atkinson dithering
+----
+url: https://irc.alligatr.co.uk/dither.html
+----
+technology: web
+#### experiment ####
+name: the sounds
+----
+description: music generator
+----
+url: https://irc.alligatr.co.uk/the-sounds.html
+----
+technology: web
+#### experiment ####
+name: pizza.alligator.co.uk
+----
+description: old web experiments
+----
+url: http://pizza.alligatr.co.uk
+----
+technology: web
+#### experiment ####
+name: old alligatr.co.uk
+----
+description: even older web experiments
+----
+url: static/canvas-things.html
+----
+technology: web
