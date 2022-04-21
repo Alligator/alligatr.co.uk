@@ -1,0 +1,24 @@
+title: Contextual command-line help
+---
+date: 2022-04-21
+---
+body:
+
+An idea: what if running a program with `-h` or `--help` described the flags and arguments passed in, rather than everything? Subcommands get this treatment (e.g. `git log -h`), why not everything else?
+
+Say you want to know what `fzf +s` does. Running `fzf -h` prints 89 lines of text. The `+s` flag is on line 17. That's 72 lines of scrolling. If the help was contextual, you could run `fzf +s -h` to see just the help for `+s`.
+
+We could go further and print argument values too. A hypothetical example:
+
+```
+$ fzf +s -q $(date) --preview="ls {}" -h
+usage: fzf [options]
+
+  +s, --no-sort       Do not sort the result
+  --prevjew=COMMAND   Command to preview highlighted line ({})
+    value: "ls {}"
+  -q, --query=STR     Start the finder with the given query
+    value: "Fri 15 Apr 2022 19:15:38 BST"
+```
+
+You could copy any command invocation from the internet and add `-h` to understand what it does.
