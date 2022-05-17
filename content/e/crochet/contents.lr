@@ -1,0 +1,425 @@
+_model: experiment
+---
+name: crochet cloth simulation
+---
+technology: web
+---
+description: crochet, physics
+---
+html:
+
+  <script>
+class ParticleSystem {
+  constructor() {
+    this.particles = [];
+    this.prevParticles = [];
+    this.forceAccumulators = [];
+    this.constraints = [];
+    this.fixedParticles = [];
+    this.gravity = [0, 0.6];
+  }
+
+  verlet(dt) {
+    for (let i = 0; i < this.particles.length; i++) {
+      const p = this.particles[i];
+      const prevp = this.prevParticles[i];
+      const force = this.forceAccumulators[i];
+      const newp = [0, 0];
+      newp[0] = p[0] + (p[0] - prevp[0]) + force[0] * dt * dt;
+      newp[1] = p[1] + (p[1] - prevp[1]) + force[1] * dt * dt;
+      this.particles[i] = newp;
+      this.prevParticles[i] = p;
+    }
+  }
+
+  accumulateForces() {
+    for (let i = 0; i < this.particles.length; i++) {
+      // this.forceAccumulators[i][0] = this.gravity[0];
+      this.forceAccumulators[i][1] = this.gravity[1];
+    }
+  }
+
+  satisfyConstraints() {
+    const iterations = 5;
+    for (let j = 0; j < iterations; j++) {
+      for (let i = 0; i < this.constraints.length; i++) {
+        const [ida, idb, len] = this.constraints[i];
+        const pa = this.particles[ida];
+        const pb = this.particles[idb];
+        const delta = [pb[0] - pa[0], pb[1] - pa[1]];
+        const deltaLength = Math.sqrt(delta[0] * delta[0] + delta[1] * delta[1]);
+        const diff = (deltaLength - len) / deltaLength;
+        pa[0] += delta[0] * 0.6 * diff;
+        pa[1] += delta[1] * 0.6 * diff;
+        pb[0] -= delta[0] * 0.6 * diff;
+        pb[1] -= delta[1] * 0.6 * diff;
+      }
+
+      for (const particle of this.fixedParticles) {
+        const [id, x, y] = particle;
+        this.particles[id] = [x, y];
+      }
+    }
+  }
+
+  step(dt) {
+    this.accumulateForces();
+    this.verlet(dt);
+    this.satisfyConstraints();
+  }
+
+  add(x, y, fx = 0, fy = 0) {
+    this.particles.push([x, y]);
+    const i = this.particles.length - 1;
+    this.prevParticles[i] = [x, y];
+    this.forceAccumulators[i] = [fx, fy];
+    return i;
+  }
+
+  fix(id, x, y) {
+    if (typeof x === 'undefined') {
+      const p = this.particles[id];
+      this.fixedParticles.push([id, p[0], p[1]]);
+    } else {
+      this.fixedParticles.push([id, x, y]);
+    }
+  }
+
+  unfix(id) {
+    this.fixedParticles = this.fixedParticles.filter(p => p[0] !== id);
+  }
+
+  addConstraint(ida, idb, len) {
+    this.constraints.push([ida, idb, len]);
+  }
+}
+
+window.onload = async () => {
+  const font = await (await fetch('font.json')).json();
+  const canvas = document.getElementById('canv');
+  const ctx = canvas.getContext('2d');
+
+  canvas.width = 1000;
+  canvas.height = 480;
+
+  let psim = new ParticleSystem();
+  let edges = {};
+  let dragPoint = null;
+
+  function getLetter(l) {
+    if (font[l.toLowerCase()]) {
+      return font[l.toLowerCase()];
+    }
+    return {
+      w: 4,
+      h: 13,
+      char: [],
+    };
+  }
+
+  function makeGrid(text, space) {
+    const margin = 2;
+    let w = text.split('').reduce((acc, l) => acc + getLetter(l).w, 0) + text.length + margin * 2;
+    if (w % 2 === 0) {
+      w++;
+    }
+    let h = font['s'].h + 1 + margin * 2;
+    if (h % 2 === 0) {
+      h++;
+    }
+
+    // add points
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        let px = x * space;
+        let py = y * space;
+
+        // wiggle the edges a lil
+        // if ((x === 0 || x === w - 1 || y === 0 || y === h - 1)) {
+          // const wiggle = 8;
+          // px += Math.floor(Math.random() * wiggle - (wiggle/2));
+          // py += Math.floor(Math.random() * wiggle - (wiggle/2));
+        // }
+
+        const id = psim.add(px, py);
+
+        if (x === Math.floor(w/2) && y === h - 2) {
+          dragPoint = id;
+        }
+      }
+    }
+
+    // add grid constraints
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const id = x + y * w;
+        if (x > 0)
+          psim.addConstraint(id - 1, id, space);
+        if (y > 0)
+          psim.addConstraint(id - w, id, space);
+      }
+    }
+
+    // add fancy edges
+    const fancySpace = space / 3;
+
+    // vertical
+    for (let x = 0; x < w; x++) {
+      if (x % 2 === 1) {
+        let prevTop = null;
+        let prevBottom = null;
+        for (let i = 0; i < 6; i++) {
+          const px = Math.cos(Math.PI * (i + 1)/7) * space;
+          const py = Math.sin(Math.PI * (i + 1)/7) * space;
+
+          // top
+          const top = psim.add(x * space + px, 0 - py);
+          psim.fix(top);
+          psim.addConstraint(x, top, space);
+
+          if (prevTop) {
+            psim.addConstraint(prevTop, top, fancySpace);
+          }
+          if (i === 0) {
+            psim.addConstraint(x + 1, top, fancySpace);
+          }
+          if (i === 5) {
+            psim.addConstraint(x - 1, top, fancySpace);
+          }
+          prevTop = top;
+
+          // bottom
+          const bottom = psim.add(x * space + px, (h - 1) * space + py);
+          psim.fix(bottom);
+          psim.addConstraint(x + (h - 1) * w, bottom, space);
+
+          if (prevBottom) {
+            psim.addConstraint(prevBottom, bottom, fancySpace);
+          }
+          if (i === 0) {
+            psim.addConstraint(x + 1 + (h - 1) * w, bottom, fancySpace);
+          }
+          if (i === 5) {
+            psim.addConstraint(x - 1 + (h - 1) * w, bottom, fancySpace);
+          }
+          prevBottom = bottom;
+        }
+      }
+    }
+
+    // horizontal
+    for (let y = 0; y < h; y++) {
+      if (y % 2 === 1) {
+        let prevLeft = null;
+        let prevRight = null;
+        for (let i = 0; i < 6; i++) {
+          const px = Math.sin(Math.PI * (i + 1)/7) * space;
+          const py = Math.cos(Math.PI * (i + 1)/7) * space;
+
+          // left
+          const left = psim.add(0 - px, y * space + py);
+          psim.fix(left);
+          psim.addConstraint(y * w, left, space);
+
+          if (prevLeft) {
+            psim.addConstraint(prevLeft, left, fancySpace);
+          }
+          if (i === 0) {
+            psim.addConstraint((y + 1) * w, left, fancySpace);
+          }
+          if (i === 5) {
+            psim.addConstraint((y - 1) * w, left, fancySpace);
+          }
+          prevLeft = left;
+
+          // right
+          const right = psim.add((w - 1) * space + px, y * space + py);
+          psim.fix(right);
+          psim.addConstraint((y + 1) * w - 1, right, space);
+
+          if (prevRight) {
+            psim.addConstraint(prevRight, right, fancySpace);
+          }
+          if (i === 0) {
+            psim.addConstraint((y + 2) * w - 1, right, space);
+          }
+          if (i === 5) {
+            psim.addConstraint(y * w - 1, right, space);
+          }
+          prevRight = right;
+        }
+      }
+    }
+
+    // fix the edges
+    const minx = psim.particles.reduce((min, p) => p[0] < min ? p[0] : min, Infinity);
+    const maxx = psim.particles.reduce((max, p) => p[0] > max ? p[0] : max, -Infinity);
+    const miny = psim.particles.reduce((min, p) => p[1] < min ? p[1] : min, Infinity);
+    const maxy = psim.particles.reduce((max, p) => p[1] > max ? p[1] : max, -Infinity);
+
+    for (let i = 0; i < psim.particles.length; i++) {
+      const p = psim.particles[i];
+      if (p[0] === minx || p[0] === maxx || p[1] === miny || p[1] === maxy) {
+        psim.fix(i);
+      }
+    }
+
+    // add filled letter constraints
+    let xoffset = margin;
+    let yoffset = margin;
+    const diagonalSpace = Math.sqrt(space * space + space * space) * 0.9;
+    for (const letter of text.split('')) {
+      const f = getLetter(letter);
+      if (f.char.length === 0) {
+        xoffset += f.w + 1;
+        continue;
+      }
+
+      for (let y = 0; y < f.h; y++) {
+        for (let x = 0; x < f.w; x++) {
+          if (f.char[y][x] === '0') {
+            const id = x + xoffset + (y + yoffset) * w;
+            psim.addConstraint(id + w + 1, id, diagonalSpace);
+            psim.addConstraint(id + w, id + 1, diagonalSpace);
+          }
+        }
+      }
+
+      xoffset += f.w + 1;
+    }
+
+    return [w, h];
+  }
+
+  const cellSize = 12;
+  const padding = 10;
+  let w = 0;
+  let h = 0;
+  let fixedParticles = [];
+
+  function reset(text) {
+    psim = new ParticleSystem();
+    edges = {};
+    [w, h] = makeGrid(text, cellSize);
+    canvas.width = w * cellSize + (padding * cellSize);
+    canvas.height = h * cellSize + (padding * cellSize);
+    fixedParticles = [...psim.fixedParticles];
+  }
+
+  reset('hello');
+
+  document.querySelector('button').addEventListener('click', () => {
+    const text = document.querySelector('input').value;
+    reset(text);
+  });
+  document.querySelector('input').addEventListener('keypress', (evt) => {
+    if (evt.key === 'Enter') {
+      reset(evt.target.value);
+    }
+  });
+
+  let hasFocus = false;
+  canvas.addEventListener('mouseover', () => hasFocus = true);
+  canvas.addEventListener('mouseout', () => hasFocus = false);
+
+  let mouseDown = false;
+  let mousePos = null;
+  canvas.addEventListener('mousemove', (evt) => {
+    if (mouseDown) {
+      const rect = canvas.getBoundingClientRect();
+      mousePos = [evt.clientX - rect.left, evt.clientY - rect.top];
+    }
+  });
+  canvas.addEventListener('mousedown', (evt) => {
+    mouseDown = true;
+    const rect = canvas.getBoundingClientRect();
+    mousePos = [evt.clientX - rect.left, evt.clientY - rect.top];
+  });
+  canvas.addEventListener('touchstart', (evt) => {
+    mouseDown = true;
+    const rect = canvas.getBoundingClientRect();
+    const tx = evt.targetTouches[0].pageX
+    const ty = evt.targetTouches[0].pageY;
+    mousePos = [tx - rect.left, ty - rect.top];
+    evt.preventDefault();
+  });
+  canvas.addEventListener('touchmove', (evt) => {
+    const rect = canvas.getBoundingClientRect();
+    const tx = evt.targetTouches[0].pageX
+    const ty = evt.targetTouches[0].pageY;
+    mousePos = [tx - rect.left, ty - rect.top];
+    evt.preventDefault();
+  });
+  canvas.addEventListener('mouseup', () => mouseDown = null);
+  canvas.addEventListener('touchend', () => mouseDown = null);
+
+  function drawCrochet(psim, ctx) {
+    for (const constraint of psim.constraints) {
+      const [ida, idb, len] = constraint;
+      const pa = psim.particles[ida];
+      const pb = psim.particles[idb];
+      ctx.lineWidth = 3;
+
+      // if (edges[ida] && edges[idb]) {
+      //   ctx.lineWidth = 7;
+      // }
+
+      ctx.beginPath();
+      ctx.moveTo(pa[0], pa[1]);
+      ctx.lineTo(pb[0], pb[1]);
+      ctx.stroke();
+    }
+  }
+
+  let t = 0;
+  function go(ts) {
+    const dt = ts - t;
+    t = ts;
+    // if (hasFocus) {
+    if (true) {
+      if (mouseDown) {
+        // unfix everything except the top row
+        psim.fixedParticles = fixedParticles.filter(p => p[2] < 20);
+        psim.particles[dragPoint][0] = mousePos[0] - (padding/2 * cellSize);
+        psim.particles[dragPoint][1] = mousePos[1] - (padding/2 * cellSize);
+      } else {
+        psim.fixedParticles = fixedParticles;
+      }
+      psim.step(1);
+
+      ctx.save();
+      ctx.fillStyle = 'rgb(16, 92, 32)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.translate(padding/2 * cellSize, padding/2 * cellSize);
+
+
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = 'rgb(240, 224, 210)';
+      drawCrochet(psim, ctx);
+
+      // ctx.fillStyle = 'dodgerblue';
+      // for (const p of psim.particles) {
+      //   ctx.beginPath();
+      //   ctx.arc(p[0], p[1], 2, 0, Math.PI * 2);
+      //   ctx.fill();
+      // }
+
+      ctx.restore();
+    }
+    window.requestAnimationFrame(go);
+  }
+
+  window.requestAnimationFrame(go);
+};
+  </script>
+
+  <p>
+    a physics simulation based on <a href="http://web.archive.org/web/20070610223835/http://www.teknikus.dk/tj/gdc2001.htm">Advanced Character Physics</a>
+  </p>
+  <p>click to pull it around</p>
+  <canvas id="canv"></canvas>
+  <label for="crochet">
+    text to crochet
+    <input type="text" name="crochet">
+  </label>
+  <button type="button">crochet me</button>

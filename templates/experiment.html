@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}{{ this.name }} - alligatr{% endblock %}
+{% block header %}
+<h1>
+  {{ this.name }}
+</h1>
+{% endblock %}
+
+{% block body %}
+{{ this.html }}
+<footer>
+  <p>
+    by <a href="{{ '/'|url }}">alligator</a>
+  <p>
+</footer>
+{% endblock %}

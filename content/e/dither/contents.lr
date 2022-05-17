@@ -1,0 +1,178 @@
+_model: experiment
+---
+name: dither
+---
+technology: web
+---
+description: a lil' experiment with atkinson dithering
+---
+html:
+
+  <script>
+window.onload = () => {
+  createMatrixInputs();
+  go();
+};
+
+function go() {
+  const matrix = getMatrix();
+
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  const duck = document.getElementById('duck');
+  canvas.width = duck.width;
+  canvas.height = duck.height;
+
+  ctx.font = '16pt sans-serif';
+  ctx.fillText('dithering...', 10, 20);
+
+  requestIdleCallback(() => {
+    ctx.drawImage(duck, 0 ,0);
+    dither(ctx, matrix);
+  });
+};
+
+function dither(ctx, matrix) {
+  const start = new Date();
+
+  const imgData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+  const data = imgData.data;
+  const data32 = new Uint32Array(data.buffer);
+
+  /*
+  const matrix = [
+    // x, y, value
+    [ 1,  0,  1/8],
+    [ 2,  0,  1/8],
+    [-1,  1,  1/8],
+    [ 0,  1,  1/8],
+    [ 1,  1,  1/8],
+    [ 0,  2,  1/8],
+  ];
+  */
+
+  // convert everything to grayscale first
+  for (let i = 0; i < data32.length; i++) {
+    const val = data32[i];
+    const r = val & 0xff;
+    const g = (val >> 8) & 0xff;
+    const b = (val >> 16) & 0xff;
+
+    let brightness = Math.sqrt(
+      r * r * 0.241 +
+      g * g * 0.691 +
+      b * b * 0.068
+    );
+
+    data32[i] = 255 << 24 | brightness << 16 | brightness << 8 | brightness;
+  }
+
+  for (let i = 0; i < data32.length; i++) {
+    const brightness = data32[i] & 0xff;
+
+    const result = brightness > 127 ? 255 : 0;
+    data32[i] = 255 << 24 | result << 16 | result << 8 | result;
+    // data[i] = data[i+1] = data[i+2] = result;
+
+    const error = result - brightness;
+
+    const x = i % ctx.canvas.width;
+    const y = Math.floor(i / ctx.canvas.width);
+
+    // diffuse the error
+    for (let j = 0; j < matrix.length; j++) {
+      const err = Math.floor(error * matrix[j][2]);
+      const idx = ((x + matrix[j][0]) + (y + matrix[j][1]) * ctx.canvas.width);
+
+      const val = data32[idx];
+      const r = val & 0xff;
+      data32[idx] =
+        255 << 24 |
+        (r - err) << 16 |
+        (r - err) << 8 |
+        (r - err);
+      // data[idx] -= err;
+      // data[idx+1] -= err;
+      // data[idx+2] -= err;
+    }
+  }
+
+  ctx.putImageData(imgData, 0, 0);
+
+  const elapsed = new Date().getTime() - start.getTime();
+  console.log(`dithered in ${elapsed}ms`);
+}
+
+function createMatrixInputs() {
+  const el = document.querySelector('.matrix');
+
+  for (let y = 0; y <= 2; y++) {
+    for (let x = -2; x <= 2; x++) {
+      const input = document.createElement('input');
+      input.setAttribute('data-coords', `${x},${y}`);
+      if (x == 0 && y == 0) {
+        input.value = '*';
+      }
+
+      // atkinson
+      if (x == 1 && y == 0) input.value = '0.125';
+      if (x == 2 && y == 0) input.value = '0.125';
+      if (x == -1 && y == 1) input.value = '0.125';
+      if (x == 0 && y == 1) input.value = '0.125';
+      if (x == 1 && y == 1) input.value = '0.125';
+      if (x == 0 && y == 2) input.value = '0.125';
+
+      if (x <= 0 && y == 0) {
+        input.setAttribute('disabled', 'disabled');
+      }
+
+      input.addEventListener('blur', go);
+      el.appendChild(input);
+    }
+  }
+}
+
+function getMatrix() {
+  const els = document.querySelectorAll('.matrix > input');
+  const matrix = [];
+
+  els.forEach((el) => {
+    if (el.getAttribute('disabled')) {
+      return;
+    }
+    const coords = el.getAttribute('data-coords').split(',');
+    const x = parseInt(coords[0], 10);
+    const y = parseInt(coords[1], 10);
+    const val = parseFloat(el.value || 0);
+
+    if (val != 0) {
+      matrix.push([x, y, val]);
+    }
+  });
+
+  return matrix;
+}
+  </script>
+  <style>
+.matrix {
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  column-gap: .5rem;
+  row-gap: .5rem;
+}
+  </style>
+
+  <p>my lil' experiment with <a href="https://beyondloom.com/blog/dither.html">atkinson dithering</a></p>
+
+  <h2>dither matrix</h2>
+  <p>edit this</p>
+  <div class="matrix">
+  </div>
+
+  <h2>result</h2>
+  <div style="display: flex; justify-content: space-around;">
+    <img class="border" id="duck" crossorigin="anonymous" src="duck.jpg"></img>
+    <canvas class="border" id="canvas"></canvas>
+  </div>

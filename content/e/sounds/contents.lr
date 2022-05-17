@@ -1,0 +1,341 @@
+_model: experiment
+---
+name: the sounds
+---
+technology: web
+---
+description: music generator
+---
+html:
+  <script type="text/javascript">
+const midiMap = {
+  "0": 8.18, "1": 8.66, "2": 9.18, "3": 9.72, "4": 10.30, "5": 10.91, "6": 11.56, "7": 12.25,
+  "8": 12.98, "9": 13.75, "10": 14.57, "11": 15.43, "12": 16.35, "13": 17.32, "14": 18.35, "15": 19.45,
+  "16": 20.60, "17": 21.83, "18": 23.12, "19": 24.50, "20": 25.96, "21": 27.50, "22": 29.14, "23": 30.87,
+  "24": 32.70, "25": 34.65, "26": 36.71, "27": 38.89, "28": 41.20, "29": 43.65, "30": 46.25, "31": 49.00,
+  "32": 51.91, "33": 55.00, "34": 58.27, "35": 61.74, "36": 65.41, "37": 69.30, "38": 73.42, "39": 77.78,
+  "40": 82.41, "41": 87.31, "42": 92.50, "43": 98.00, "44": 103.83, "45": 110.00, "46": 116.54, "47": 123.47,
+  "48": 130.81, "49": 138.59, "50": 146.83, "51": 155.56, "52": 164.81, "53": 174.61, "54": 185.00, "55": 196.00,
+  "56": 207.65, "57": 220.00, "58": 233.08, "59": 246.94, "60": 261.63, "61": 277.18, "62": 293.66, "63": 311.13,
+  "64": 329.63, "65": 349.23, "66": 369.99, "67": 392.00, "68": 415.30, "69": 440.00, "70": 466.16, "71": 493.88,
+  "72": 523.25, "73": 554.37, "74": 587.33, "75": 622.25, "76": 659.26, "77": 698.46, "78": 739.99, "79": 783.99,
+  "80": 830.61, "81": 880.00, "82": 932.33, "83": 987.77, "84": 1046.50, "85": 1108.73, "86": 1174.66, "87": 1244.51,
+  "88": 1318.51, "89": 1396.91, "90": 1479.98, "91": 1567.98, "92": 1661.22, "93": 1760.00, "94": 1864.66, "95": 1975.53,
+  "96": 2093.00, "97": 2217.46, "98": 2349.32, "99": 2489.02, "100": 2637.02, "101": 2793.83, "102": 2959.96, "103": 3135.96,
+  "104": 3322.44, "105": 3520.00, "106": 3729.31, "107": 3951.07, "108": 4186.01, "109": 4434.92, "110": 4698.64, "111": 4978.03,
+  "112": 5274.04, "113": 5587.65, "114": 5919.91, "115": 6271.93, "116": 6644.88, "117": 7040.00, "118": 7458.62, "119": 7902.13,
+  "120": 8372.02, "121": 8869.84, "122": 9397.27, "123": 9956.06, "124": 10548.08, "125": 11175.30, "126": 11839.82, "127": 12543.85,
+}
+
+class Params {
+  constructor(query) {
+    this.rendered = false;
+    // keys in display order
+    this.paramKeys = ['magic', 'other-magic', 'modulo', 'bpm', 'wave'];
+    this.shortKeys = ['m', 'om', 'mo', 'b', 'w'];
+    this.params = {
+      magic: {
+        value: 21,
+        min: 1,
+        max: 64,
+      },
+      'other-magic': {
+        value: 4,
+        min: 1,
+        max: 16,
+      },
+      modulo: {
+        value: 87,
+        min: 22,
+        max: 96,
+      },
+      bpm: {
+        value: 100,
+        min: 20,
+        max: 360,
+      },
+      wave: {
+        value: 'sine',
+        options: ['sine', 'triangle', 'square', 'sawtooth'],
+      },
+    }
+
+    if (query) {
+      try {
+        this.deserialize(query);
+      } catch (e) {
+        // ignore errors
+        return;
+      }
+    }
+  }
+
+  get(key) {
+    return this.params[key].value;
+  }
+
+  set(key, value) {
+    this.params[key].value = value;
+
+    if (!this.rendered) {
+      return;
+    }
+
+    if (this.params[key].options) {
+      // ?
+    } else {
+      document.getElementById(`param-${key}`).value = value;
+      document.getElementById(`param-display-${key}`).innerText = value;
+    }
+  }
+
+  randomize() {
+    this.paramKeys.forEach((key) => {
+      const param = this.params[key];
+      if (param.options) {
+      } else {
+        const val = param.min + Math.floor(Math.random() * (param.max - param.min));
+        this.set(key, val);
+      }
+    });
+  }
+
+  serialize() {
+    const output = [];
+    this.shortKeys.forEach((shortKey, index) => {
+      const key = this.paramKeys[index];
+      output.push(shortKey);
+      output.push(this.params[key].value);
+    });
+    return btoa(output.join('|'));
+  }
+
+  deserialize(query) {
+    const data = atob(query);
+    const items = data.split('|');
+    for (let i = 0; i < items.length; i++) {
+      const shortKey = items[i];
+      const key = this.paramKeys[this.shortKeys.indexOf(shortKey)];
+      i++;
+      const value = items[i];
+      if (key && value) {
+        this.set(key, value);
+      }
+    }
+  }
+
+  render(container) {
+    this.paramKeys.forEach((key) => {
+      const param = this.params[key];
+      const div = document.createElement('div');
+      div.classList.add('param');
+
+      const label = document.createElement('label');
+      label.innerText = key;
+      label.setAttribute('for', `param-${key}`);
+
+      const display = document.createElement('span');
+      display.id = `param-display-${key}`;
+      display.innerText = param.value
+
+      if (param.options) {
+        div.appendChild(label);
+
+        for (const option of param.options) {
+          const radio = document.createElement('input');
+          radio.type = 'radio';
+          radio.name = `param-${key}`;
+          radio.value = option;
+
+          if (option === param.value) {
+            radio.checked = true;
+          }
+
+          radio.addEventListener('change', (evt) => {
+            if (evt.target.checked) {
+              param.value = evt.target.value;
+            }
+          });
+
+          const radioLabel = document.createElement('label');
+          radioLabel.classList.add('radio');
+          radioLabel.appendChild(radio);
+          radioLabel.appendChild(document.createTextNode(option));
+          div.appendChild(radioLabel);
+        }
+      } else {
+        const slider = document.createElement('input');
+        slider.type = 'range';
+        slider.min = param.min;
+        slider.max = param.max;
+        slider.value = param.value;
+        slider.id = `param-${key}`;
+        slider.addEventListener('change', (evt) => {
+          param.value = evt.target.valueAsNumber;
+          display.innerText = param.value;
+        });
+
+        div.appendChild(label);
+        div.appendChild(slider);
+        div.appendChild(display);
+      }
+
+      container.appendChild(div);
+    });
+    this.rendered = true;
+  }
+}
+
+let params;
+if (location.search) {
+  params = new Params(location.search.replace('?', ''));
+} else {
+  params = new Params();
+}
+
+function step(bp) {
+  const magic = params.get('magic') * 32 * params.get('other-magic');
+  let ax = bp * magic;
+  ax = ax % params.get('modulo');
+  ax += 37;
+  return ax;
+}
+
+function bpmToInterval(bpm) {
+  return 1000 / ((bpm / 60) * 4);
+}
+
+window.onload = () => {
+  const audioCtx = new AudioContext();
+  audioCtx.suspend();
+  const osc = audioCtx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+  osc.start();
+
+  const gain = audioCtx.createGain();
+  gain.connect(audioCtx.destination);
+  gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+  gain.connect(audioCtx.destination);
+
+  osc.connect(gain);
+
+  const delay = audioCtx.createDelay(5.0);
+  delay.delayTime.setValueAtTime(0.25, audioCtx.currentTime);
+  const delayGain = audioCtx.createGain();
+  delayGain.gain.setValueAtTime(0.025, audioCtx.currentTime);
+  osc.connect(delay);
+  delay.connect(delayGain);
+  delayGain.connect(audioCtx.destination);
+
+  let bp = 0;
+  function next() {
+    bp += 8;
+    const note = step(bp);
+    osc.frequency.setValueAtTime(midiMap[note], audioCtx.currentTime);
+    if (params.get('wave') !== osc.type) {
+      osc.type = params.get('wave');
+    }
+    setTimeout(next, bpmToInterval(params.get('bpm')));
+  };
+
+  setTimeout(next, bpmToInterval(params.get('bpm')));
+  params.render(document.getElementById('params'));
+
+  document.querySelector('#start-stop').addEventListener('click', (evt) => {
+    if (audioCtx.state !== 'running') {
+      audioCtx.resume();
+    } else {
+      audioCtx.suspend();
+    }
+  });
+
+  document.querySelector('#randomize').addEventListener('click', (evt) => {
+    params.randomize();
+  });
+
+  document.querySelector('#share').addEventListener('click', async (evt) => {
+    const query = params.serialize();
+    const baseUrl = location.href.split('?')[0];
+    navigator.clipboard.writeText(`${baseUrl}?${query}`);
+    document.querySelector('#share-text').innerText = 'copied!';
+    setTimeout(() => {
+      document.querySelector('#share-text').innerText = 'copy link';
+    }, 2000);
+  });
+};
+
+function generateUrl() {
+  const keys = [];
+  Object.keys(params).forEach((key) => {
+    if (key === 'get') {
+      return;
+    }
+    keys.push(params[key].urlKey);
+    keys.push(params[key].value);
+  });
+  return btoa(keys.join('|'));
+}
+
+  </script>
+  <style>
+    .param {
+      display: flex;
+      align-items: center;
+      height: 2em;
+    }
+    .param label:first-child {
+      width: 7em;
+      text-align: right;
+      margin-right: 1ex;
+    }
+    .param input[type=range] {
+      flex: 1;
+    }
+    .param label.radio {
+      display: flex;
+      align-items: center;
+      flex: 1;
+    }
+    .param span {
+      width: 3em;
+      text-align: left;
+    }
+    #buttons {
+      display: flex;
+      justify-content: center;
+    }
+    #buttons > button {
+      flex: 1;
+      margin: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    svg {
+      fill: #eee;
+    }
+  </style>
+    <p>
+      algorithim music generator, inspired by the memories DOS demo.
+      <br />
+      <a href="https://www.youtube.com/watch?v=Imquk_3oFf4">video</a>
+      <br />
+      <a href="http://www.sizecoding.org/wiki/Memories#MIDI_music_part">algorithm</a>
+    </p>
+
+    <div id="buttons">
+      <button id="start-stop">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zM10.622 8.415a.4.4 0 0 0-.622.332v6.506a.4.4 0 0 0 .622.332l4.879-3.252a.4.4 0 0 0 0-.666l-4.88-3.252z"/></svg>
+        start/stop
+      </button>
+      <button id="randomize">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36"><path fill="none" d="M0 0h24v24H0z"/><path d="M18 17.883V16l5 3-5 3v-2.09a9 9 0 0 1-6.997-5.365L11 14.54l-.003.006A9 9 0 0 1 2.725 20H2v-2h.725a7 7 0 0 0 6.434-4.243L9.912 12l-.753-1.757A7 7 0 0 0 2.725 6H2V4h.725a9 9 0 0 1 8.272 5.455L11 9.46l.003-.006A9 9 0 0 1 18 4.09V2l5 3-5 3V6.117a7 7 0 0 0-5.159 4.126L12.088 12l.753 1.757A7 7 0 0 0 18 17.883z"/></svg>
+        randomize
+      </button>
+      <button id="share">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36"><path fill="none" d="M0 0h24v24H0z"/><path d="M18.364 15.536L16.95 14.12l1.414-1.414a5 5 0 1 0-7.071-7.071L9.879 7.05 8.464 5.636 9.88 4.222a7 7 0 0 1 9.9 9.9l-1.415 1.414zm-2.828 2.828l-1.415 1.414a7 7 0 0 1-9.9-9.9l1.415-1.414L7.05 9.88l-1.414 1.414a5 5 0 1 0 7.071 7.071l1.414-1.414 1.415 1.414zm-.708-10.607l1.415 1.415-7.071 7.07-1.415-1.414 7.071-7.07z"/></svg>
+        <span id="share-text">copy link</span>
+      </button>
+    </div>
+    <div id="params"></div>
