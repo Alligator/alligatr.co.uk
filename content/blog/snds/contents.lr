@@ -1,0 +1,27 @@
+title: snds - a generative music thing
+---
+date: 2022-11-03
+---
+body:
+
+[snds](https://irc.alligatr.co.uk/snds/) is a web-based generative music thingy I've been working on. Each box is a little experiment. Click on one to hear it and see its visualisation.
+
+## sike
+
+Eno-esque loops of varying lengths. Each loop uses notes from the same scale, then I fiddled around with the timing until it got interesting.
+
+## evening echo
+
+The ticking parts have intervals of 1 and 1.02 seconds. They slowly diverge then recombine, over and over. The main synth is being triggered at 0.98 and 1 second intervals, making the note lengths change as the two loops fight.
+
+## across the two lane
+
+This plays four parts by variously multiplying and dividing a base frequency by a changing ratio.
+
+## mostly spoon
+
+My attempt at something "nice". A few loops in dorian, sometimes with a raised fourth to keep you awake.
+
+## welcome brake
+
+Three noise synths triggering every 0.5, 0.375 and 0.125 seconds. Each synth has it's own bitcrusher, where the number of bits is twiddled every quarter note, creating the variations.
