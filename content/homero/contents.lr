@@ -1,0 +1,474 @@
+_model: experiment
+---
+name: ¿homero?
+---
+_discoverable: no
+---
+html:
+<style>
+  img {
+    vertical-align: top;;
+  }
+</style>
+<p>
+  this is a guide on using homero.
+</p>
+
+<h2>tl;dr</h2>
+<p>
+  you can run a command by using the leader, which is a comma:
+</p>
+<pre>
+   you: ,echo hello
+homero: did you say hello?
+</pre>
+
+<p>
+  you can also pipe the output of a command into another command
+</p>
+<pre>
+   you: ,echo hello | uppercase | papyrus
+homero: <img src="data:image/png;base64,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" />
+</pre>
+<p>
+  run <code>,help command</code> to see the help for a command. most of them don't have good help messages, sorry :(</p>
+</p>
+<p>
+  if a command doesn't seem to do anything, try giving it some input.
+</p>
+<p>
+  msg me at alligator#9563 if somethings broke.
+</p>
+
+<h2>images and sound</h2>
+
+<p>
+  some homero commands respond with text, some with images, and some with sound. here's some examples:
+</p>
+<p>
+  <strong>imgsearch</strong><br>
+  search for an image using some search engine, i forgot which.
+</p>
+<p>
+  <strong>speak</strong><br>
+  old ass text to speech.
+</p>
+<p>
+  <strong>gpt</strong><br>
+  complete the text you pass in. uses GPT via <a href="https://textsynth.com/">textsynth</a>.
+</p>
+<p>
+  <strong>stablediffusion</strong><br>
+  generate an image from the text you pass in. uses stable diffusion via <a href="https://textsynth.com/">textsynth</a>.
+</p>
+
+<h2>pipes</h2>
+<p>
+  homero lets you pipe the output from one command into another. e.g.
+</p>
+<pre>
+   you: ,duck | vhs
+homero: <img src="duck.png" />
+</pre>
+<p>
+  you can keep going:
+</p>
+<pre>
+   you: ,duck | overlay | darksouls The Fucker
+homero: <img src="duck2.png" />
+</pre>
+<p>
+  there's a bunch of commands that modify their input, and are meant to be used in a pipeline. some commands also combine two inputs, like <code>overlay</code> above
+</p>
+
+<h2>the big list of commands</h2>
+<table>
+  <thead>
+    <tr>
+      <th>command</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>100</td>
+      <td>💯ify some text</td>
+    </tr>
+    <tr>
+      <td>audio, snd</td>
+      <td>apply an effect to some audio. see the help message for the available effects. used like <code>,snd effect</code></td>
+    </tr>
+    <tr>
+      <td>bigged</td>
+      <td>🇩 🇴 🇪 🇸&nbsp;&nbsp;&nbsp;🇹 🇭 🇮 🇸&nbsp;&nbsp;&nbsp;🇧 🇺 🇹&nbsp;&nbsp;&nbsp;🇩 🇮 🇸 🇨 🇴 🇷 🇩&nbsp;&nbsp;&nbsp;🇲 🇦 🇰 🇪 🇸&nbsp;&nbsp;&nbsp;🇮 🇹&nbsp;&nbsp;&nbsp;🇧 🇮 🇬</td>
+    </tr>
+    <tr>
+      <td>bigger</td>
+      <td>make an image b i g g e r</td>
+    </tr>
+    <tr>
+      <td>blend</td>
+      <td>blend two images together</td>
+    </tr>
+    <tr>
+      <td>bread</td>
+      <td>bread</td>
+    </tr>
+    <tr>
+      <td>burgerbottom</td>
+      <td>an image of the bottom of a burger. goes well with <code>stack</code>.</td>
+    </tr>
+    <tr>
+      <td>burgerfilling</td>
+      <td>some delicious burger filling ideas</td>
+    </td>
+    <tr>
+      <td>burgertop</td>
+      <td>an image of the top of a burger
+    </tr>
+    <tr>
+      <td>butt</td>
+      <td>buttbot never dies</td>
+    </tr>
+    <tr>
+      <td>ca</td>
+      <td>generate a cellular automata image</td>
+    </tr>
+    <tr>
+      <td>calc</td>
+      <td>a shit calculator. don't use</td>
+    </tr>
+    <tr>
+      <td>circles</td>
+      <td>ⓓ ⓞ ⓔ ⓢ   ⓣ ⓗ ⓘ ⓢ</td>
+    </tr>
+    <tr>
+      <td>crochet</td>
+      <td>generate a crochet of some text</td>
+    </tr>
+    <tr>
+      <td>currency, exch</td>
+      <td>exchange currencies. see it's <code>,help</code></td>
+    </tr>
+    <tr>
+      <td>cutafter</td>
+      <td>idr</td>
+    </tr>
+    <tr>
+      <td>darksouls</td>
+      <td>generate dark souls boss text</td>
+    </tr>
+    <tr>
+      <td>deadlypremonition</td>
+      <td>generate deadly premonition text</td>
+    </tr>
+    <tr>
+      <td>deepthoughts</td>
+      <td>deep thoughts, by jack handey</td>
+    </tr>
+    <tr>
+      <td>dogplanet</td>
+      <td>100% dogs</td>
+    </tr>
+    <tr>
+      <td>doom, doombig, doombigred</td>
+      <td>generate text in various doom fonts</td>
+    </tr>
+    <tr>
+      <td>doomfire</td>
+      <td>apply the doom fire effect to an image</td>
+    </tr>
+    <tr>
+      <td>doommelt, melt</td>
+      <td>apply the doom melt effect to an image</td>
+    </tr>
+    <tr>
+      <td>duck</td>
+      <td>get an image of a duck</td>
+    </tr>
+    <tr>
+      <td>echo</td>
+      <td>did you say echo?</td>
+    </tr>
+    <tr>
+      <td>ellipses</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>entering</td>
+      <td>generate doom style "entering thing> text</td>
+    </tr>
+    <tr>
+      <td>forget</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>forth</td>
+      <td>terrible custom made forth interpreter</td>
+    </tr>
+    <tr>
+      <td>freesound</td>
+      <td>search freesound for some text, returns the first sound</td>
+    </tr>
+    <tr>
+      <td>gameboycamera, gbc</td>
+      <td>apply a game boy camera effect to an image</td>
+    </tr>
+    <tr>
+      <td>glitch</td>
+      <td>glitch an image. might break the image</td>
+    </tr>
+    <tr>
+      <td>gpt</td>
+      <td>complete the text you enter using GPT</td>
+    </tr>
+    <tr>
+      <td>gptcode</td>
+      <td>sucks. don't use</td>
+    </tr>
+    <tr>
+      <td>gun</td>
+      <td>overlay a gun on an image. if run on it's own, uses the last image in the channel</td>
+    </tr>
+    <tr>
+      <td>hexspeak</td>
+      <td>bet thousand ernest hundred and ernesty frost</td>
+    </tr>
+    <tr>
+      <td>img</td>
+      <td>apply various effects to an image. see it's <code>,help</code></td>
+    </tr>
+    <tr>
+      <td>img2snd</td>
+      <td>convert an image to a sound file</td>
+    </tr>
+    <tr>
+      <td>imgsearch</td>
+      <td>search for an image using some search engine</td>
+    </tr>
+    <tr>
+      <td>inflation</td>
+      <td>inflation calculator</td>
+    </tr>
+    <tr>
+      <td>jab</td>
+      <td>ｄ ｏ ｕ ｂ ｌ ｅ &nbsp; ｗ ｉ ｄ ｅ</td>
+    </tr>
+    <tr>
+      <td>japanese</td>
+      <td>english -> katakana -> romaji</td>
+    </tr>
+    <tr>
+      <td>jpeg</td>
+      <td>apply bad jpeg compressing to an image</td>
+    </tr>
+    <tr>
+      <td>kern</td>
+      <td>doesn't do  no t hi ng.  no eff ect</td>
+    </tr>
+    <tr>
+      <td>kg2lbs</td>
+      <td>kg 2 lbs</td>
+    </tr>
+    <tr>
+      <td>lake</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>lastimage</td>
+      <td>get the last image posted in the channel</td>
+    </tr>
+    <tr>
+      <td>laststicker</td>
+      <td>get the last sticker posted in the channel</td>
+    </tr>
+    <tr>
+      <td>lbs2kg</td>
+      <td>lbs 2 kg</td>
+    </tr>
+    <tr>
+      <td>marquee</td>
+      <td>bad scrolling marquee</td>
+    </tr>
+    <tr>
+      <td>meet</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>monospace</td>
+      <td>make text monospace</td>
+    </tr>
+    <tr>
+      <td>mtg</td>
+      <td>generate a magic the gathering card from an image and random messages in the channel</td>
+    </tr>
+    <tr>
+      <td>mystery</td>
+      <td>wouldn't you like to know</td>
+    </tr>
+    <tr>
+      <td>new, star</td>
+      <td><img src="data:image/png;base64,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" /></td>
+    </tr>
+    <tr>
+      <td>notes</td>
+      <td>make text look like ios notes</td>
+    </tr>
+    <tr>
+      <td>omikron</td>
+      <td>generate text that looks like it's from omikron the name soul by game visionary and noted abuser david cage</td>
+    </tr>
+    <tr>
+      <td>overlay</td>
+      <td>overlay one image on top of another. center by default, use compass directions to change it, e.g. "southeast"</td>
+    </tr>
+    <tr>
+      <td>papyrus</td>
+      <td>generate papyrus text</td>
+    </tr>
+    <tr>
+      <td>parens</td>
+      <td>⒟ ⒪ ⒠ ⒮ &nbsp; ⒯ ⒣ ⒤ ⒮</td>
+    </tr>
+    <tr>
+      <td>photocopy</td>
+      <td>make an image look photocopied</td>
+    </tr>
+    <tr>
+      <td>pin</td>
+      <td>setup homero as a pinbot. probably don't do this</td>
+    </tr>
+    <tr>
+      <td>quake</td>
+      <td>generate quake text</td>
+    </tr>
+    <tr>
+      <td>randomMessages</td>
+      <td>get random messages from a channel. mention the channel when you run the command</td>
+    </tr>
+    <tr>
+      <td>remember</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>rip</td>
+      <td>rip</td>
+    </tr>
+    <tr>
+      <td>rolling</td>
+      <td>rolling start</td>
+    </tr>
+    <tr>
+      <td>sansserif</td>
+      <td>generate sans-serif text</td>
+    </tr>
+    <tr>
+      <td>saturn</td>
+      <td>ᙎᗁᘎ ᔌᑎᘎᙎᔕ ᙎᗁᗩᒮ ᒮᗁᓮᔕ ᗪᘎᕮᔕ</td>
+    </tr>
+    <tr>
+      <td>say, speak, speakdeep, sing</td>
+      <td>text to speech</td>
+    </tr>
+    <tr>
+      <td>script</td>
+      <td>𝓭𝓸𝓮𝓼 𝓽𝓱𝓲𝓼</td>
+    </tr>
+    <tr>
+      <td>scroll</td>
+      <td>make an animation of an image scrolling. pass "loop" to make it... loop</td>
+    </tr>
+    <tr>
+      <td>smaller</td>
+      <td>squish an image using context aware sizing. pass "animate" to generate an animation of it squishing</td>
+    </tr>
+    <tr>
+      <td>snd2img</td>
+      <td>convert sound to an image</td>
+    </tr>
+    <tr>
+      <td>spin</td>
+      <td>generate an animation of an image spinning</td>
+    </tr>
+    <tr>
+      <td>spoiler</td>
+      <td>spoiler the last image homero posted. good for unexpected nsfw</td>
+    </tr>
+    <tr>
+      <td>stablediffusion</td>
+      <td>generate an image from some text using stable diffusion</td>
+    </tr>
+    <tr>
+      <td>stack</td>
+      <td>stack two images on top of each other</td>
+    </tr>
+    <tr>
+      <td>steal</td>
+      <td>you wouldn't steal a car</td>
+    </tr>
+    <tr>
+      <td>strife</td>
+      <td>generate strife text</td>
+    </tr>
+    <tr>
+      <td>synonyms, torture</td>
+      <td>replace words in the input with random synonyms</td>
+    </tr>
+    <tr>
+      <td>teletext</td>
+      <td>show a random page of teletext</td>
+    </tr>
+    <tr>
+      <td>temp</td>
+      <td>convert F to C and C to F</td>
+    </tr>
+    <tr>
+      <td>tenyearsago</td>
+      <td>bad command</td>
+    </tr>
+    <tr>
+      <td>theatre</td>
+      <td>generate theatre sign lookin images</td>
+    </tr>
+    <tr>
+      <td>think</td>
+      <td>( .   __ . ) . o O ( cum )</td>
+    </tr>
+    <tr>
+      <td>tingle</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>tone</td>
+      <td>rest in peace tony</td>
+    </tr>
+    <tr>
+      <td>type</td>
+      <td>generate a gif of it's input being typed badly</td>
+    </tr>
+    <tr>
+      <td>uppercase</td>
+      <td>HELLO</td>
+    </tr>
+    <tr>
+      <td>userbar</td>
+      <td>get a random userbar</td>
+    </tr>
+    <tr>
+      <td>vcr, vhs</td>
+      <td>if given some text, generate vhs lookin text. without any text, apply a vhs effect to an image</td>
+    </tr>
+    <tr>
+      <td>weather</td>
+      <td>get the weather. pass a zip code, post code, whatever</td>
+    </tr>
+    <tr>
+      <td>wiggle</td>
+      <td>make an image wiggle</td>
+    </tr>
+    <tr>
+      <td>y2k</td>
+      <td>get a random cool ass y2k image</td>
+    </tr>
+  </tbody>
+</table>

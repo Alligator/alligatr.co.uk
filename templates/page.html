@@ -13,7 +13,6 @@
       <tbody>
         {% for exp in site.query('/e')
           .include_hidden(true)
-          .include_undiscoverable(true)
           .order_by('') %}
         <tr>
           <td style="width: 33%">
