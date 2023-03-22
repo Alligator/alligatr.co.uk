@@ -45,6 +45,7 @@ pre {
 
 hr {
   border: 1px solid #888;
+  margin: 0 2rem;
   height: 0px;
 }
 
@@ -159,7 +160,10 @@ details {
 
 summary { cursor: pointer; }
 
-.page { margin-bottom: 1rem; }
+.page {
+  margin-bottom: 1rem;
+  position: relative;
+}
 
 .border {
   border: 1px solid #555;
@@ -194,4 +198,21 @@ button {
 }
 button:hover {
   background-color: #666;
+}
+
+aside {
+  font-size: 10pt;
+  line-height: 1.75;
+  color: #aaa;
+  border-top: 1px solid #666;
+  border-bottom: 1px solid #666;
+}
+
+@media (min-width: 960px) {
+  aside {
+    position: absolute;
+    right: -26ex;
+    max-width: 24ex;
+    border-bottom: none;
+  }
 }
