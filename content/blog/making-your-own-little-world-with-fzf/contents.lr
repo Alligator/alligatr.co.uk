@@ -1,0 +1,96 @@
+title: Making your own little world with fzf
+---
+date: 2023-03-22
+---
+body:
+
+In-between the interesting tasks like writing code or debugging, there's lots of little, routine
+things to do. This post is about how I do these quicker with fzf.
+
+## fzf?
+
+[fzf](https://github.com/junegunn/fzf) is a general purpose tool for picking a thing from a list of
+things. It reads the list from stdin, and writes the selected item to stdout. What's in the list is
+up to you, as is what you do with it.
+
+Here's some ways I use it, in increasing complexity.
+
+## Level 1 - .sln files
+
+We have a monorepo containing lots of services, each of which has it's own .sln file. This tiny
+script has saved me many minutes clicking around Windows explorer to open the .sln for a service:
+
+<aside>
+<p>This example is in bash even though the original is a Windows batch script.</p>
+<p>Batch scripts are just too weird to use for educational purposes.</p>
+</aside>
+
+```sh
+devenv $(fd -a .sln | fzf)
+```
+
+It uses [fd](https://github.com/sharkdp/fd) to recursively find files ending in .sln, then fzf to pick
+one, then opens that file in `devenv` (Visual Studio).
+
+## Level 2 - Recent git branches
+
+This shows me a list of git branches, sorted by how recently I switched to them:
+
+```sh
+current_branch=$(git branch --show-current)
+
+ref=$(git reflog -1000 --format="%cs %gs" \
+| rg -i "checkout: moving from" \
+| awk '!dupes[$5]++ { print $1, $5 }' \
+| fzf -n 2 --header="current branch: $current_branch" \
+| awk '{ print $2 }')
+
+git checkout "$ref"
+```
+
+This looks complicated, but most of it is plumbing to get the list of branches. It uses `git
+reflog`, [ripgrep](https://github.com/BurntSushi/ripgrep) and awk to get a list of branches and the
+date they were last used, like this:
+
+```
+2023-03-21 latest-branch
+2023-03-14 old-branch
+2023-01-12 older-branch
+```
+
+Which fzf then sorts alphabetically and shows from the bottom up, so you see the most recent branch
+first. The `-n 2` flag tells fzf to search in the second field, i.e. the branch name.
+
+Usually I want to switch to the most recent branch, which will be the default item selected. With
+this script I can run it, quickly check if the branch is what I expected, and press enter to switch
+to it.
+
+## Level 3 - As a filter in a larger program
+
+We have lots of services with HTTP APIs and Swagger pages letting you poke at those
+APIs. I often want to open a service's swagger page, but I don't know it's address.
+
+I can get that information from an API, so I have python script like this:
+
+```python
+# get the service names from an API
+fzf_input = '\n'.join(service_names)
+
+p = subprocess.run('fzf', input=fzf_input, capture_output=True, encoding='utf-8')
+if p.returncode != 0:
+    sys.exit(p.returncode)
+selected_service_name = p.stdout.strip()
+
+# look up the service address for the selected name
+# and open it in a browser
+```
+
+Shelling out to fzf is easy, especially in python since `subprocess.run` blocks until the program
+exits. This script shows me a list of services, I pick one, and it's Swagger page opens in my
+browser.
+
+These are just some of the ways I use fzf to create my own little world of terminal utilities.
+
+Speeding up these routine tasks isn't *really* about saving time. It's about staying focused and
+avoiding distractions. Clicking around a slow UI or a file explorer is prime distraction time for
+me. 
