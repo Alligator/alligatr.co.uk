@@ -1,0 +1,249 @@
+_model: experiment
+---
+name: polyrhythm
+---
+technology: web
+---
+description: see and hear polyrhythms
+---
+html:
+
+  <script>
+let divA = 4;
+let divB = 5;
+window.onload = () => {
+  document.getElementById('divisions-a').addEventListener('change', (evt) => {
+    divA = evt.target.valueAsNumber;
+    if (divA !== null && divB !== null) {
+      generate();
+    }
+  });
+
+  document.getElementById('divisions-b').addEventListener('change', (evt) => {
+    divB = evt.target.valueAsNumber;
+    if (divA !== null && divB !== null) {
+      generate();
+    }
+  });
+
+  document.getElementById('play-btn').addEventListener('click', toggleAudio);
+
+  generate();
+};
+
+function getArticle(num) {
+  // only handles 1-24 or so
+  switch (num) {
+    case 8:
+    case 11:
+    case 18:
+      return 'an';
+    default:
+      return 'a';
+  }
+}
+
+function el(tag) {
+  return document.createElement(tag);
+}
+
+let audioCtx = null;
+let audioInterval = null;
+let audioPlaying = false;
+let steps = [];
+
+function generate() {
+  stopPlaying();
+  steps = [];
+
+  // table
+  // header
+  const grid = el('div');
+  grid.classList.add('grid');
+  grid.style.gridTemplateColumns = `repeat(${divB}, 2.5rem)`;
+
+  const addCell = (content) => {
+    const cell = el('div');
+    const container = el('div');
+    cell.innerText = content;
+    container.appendChild(cell);
+    grid.appendChild(container);
+    return container;
+  };
+
+  // body
+  let i = 0;
+  for (let row = 0; row < divA; row++) {
+    for (let col = 0; col < divB; col++) {
+      const beat = addCell((i + 1).toString());
+      let step = { beat: i + 1, el: beat };
+      if (i % divA === 0) {
+        beat.classList.add('divb');
+        step.divA = true;
+      }
+      if (i % divB === 0) {
+        beat.classList.add('diva');
+        step.divB = true;
+      }
+      if (i % divA !== 0 && i % divB !== 0) {
+        beat.classList.add('dim');
+      }
+      steps.push(step);
+      i++;
+    }
+  }
+
+  const container = document.getElementById('pr-table');
+  container.innerHTML = '';
+  container.appendChild(grid);
+
+  // text
+  const textContainer = document.getElementById('pr-text');
+  textContainer.innerHTML = '';
+
+  const divASpan = document.createElement('span');
+  divASpan.classList.add('diva-colour');
+  divASpan.innerText = divA;
+
+  const divBSpan = document.createElement('span');
+  divBSpan.classList.add('divb-colour');
+  divBSpan.innerText = divB;
+
+  textContainer.appendChild(document.createTextNode(`for ${getArticle(divA)} `));
+  textContainer.appendChild(divASpan);
+  textContainer.appendChild(document.createTextNode(' against '));
+  textContainer.appendChild(divBSpan);
+  textContainer.appendChild(document.createTextNode(` polyrhythm, slice the bar into ${i} divisions`));
+}
+
+function stopPlaying() {
+  audioPlaying = false;
+  clearInterval(audioInterval);
+  steps.forEach((step) => {
+    step.el.classList.remove('active');
+  });
+}
+
+function toggleAudio() {
+  if (audioCtx !== null && audioCtx.state === 'running') {
+    audioCtx.close();
+  }
+
+  clearInterval(audioInterval);
+
+  if (audioPlaying) {
+    stopPlaying();
+    return;
+  }
+
+  audioCtx = new AudioContext();
+  const gainNode = audioCtx.createGain();
+  gainNode.gain.value = 0.25;
+  gainNode.connect(audioCtx.destination);
+
+  const playWave = (type, freq) => {
+    const osc = audioCtx.createOscillator();
+    osc.connect(gainNode);
+    osc.type = type;
+    osc.frequency.value = freq;
+    osc.start();
+    osc.stop(audioCtx.currentTime + 60/1000);
+  };
+
+  let index = 0;
+  let prevStep = null;
+
+  let speed = 3500 / (steps.length * 8/Math.max(divA, divB));
+
+  audioPlaying = true;
+  audioInterval = setInterval(() => {
+    if (!steps) {
+      clearInterval(audioInterval);
+      audioPlaying = false;
+      return;
+    }
+    const step = steps[index];
+    if (step.divA) {
+      playWave('triangle', 329.63);
+    }
+    if (step.divB) {
+      playWave('square', 220);
+    }
+    index = (index + 1) % steps.length;
+    step.el.classList.add('active');
+    if (prevStep) {
+      prevStep.el.classList.remove('active');
+    }
+    prevStep = step;
+  }, speed);
+}
+  </script>
+
+  <style>
+#pr-table > .grid {
+  display: grid;
+  justify-items: stretch;
+  column-gap: .5rem;
+  row-gap: .5rem;
+}
+#pr-table > .grid > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#pr-table > .grid > div.active {
+  border: 2px solid #eee;
+  border-radius: 4px;
+}
+#pr-table > .grid .label {
+  color: #666;
+  font-size: 10pt;
+}
+.dim {
+  color: #555;
+  border: 2px solid #333;
+  border-radius: 4px;
+}
+.diva {
+  color: greenyellow !important;
+}
+#pr-table .diva {
+  border: 2px solid #333;
+  border-radius: 4px;
+}
+.divb {
+  color: #888;
+  border: 2px solid hotpink;
+  border-radius: 4px;
+}
+
+#divisions-a {
+  border: 2px solid greenyellow;
+}
+#divisions-b {
+  border: 2px solid hotpink;
+}
+.diva-colour {
+  color: greenyellow;
+}
+.divb-colour {
+  color: hotpink;
+}
+  </style>
+  <p>
+    visulise an <span class="diva-colour">N</span> against <span class="divb-colour">N</span> polyrythm
+  </p>
+
+  <p>
+    <input id="divisions-a" type="number" min="2" max="24" step="1" value="4" />
+    <input id="divisions-b" type="number" min="2" max="24" step="1" value="5" />
+  </p>
+
+  <p id="pr-text">
+  </p>
+
+  <div id="pr-table"></div>
+
+  <p>
+    <button id="play-btn" type="button">play / stop</button>
+  </p>
