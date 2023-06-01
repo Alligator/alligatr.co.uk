@@ -231,7 +231,7 @@ function toggleAudio() {
 }
   </style>
   <p>
-    visulise an <span class="diva-colour">N</span> against <span class="divb-colour">N</span> polyrythm
+    visualise an <span class="diva-colour">N</span> against <span class="divb-colour">N</span> polyrythm
   </p>
 
   <p>
