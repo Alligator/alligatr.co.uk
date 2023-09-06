@@ -45,7 +45,7 @@ pre {
 
 hr {
   border: 1px solid #888;
-  margin: 0 2rem;
+  margin: 2rem 2rem;
   height: 0px;
 }
 
@@ -132,7 +132,7 @@ time {
 }
 
 /* syntax highlighting */
-pre, code {
+pre {
   color: #ccc;
 }
 .kd, .k {
