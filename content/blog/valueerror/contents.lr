@@ -1,0 +1,101 @@
+title: A pickle of a Python ValueError
+---
+date: 2023-08-23
+---
+body:
+
+I have a custom feed aggregator written in Python. To be [well behaved](http://rachelbythebay.com/w/2023/01/18/http/), it keeps a cache of previous feeds it's fetched. It [unpickles](https://docs.python.org/3/library/pickle.html#pickle.load) the cache from a file after it starts, and [pickles](https://docs.python.org/3/library/pickle.html#pickle.dump) it to a file before it exits.
+
+Every few months it would throw this exception while it's pickling the cache to a file:
+
+```
+Traceback (most recent call last):
+  File "rss.py", line 404, in <module>
+    pickle.dump(cache, f)
+ValueError: I/O operation on closed file.
+```
+
+It would only happen once. If I ran it again, no exception.
+
+This is the `pickle.dump` call on that line:
+
+```python
+with open(cache_file, 'wb') as f:
+  pickle.dump(cache, f)
+```
+
+*How can the file be closed if I opened it on the line before?*
+
+Turns out, it's not. It's a different file. Here's how I figured that out.
+
+## tl;dr, what was the problem?
+
+The `cache` object being pickled contained, deep in it's hierarchy, a file-like object that was closed. That was the source of the exception.
+
+----
+
+First I had to find a reproducible case and... I just waited. It took about six months until it happened reproducibly. Once I had that, I started debugging.
+
+Debugging was frustrating at first. Every exception pointed to the `pickle.dump` call, and I couldn't step into it because it's a native function written in C. Fortunately there's a pure Python version of pickle. It's only used if the native one can't be loaded, but its functions are still there with underscore prefixes.
+
+Changing the call to this allowed me to step into pickle:
+
+```python
+pickle._dump(cache, f)
+```
+
+The object being pickled when the exception was thrown looked interesting:
+
+```
+<_io.BytesIO object at 0x0000015373D15A80>
+```
+
+That's a [file-like object](https://docs.python.org/3/glossary.html#term-file-object). I wonder what it's `closed` property is?
+
+```
+p obj.closed
+True
+```
+
+Hello closed "file". Where did you come from?
+
+Pickle is recursive, so I could look through the stack and see the object hierarchy. The `io.BytesIO` object is inside a [`SAXParseException`](https://docs.python.org/3/library/xml.sax.html#xml.sax.SAXParseException). Where did *that* come from?
+
+<aside>
+<p>Feedparser calls badly-formed feeds "bozos" and these exceptions are "bozo exceptions", which is pretty wonderful.</p>
+</aside>
+
+My feed aggregator uses [feedparser](https://github.com/kurtmckee/feedparser). When that fails to parse a feed, it returns an object containing the exception. In my repro case, a feed would always fail to parse and return a `SAXParseException`.
+
+<!-- obj.bozo_exception._locator._source._InputSource__bytefile -->
+
+<!-- - The exception contained the `XMLReader` that threw it -->
+<!-- - which contained an `InputSource` -->
+<!-- - which contained a `__bytefile` property -->
+<!-- - which contained the closed `io.BytesIO` above -->
+
+<!--
+- `feedparser.util.FeedParserDict.bozo_exception`
+  - `xml.sax._exceptions.SAXParseException._locator`
+      - `xml.sax.expatreader.ExpatParser._source`
+          - `xml.sax.xmlreader.InputSource._InputSource__bytefile`
+              - `io.BytesIO`
+-->
+
+
+The aggregator then put this object into the cache, *without checking if it contains an exception*. Later on, pickle tries to serialize this exception and throws the ValueError.
+
+But, why does the closed `io.BytesIO` object throw that exception when it's pickled? For that, we need to look at its [source](https://github.com/python/cpython/blob/1700d34d314f5304a7a75363bda295a8c15c371f/Modules/_io/bytesio.c).
+
+An object can override `__getstate__` to [change how it's pickled](https://docs.python.org/3/library/pickle.html#object.__getstate__). `io.BytesIO` [does this](https://github.com/python/cpython/blob/1700d34d314f5304a7a75363bda295a8c15c371f/Modules/_io/bytesio.c#L786), and will [throw a ValueError](https://github.com/python/cpython/blob/1700d34d314f5304a7a75363bda295a8c15c371f/Modules/_io/bytesio.c#L38) if it's internal buffer is closed (i.e. null). I'm not sure when this particular `io.BytesIO` gets closed, but it's wrapped around the response body of the HTTP request that fetched the feed. That itself is a file-like object, and has probably long-since been closed.
+
+So, the problem is that feedparser returns an object, that contains a `SAXParseException`, that contains an `io.BytesIO` object, that is closed, and my feed aggregator tries to pickle it.
+
+## The fix
+
+I fixed this in two ways:
+
+1. Don't populate the cache if the feed failed to parse
+2. Don't pickle the whole result from feedparser, just pickle the text content of the feed
+
+If you get a weird ValueError on a `pickle.dump` call, check what you're pickling.
