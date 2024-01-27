@@ -1,0 +1,62 @@
+_model: experiment
+---
+name: audio2img
+---
+technology: web
+---
+description: apply image effects to audio
+---
+html:
+
+  <script src="audio2img.js"></script>
+
+  <style>
+    .btns {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+    main, #img {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    h3 {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+
+<p>
+  apply image effects to audio.
+</p>
+</p>
+  <strong>it's easy to make horrible screeching sounds</strong>. keep the volume low.
+</p>
+
+<main>
+  <div style="display: flex; align-items: center; gap: 1rem;">
+    <input type="file" id="upload" />
+    <button id="example" type="button">load example sound</button>
+  </div>
+  <div id="img" style="display: none">
+    <h3>controls</h3>
+    <div class="btns">
+      <button id="play" type="button">play</button>
+      <button id="stop" type="button">stop</button>
+      <button id="reset" type="button">️reset</button>
+    </div>
+    <h3>effects</h3>
+    <div class="btns" id="controls"></div>
+    <canvas id="canvas"></canvas>
+  </div>
+</main>
+
+<h2>How does this work?</h2>
+<p>
+  It converts the audio data into a series of 8 bit samples and draws those as a grayscale image on an HTML canvas.
+  "Playing" the image does the same in reverse, converting the pixels of the image back into a series of samples.
+</p>
+<p>
+  example sound by <a href="https://freesound.org/people/VEXST/sounds/25577/">VEXST</a>
