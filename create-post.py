@@ -6,7 +6,7 @@ from datetime import datetime
 title = input('title: ')
 
 slug = title.lower().replace(' ', '-')
-slug = re.sub('[^a-z-]', '', slug)
+slug = re.sub('[^a-z-0-9]', '', slug)
 print(f'slug will be {slug}')
 if input('is this ok? (y/n) ') != 'y':
     sys.exit(0)
@@ -18,9 +18,9 @@ f = open(os.path.join('content', 'blog', slug, 'contents.lr'), 'w', encoding='ut
 f.write(f'''\
 title: {title}
 ---
-body:
----
 date: {dt}
+---
+body:
 ''')
 f.close()
 
