@@ -1,0 +1,96 @@
+title: Entity Framework 6 takes a power nap
+---
+date: 2024-02-13
+---
+body:
+
+Or "why do my EF6 migrations take so long to connect to the database?"
+
+A project at work still uses EF6. It also takes *ages* to run the migrations on all the production databases - 40 minutes! Even with no new migrations to run! It seemed to take 30 seconds just to connect to each database.
+
+We told ourselves "EF6 is old and unmaintained, one day we'll upgrade to EF core and the problem will solve itself". But that didn't sit right with me. There's got to be a reason.
+
+There is - EF6 spends most of those 40 minutes sleeping.
+
+## tl;dr
+
+- The database account the project uses can't read from `master`
+- EF6 tries to read from `master` before running the migrations, to check the database exists
+- This fails and hits some retry logic in `System.Data.SqlClient`
+- The retry logic attempts the connection 3 times, sleeping for 10 seconds after each failure
+- EF6 apparently carries on, despite the failure
+
+30 seconds per production database = 40 sleepy minutes.
+
+## Details
+
+We use the SQL server database provider. Before EF6 runs the migrations, it calls `SqlProviderServices.CheckDatabaseExists`, presumably to check the database exists.
+
+Here's that method:
+
+```csharp
+private bool CheckDatabaseExists(SqlConnection sqlConnection, int? commandTimeout, string databaseName)
+{
+  var databaseExists = false;
+  UsingMasterConnection(
+    sqlConnection, conn =>
+    {
+      var databaseExistsScript = SqlDdlBuilder.CreateDatabaseExistsScript(databaseName);
+      using (var command = CreateCommand(conn, databaseExistsScript, commandTimeout))
+      {
+        databaseExists = (int)DbInterception.Dispatch.Command.Scalar(
+        command, new DbCommandInterceptionContext()) >= 1;
+      }
+    });
+  return databaseExists;
+}
+```
+[source](https://github.com/dotnet/ef6/blob/66414427586229202b0305ab9764f601e2a0b4d9/src/EntityFramework.SqlServer/SqlProviderServices.cs#L1371)
+
+Note the call to `UseMasterConnection`. That attempts to connect to the `master` database.
+
+Here's the retry logic this hits in `System.Data.SqlClient`:
+
+```csharp
+int connectionEstablishCount = applyTransientFaultHandling ? connectionOptions.ConnectRetryCount + 1 : 1;
+int transientRetryIntervalInMilliSeconds = connectionOptions.ConnectRetryInterval * 1000; // Max value of transientRetryInterval is 60*1000 ms. The max value allowed for ConnectRetryInterval is 60
+
+for (int i = 0; i < connectionEstablishCount; i++)
+{
+  try
+  {
+    OpenLoginEnlist(_timeout, connectionOptions, credential, newPassword, newSecurePassword, redirectedUserInstance);
+    break;
+  }
+  catch (SqlException sqlex)
+  {
+    if (i + 1 == connectionEstablishCount
+      || !applyTransientFaultHandling
+      || _timeout.IsExpired
+      || _timeout.MillisecondsRemaining < transientRetryIntervalInMilliSeconds
+      || !IsTransientError(sqlex))
+    {
+      throw;
+    }
+    else
+    {
+      Thread.Sleep(transientRetryIntervalInMilliSeconds);
+    }
+  }
+}
+```
+[source](https://github.com/dotnet/SqlClient/blob/af7d39d4496c23fa1660c828a84f31680c0079fc/src/Microsoft.Data.SqlClient/netfx/src/Microsoft/Data/SqlClient/SqlInternalConnectionTds.cs#L540)
+
+`OpenLoginEnlist` fails and hits the catch block.
+
+Note the use of `connectionOptions.ConnectRetryCount` and `connectionOptions.ConnectRetryInterval`. We set `ConnectRetryCount` to 3 in our connection string, but leave `ConnectRetryInterval` unset, which defaults to 10. So this loop will retry 3 times, sleeping for 10 seconds each time.
+
+I'm not sure why a login failure is considered a transient error but apparently, it is.
+
+## Solution
+
+We fixed this by giving our database users read-only access to `master`.
+
+You could also change the `ConnectRetryCount` and `ConnectRetryInterval` options in your connection string, to reduce or entirely stop the retry attempts.
+
+Or you could just let EF6 get some well deserved sleep. It is getting on a bit.
