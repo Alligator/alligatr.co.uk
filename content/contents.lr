@@ -27,6 +27,20 @@ technology: JavaScript (Svelte, d3, uPlot) and Python
 ----
 body: An unofficial viewer and donation count tracker for the biannual [Games Done Quick](https://gamesdonequick.com/) marathons. Run since 2013.
 #### project ####
+title: jqawk
+----
+year: 2021 onwards
+----
+url: https://github.com/Alligator/jqawk
+----
+source: https://github.com/Alligator/jqawk
+----
+image: 
+----
+technology: go
+----
+body: An awk-inspired programming language for wrangling JSON. Written in go.
+#### project ####
 title: seam-carving
 ----
 year: 2021
