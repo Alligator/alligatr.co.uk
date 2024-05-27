@@ -6,108 +6,37 @@
   {{ this.body }}
   <h2>Projects</h2>
   {{ this.projects }}
-  <div class="project">
-    Fun things
+  <section>
+    <h3>Fun things</h3>
 
-    <table style="width: 100%">
-      <tbody>
-        {% for exp in site.query('/e')
-          .include_hidden(true)
-          .order_by('') %}
-        <tr>
-          <td style="width: 33%">
-            {%if exp.url %}
-            <a href="{{exp.url}}">{{exp.name}}</a>
-            {% else %}
-            <a href="{{exp|url}}">{{exp.name}}</a>
-            {% endif %}
-          </td>
-          <!-- <td>{{exp.technology}}</td> -->
-          <td>{{exp.description}}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    {% for exp in site.query('/e')
+      .include_hidden(true)
+      .order_by('') %}
+      <div class="project-row project-row__c2">
+        <h4>
+          {%if exp.url %}
+          <a href="{{exp.url}}">{{exp.name}}</a>
+          {% else %}
+          <a href="{{exp|url}}">{{exp.name}}</a>
+          {% endif %}
+        </h4>
+        <div>{{exp.description}}</div>
+      </div>
+    {% endfor %}
 
-  </div>
-  <div class="project">
-    Others
+  </section>
 
-    <table style="width: 100%">
-      <thead>
-        <tr>
-          <th>name</th>
-          <th>tech</th>
-          <th>description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <a href="https://github.com/Alligator/accent.vim">accent.vim</a>
-          </td>
-          <td>vimscript</td>
-          <td>my vim colourscheme</td>
-        </tr>
-        <tr>
-          <td>
-            <a href="https://github.com/Alligator/gordle">gordle</a>
-          </td>
-          <td>go</td>
-          <td>terminal wordle</td>
-        </tr>
-        <tr>
-          <td>
-            <a href="https://github.com/Alligator/focus">focus</a>
-          </td>
-          <td>swift</td>
-          <td>a mac app to help me focus</td>
-        </tr>
-        <tr>
-          <td>
-            <a href="https://github.com/Alligator/jtermbox">jtermbox</a>
-          </td>
-          <td>C, janet</td>
-          <td>termbox bindings for janet</td>
-        </tr>
-        <tr>
-          <td>
-            <a href="https://github.com/Alligator/nimi-pi-toki-pona">nimi pi toki pona</a>
-          </td>
-          <td>C</td>
-          <td>toki pona to english dictionary</td>
-        </tr>
-        <tr>
-          <td>
-            <a href="https://github.com/Alligator/rss">rss</a>
-          </td>
-          <td>python</td>
-          <td>generate static HTML from RSS feeds</td>
-        </tr>
-        <tr>
-          <td>
-            <a href="https://github.com/Alligator/slider">slider</a>
-          </td>
-          <td>C</td>
-          <td>a tiny tool for creating slideshows</td>
-        </tr>
-        <tr>
-          <td>
-            <a href="http://pizza.alligatr.co.uk">pizza.alligator.co.uk</a>
-          </td>
-          <td>web</td>
-          <td>old web experiments</td>
-        </tr>
-        <tr>
-          <td>
-            <a href="static/canvas-things.html">old alligatr.co.uk</a>
-          </td>
-          <td>web</td>
-          <td>even older web experiments</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <section>
+    <h3>Others</h3>
+    {% for o in this.other.blocks %}
+      <div class="project-row project-row__c3">
+        <h4><a href="{{o.url}}">{{ o.title }}</a></h4>
+        <div class="mobile-hide">{{ o.technology }}</div>
+        <div>{{ o.body }}</div>
+      </div>
+    {% endfor %}
+  </section>
+
   <h2>Games</h2>
   {{ this.games }}
 {% endblock %}

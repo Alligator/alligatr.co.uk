@@ -1,0 +1,10 @@
+_model: experiment
+---
+name: snds
+---
+technology: web
+---
+url: https://irc.alligatr.co.uk/snds/
+---
+description: generative music experiments
+---

@@ -264,3 +264,132 @@ description: even older web experiments
 url: static/canvas-things.html
 ----
 technology: web
+---
+other:
+
+#### project ####
+title: accent.vim
+----
+year: 
+----
+url: https://github.com/Alligator/accent.vim
+----
+source: https://github.com/Alligator/accent.vim
+----
+image: 
+----
+technology: vimscript
+----
+body: my vim colourscheme
+#### project ####
+title: gordle
+----
+year: 
+----
+url: https://github.com/Alligator/gordle
+----
+source: https://github.com/Alligator/gordle
+----
+image: 
+----
+technology: go
+----
+body: terminal wordle
+#### project ####
+title: focus
+----
+year: 
+----
+url: https://github.com/Alligator/focus
+----
+source: https://github.com/Alligator/focus
+----
+image: 
+----
+technology: swift
+----
+body: a mac app to help me focus
+#### project ####
+title: jtermbox
+----
+year: 
+----
+url: https://github.com/Alligator/jtermbox
+----
+source: https://github.com/Alligator/jtermbox
+----
+image: 
+----
+technology: C, janet
+----
+body: termbox bindings for janet
+#### project ####
+title: nimi pi toki pona
+----
+year: 
+----
+url: https://github.com/Alligator/nimi-pi-toki-pona
+----
+source: https://github.com/Alligator/nimi-pi-toki-pona
+----
+image: 
+----
+technology: C
+----
+body: toki pona to english dictionary
+#### project ####
+title: rss
+----
+year: 
+----
+url: https://github.com/Alligator/rss
+----
+source: https://github.com/Alligator/rss
+----
+image: 
+----
+technology: python
+----
+body: RSS to static HTML generator
+#### project ####
+title: slider
+----
+year: 
+----
+url: https://github.com/Alligator/slider
+----
+source: https://github.com/Alligator/slider
+----
+image: 
+----
+technology: C
+----
+body: tiny slideshow creator
+#### project ####
+title: old web experiments
+----
+year: 
+----
+url: http://pizza.alligatr.co.uk/
+----
+source: http://pizza.alligatr.co.uk/
+----
+image: 
+----
+technology: 
+----
+body: old, weird web experiments
+#### project ####
+title: older web experiments
+----
+year: 
+----
+url: http://localhost:5000/static/canvas-things.html
+----
+source: http://localhost:5000/static/canvas-things.html
+----
+image: 
+----
+technology: 
+----
+body: older, weirder web experiments

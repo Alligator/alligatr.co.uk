@@ -4,7 +4,7 @@ name: dither
 ---
 technology: web
 ---
-description: a lil' experiment with atkinson dithering
+description: an atkinson dithering experiment
 ---
 html:
 
