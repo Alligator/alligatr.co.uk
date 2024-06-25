@@ -17,10 +17,11 @@ to: Present
 ----
 body:
 
-I became a Senior Software Engineer at Calero MDSL in early 2020. I also moved to a new team, working on an Azure-hosted project with a TypeScript and React frontend, and a C# microservice based backend.
-- Helped to define and improve development processes.
-- Mentored junior developers.
-- Became PSM I certified as a Scrum Master.
+I became a Senior Software Engineer at Calero MDSL in early 2020 and moved to a new team, working on an Azure-hosted project with a React frontend, and a C# microservice based backend. The project was written by external contractors, and my team had to understand and take ownership of it.
+- Worked on all areas of the stack, including devops adjacent tasks like automating the creation of new databases
+- Helped define new development processes
+- Mentored junior developers
+- Served as scrum master
 #### cv_experience ####
 jobtitle: Software Engineer
 ----
@@ -34,17 +35,7 @@ body:
 
 I started as a frontend developer and progressed to a full-stack developer, working on all areas of a React, ASP.NET and SQL Server stack.
 - Worked as part of a 5-7 person team implementing new features and supporting a large existing codebase.
-- Followed agile development practices and helped improve them within the team, eventually serving as Scrum Master.
-#### cv_experience ####
-jobtitle: VPN Router Technician
-----
-place: StrongVPN, Remote
-----
-from: 2012
-----
-to: 2013
-----
-body: - Worked directly with customers over web chat and remote desktop to solve VPN related issues on routers.
+- Followed agile development practices and helped improve them within the team, eventually serving as scrum master.
 ---
 education:
 
@@ -77,21 +68,17 @@ body:
 ---
 skills:
 
-Hey, I'm Reece, a software developer based in Kent in the UK. I work in JavaScript, TypeScript, React, Jest, C# and SQL Server on a daily or near daily basis. I'm also a PSM I certified Scrum Master.
+I'm Reece, an experienced software developer based in Kent in the UK. 
 
-After working on corporate software for the last six years, I'm interested in a role where the software I help create has a positive impact on the world.
-
-I am comfortable in a wide variety of languages and have written side projects in Go, Rust, Python, C and others.
+I work in TypeScript, React, C# and SQL Server on a daily or near daily basis.
+I am comfortable in a wide variety of languages and have written side projects in Python, Go, Rust, C and others.
 ---
 github: https://github.com/alligator/
 ---
 interests:
 
 ### Programming Languages
-I wrote my own language in the summer of 2020 as a learning exercise and have since written another. I find all parts of that process fascinating and want to continue learning and experimenting with my own languages.
-
-### Rubik's Cube Speedsolving
-I've known how to solve a Rubik's cube for years, but recently started trying to do it quickly. I'm still not that fast but it's a work in progress.
+I wrote my own language in the summer of 2020 as a learning exercise and have since written a handful more. I find all parts of that process fascinating and want to continue learning and experimenting with my own languages.
 
 ### Music
 I play guitar and bass and enjoy jamming with friends.
