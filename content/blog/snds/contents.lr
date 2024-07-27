@@ -25,3 +25,13 @@ My attempt at something "nice". A few loops in dorian, sometimes with a raised f
 ## welcome brake
 
 Three noise synths triggering every 0.5, 0.375 and 0.125 seconds. Each synth has it's own bitcrusher, where the number of bits is twiddled every quarter note, creating the variations.
+
+## stretching between
+
+Three synths playing notes made by diving a base freqeuncy by various ratios. I mainly just tweaked the numbers until it sounded cool.
+
+## major 7 segment
+
+Sounds that change with the time. Listen to it at random times and see what you hear. I've already heard some nice tension and release from `01:31` to `00:32` and `00:42` to `00:43`.
+
+Each digit has a synth "playing" it. The hours and minutes are playing one note per digit. The ones digit of the seconds is playing one note per segment, it's the high synth you hear. The note it plays is offset by the tens digit, so it changes over a minute.
