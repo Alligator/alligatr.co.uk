@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANSI escape codes</title>
+  <style>
+body {
+  background: black;
+  color: white;
+  font-family: monospace;
+  font-size: 1rem;
+}
+h1, h2 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+h1 { padding: 0; margin: 1ex 0 }
+h2 { padding: 0; margin: 0 }
+
+a, a:visited {
+  color: cornflowerblue;
+}
+
+
+.code {
+  display: flex;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.code:hover {
+  background-color: white;
+  color: black;
+}
+
+.code > .desc {
+  color: #ccc;
+  font-weight: bold;
+  max-width: 20rem;
+}
+
+.code > div:first-child {
+  min-width: 10ex;
+}
+
+.columns {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.copied {
+  visibility: hidden;
+  position: absolute;
+  background: white;
+  color: black;
+  width: 10ex;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 100%;
+  }
+  49% {
+    opacity: 100%;
+  }
+  50% {
+    opacity: 90%;
+  }
+  100% {
+    opacity: 90%;
+  }
+}
+  </style>
+  <script>
+window.onload = () => {
+  const copiedOverlay = document.querySelector('.copied');
+  let timeout = null;
+
+  document.querySelectorAll('.code').forEach((el) => el.addEventListener('click', (evt) => {
+    const code = el.querySelector('div:first-child').textContent.trim();
+    navigator.clipboard.writeText(code);
+
+    const elPos = el.getBoundingClientRect();
+    copiedOverlay.style.top = `${elPos.top}px`;
+    copiedOverlay.style.left = `${elPos.left}px`;
+    copiedOverlay.style.visibility = 'visible';
+
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    timeout = setTimeout(() => {
+      copiedOverlay.style.visibility = 'hidden';
+      timeout = null;
+    }, 1000);
+  }));
+};
+  </script>
+</head>
+<body>
+  <h1>
+    ANSI escape codes - click to copy - by <a href="https://alligatr.co.uk">alligator</a>
+  </h1>
+
+  <div class="copied">copied!</div>
+
+  <div class="columns">
+    <div class="col">
+      <h2>cursor</h2>
+      {% for code in this.cursor_codes.blocks %}
+        {% if code.new_section %}
+          <br />
+        {% endif %}
+
+        <div class="code">
+          <div>\x1b[{{ code.code }}</div>
+          <div class="desc">{{ code.desc }}</div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="col">
+      <h2>colour</h2>
+      {% for code in this.colour_codes.blocks %}
+        {% if code.new_section %}
+          <br />
+        {% endif %}
+
+        <div class="code">
+          <div>\x1b[{{ code.code }}</div>
+          <div class="desc" style="{{ code.css }}">{{ code.desc }}</div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="col">
+      <h2>style</h2>
+      {% for code in this.style_codes.blocks %}
+        {% if code.new_section %}
+          <br />
+        {% endif %}
+
+        <div class="code">
+          <div>\x1b[{{ code.code }}</div>
+          <div class="desc" style="{{ code.css }}">{{ code.desc }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</body>
+</html>

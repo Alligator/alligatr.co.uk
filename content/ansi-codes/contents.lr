@@ -1,0 +1,508 @@
+_model: ansi-codes
+---
+cursor_codes:
+
+#### ansi-code ####
+code: nA
+----
+desc: cursor up
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: nB
+----
+desc: cursor down
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: nC
+----
+desc: cursor forward
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: nD
+----
+desc: cursor back
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: nE
+----
+desc: cursor next line
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: nF
+----
+desc: cursor prev line
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: nG
+----
+desc: cursor to col
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: n;mH
+----
+desc: cursor to pos
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: 0J
+----
+desc: erase cursor to end of screen
+----
+css: 
+----
+new_section: yes
+#### ansi-code ####
+code: 1J
+----
+desc: erase cursor to start of screen
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: 2J
+----
+desc: erase entire screen
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: 3J
+----
+desc: erase entire screen + scrollback
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: 0K
+----
+desc: erase cursor to end of line
+----
+css: 
+----
+new_section: yes
+#### ansi-code ####
+code: 1K
+----
+desc: erase cursor to start of line
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: 2K
+----
+desc: erase entire line
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: nS
+----
+desc: scroll up
+----
+css: 
+----
+new_section: yes
+#### ansi-code ####
+code: nT
+----
+desc: scroll down
+----
+css: 
+----
+new_section: 
+---
+colour_codes:
+
+#### ansi-code ####
+code: 0m
+----
+desc: style reset
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: 31m
+----
+desc: red fg
+----
+css: color: rgb(222, 56, 43)
+----
+new_section: 
+#### ansi-code ####
+code: 32m
+----
+desc: green fg
+----
+css: color: rgb(57, 181, 74)
+----
+new_section: 
+#### ansi-code ####
+code: 33m
+----
+desc: yellow fg
+----
+css: color: rgb(255, 199, 6)
+----
+new_section: 
+#### ansi-code ####
+code: 34m
+----
+desc: blue fg
+----
+css: color: rgb(0, 111, 184 )
+----
+new_section: 
+#### ansi-code ####
+code: 35m
+----
+desc: magenta fg
+----
+css: color: rgb(136, 23, 152)
+----
+new_section: 
+#### ansi-code ####
+code: 36m
+----
+desc: cyan fg
+----
+css: color: rgb(44, 181, 233)
+----
+new_section: 
+#### ansi-code ####
+code: 37m
+----
+desc: white fg
+----
+css: color: rgb(204, 204, 204)
+----
+new_section: 
+#### ansi-code ####
+code: 90m
+----
+desc: gray fg
+----
+css: color: rgb(128, 128, 128
+----
+new_section: 
+#### ansi-code ####
+code: 91m
+----
+desc: bright red fg
+----
+css: color: rgb(255,0,0)
+----
+new_section: 
+#### ansi-code ####
+code: 92m
+----
+desc: bright green fg
+----
+css: color: rgb(0, 255, 0)
+----
+new_section: 
+#### ansi-code ####
+code: 93m
+----
+desc: bright yellow fg
+----
+css: color: rgb(255, 255, 0)
+----
+new_section: 
+#### ansi-code ####
+code: 94m
+----
+desc: bright blue fg
+----
+css: color: rgb(85, 85, 255)
+----
+new_section: 
+#### ansi-code ####
+code: 95m
+----
+desc: bright magenta fg
+----
+css: color: rgb(255, 0, 255)
+----
+new_section: 
+#### ansi-code ####
+code: 96m
+----
+desc: bright cyan fg
+----
+css: color: rgb(0, 255, 255)
+----
+new_section: 
+#### ansi-code ####
+code: 97m
+----
+desc: bright white fg
+----
+css: color: white
+----
+new_section: 
+#### ansi-code ####
+code: 41m
+----
+desc: red bg
+----
+css: color: white; background: rgb(222, 56, 43)
+----
+new_section: 
+#### ansi-code ####
+code: 42m
+----
+desc: green bg
+----
+css: color: white; background: rgb(57, 181, 74)
+----
+new_section: 
+#### ansi-code ####
+code: 43m
+----
+desc: yellow bg
+----
+css: color: black; background: rgb(255, 199, 6)
+----
+new_section: 
+#### ansi-code ####
+code: 44m
+----
+desc: blue bg
+----
+css: color: white; background: rgb(0, 111, 184 )
+----
+new_section: 
+#### ansi-code ####
+code: 45m
+----
+desc: magenta bg
+----
+css: color: white; background: rgb(136, 23, 152)
+----
+new_section: 
+#### ansi-code ####
+code: 46m
+----
+desc: cyan bg
+----
+css: color: white; background: rgb(44, 181, 233)
+----
+new_section: 
+#### ansi-code ####
+code: 47m
+----
+desc: white bg
+----
+css: color: black; background: rgb(204, 204, 204)
+----
+new_section: 
+#### ansi-code ####
+code: 100m
+----
+desc: gray bg
+----
+css: color: white; background: rgb(128, 128, 128)
+----
+new_section: 
+#### ansi-code ####
+code: 101m
+----
+desc: bright red bg
+----
+css: color: black; background: rgb(255, 0, 0 )
+----
+new_section: 
+#### ansi-code ####
+code: 102m
+----
+desc: bright green bg
+----
+css: color: black; background: rgb(0, 255, 0)
+----
+new_section: 
+#### ansi-code ####
+code: 103m
+----
+desc: bright yellow bg
+----
+css: color: black; background: rgb(255, 255, 0)
+----
+new_section: 
+#### ansi-code ####
+code: 104m
+----
+desc: bright blue bg
+----
+css: color: white; background: rgb(85, 85, 255)
+----
+new_section: 
+#### ansi-code ####
+code: 105m
+----
+desc: bright magenta bg
+----
+css: color: black; background: rgb(255, 0, 255)
+----
+new_section: 
+#### ansi-code ####
+code: 106m
+----
+desc: bright cyan bg
+----
+css: color: black; background: rgb(0, 255, 255)
+----
+new_section: 
+#### ansi-code ####
+code: 107m
+----
+desc: bright white bg
+----
+css: color: black; background: white
+----
+new_section: 
+#### ansi-code ####
+code: 38;5;nm
+----
+desc: 256 colour fg
+----
+css: 
+----
+new_section: yes
+#### ansi-code ####
+code: 48;5;nm
+----
+desc: 256 colour bg
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: 38;2;r;g;b m
+----
+desc: rgb fg
+----
+css: 
+----
+new_section: yes
+#### ansi-code ####
+code: 48;2;r;g;b m
+----
+desc: rgb bg
+----
+css: 
+----
+new_section: 
+---
+style_codes:
+
+#### ansi-code ####
+code: 1
+----
+desc: bold
+----
+css: font-weight: bold
+----
+new_section: 
+#### ansi-code ####
+code: 2
+----
+desc: dim
+----
+css: color: #888
+----
+new_section: 
+#### ansi-code ####
+code: 3
+----
+desc: italic
+----
+css: font-style: italic
+----
+new_section: 
+#### ansi-code ####
+code: 4
+----
+desc: underlined
+----
+css: text-decoration: underline
+----
+new_section: 
+#### ansi-code ####
+code: 5
+----
+desc: slow blink
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: 6
+----
+desc: fast blink (rare)
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: 7
+----
+desc: reverse video
+----
+css: color: black; background: white
+----
+new_section: 
+#### ansi-code ####
+code: 8
+----
+desc: hide (rare)
+----
+css: 
+----
+new_section: 
+#### ansi-code ####
+code: 9
+----
+desc: strike-thru (rare)
+----
+css: text-decoration: line-through
+----
+new_section: 
+#### ansi-code ####
+code: 20
+----
+desc:
+
+ 𝔣𝔯𝔞𝔨𝔱𝔲𝔯 (𝔢𝔵𝔠𝔢𝔢𝔡𝔦𝔫𝔤𝔩𝔶 𝔯𝔞𝔯𝔢)
+----
+css: 
+----
+new_section: 
