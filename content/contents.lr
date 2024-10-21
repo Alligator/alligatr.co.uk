@@ -384,9 +384,9 @@ title: older web experiments
 ----
 year: 
 ----
-url: http://localhost:5000/static/canvas-things.html
+url: static/canvas-things.html
 ----
-source: http://localhost:5000/static/canvas-things.html
+source: static/canvas-things.html
 ----
 image: 
 ----
