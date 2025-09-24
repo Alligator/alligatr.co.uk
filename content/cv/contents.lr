@@ -9,11 +9,26 @@ experience:
 #### cv_experience ####
 jobtitle: Senior Software Engineer
 ----
+place: Sirius Insight, Remote
+----
+from: 2024
+----
+to: Present
+----
+body:
+
+At Sirius, I work on a small team developing an ingestion pipeline and UI for storing and displaying AIS vessel data.
+- Worked on a complex Azure-based ingestion pipeline processing a high volume of data
+- Worked on a real-time map UI, using Tile38 for geospatial and InfluxDB for time-series data
+- Worked on a third-party integration with WhatsApp for notifying users
+#### cv_experience ####
+jobtitle: Senior Software Engineer
+----
 place: Calero MDSL, Tunbridge Wells
 ----
 from: 2020
 ----
-to: Present
+to: 2024
 ----
 body:
 
@@ -68,10 +83,9 @@ body:
 ---
 skills:
 
-I'm Reece, an experienced software developer based in Kent in the UK. 
+I'm Reece, a senior software developer based in Kent in the UK. 
 
-I work in TypeScript, React, C# and SQL Server on a daily or near daily basis.
-I am comfortable in a wide variety of languages and have written side projects in Python, Go, Rust, C and others.
+I work mainly in C#, SQL and Go. I also have extensive frontend experience in React and TypeScript. I enjoy working on complex systems and I'm comfortable in a wide variety of languages.
 ---
 github: https://github.com/alligator/
 ---

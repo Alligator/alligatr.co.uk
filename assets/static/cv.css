@@ -9,6 +9,7 @@ body {
 }
 a {
     color: #1a79c6;
+    text-decoration: none;
 }
 
 a:hover {
@@ -24,10 +25,10 @@ a:hover {
 }
 .cv header {
     text-align: center;
-    font-family: 'Montserrat', sans-serif;
     margin-bottom: 1rem;
 }
 .cv header .name {
+    font-family: 'Montserrat', sans-serif;
     font-size: 20pt;
     text-transform: uppercase;
     letter-spacing: 0.05em;
