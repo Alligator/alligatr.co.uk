@@ -392,7 +392,7 @@ new_section:
 #### ansi-code ####
 code: 38;5;nm
 ----
-desc: 256 colour fg
+desc: n = 256 colour fg
 ----
 css: 
 ----
@@ -400,13 +400,13 @@ new_section: yes
 #### ansi-code ####
 code: 48;5;nm
 ----
-desc: 256 colour bg
+desc: n = 256 colour bg
 ----
 css: 
 ----
 new_section: 
 #### ansi-code ####
-code: 38;2;r;g;b m
+code: 38;2;r;g;bm
 ----
 desc: rgb fg
 ----
@@ -414,7 +414,7 @@ css:
 ----
 new_section: yes
 #### ansi-code ####
-code: 48;2;r;g;b m
+code: 48;2;r;g;bm
 ----
 desc: rgb bg
 ----
