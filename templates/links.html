@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}alligator's blogroll{% endblock %}
+{% block header %}
+<h1>
+  <a href="{{ '/blogroll'|url }}">alligator's links</a>
+</h1>
+{% endblock %}
+{% block body %}
+  {{ this.description }}
+
+  {% for l in this.links.blocks | sort(attribute='date', reverse=True) %}
+    <div class="link">
+      <time datetime="{{ l.date|dateformat('YYYY-MM-dd') }}">
+        {{ l.date|dateformat('YYYY-MM-dd') }}
+      </time>
+      <a href="{{ l.url}}">{{ l.title }}</a>
+      {{ l.description }}
+    </div>
+  {% endfor %}
+
+  <p>
+    <a href="{{ '/blog'|url }}">blog index</a>
+  </p>
+  <p>
+    <a href="{{ '/'|url }}">who?</a>
+  </p>
+{% endblock %}

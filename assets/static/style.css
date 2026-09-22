@@ -26,6 +26,9 @@ a {
   color: #7ab9ea;
   text-decoration: none;
 }
+a:visited {
+  color: #aa89ea;
+}
 
 a:hover {
   color: #6ac9fa;
@@ -255,4 +258,9 @@ aside {
   .mobile-hide {
     display: none;
   }
+}
+
+.link p {
+  margin-top: 0;
+  padding-left: 1rem;
 }

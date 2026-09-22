@@ -1,0 +1,42 @@
+_model: links
+---
+description: Things I like on the internet
+---
+links:
+
+#### link ####
+date: 2026-09-21
+----
+url: https://www.benkuhn.net/blub/
+----
+title: In defense of blub studies
+----
+description: A good answer to "what should I learn next?"
+#### link ####
+date: 2026-09-20
+----
+url: https://xogium.me/the-text-mode-lie-why-modern-tuis-are-a-nightmare-for-accessibility
+----
+title: The text mode lie: why modern TUIs are a nightmare for accessibility
+----
+description: Good information on why (some) modern TUIs are not accessible
+
+#### link ####
+date: 2026-09-15
+----
+url: https://yuvalino.com/how-can-you-not-be-romantic-about-unix-domain-sockets
+----
+title: How can you not be romantic about UNIX domain sockets?
+----
+description:
+UNIX archaeology is always fun
+
+#### link ####
+date: 2026-09-22
+----
+url: https://maximullaris.com/awk.html
+----
+title: Fascination with AWK
+----
+description:
+Interesting things written in AWK
