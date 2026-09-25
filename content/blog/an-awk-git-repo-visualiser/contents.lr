@@ -1,0 +1,251 @@
+title: git-tree.awk
+---
+date: 2026-09-22
+---
+body:
+
+I wrote a git tree visualiser in AWK. Here it is showing the tree for [accent.vim](https://github.com/Alligator/accent.vim), my vim coloursceheme:
+
+[![](screen.png)](screen.png)
+
+You can try it [here](/static/accent.html).
+
+The source code is [here](https://github.com/Alligator/git-tree.awk).
+
+It generates a single static HTML file. The file tree is on the left, the file content is on the right. Clicking on a file will show its content.
+
+I learned some interesting things about AWK and HTML by writing this, but first.
+
+## Why?
+
+For fun, and because I like AWK. It's minimal, it's everywhere, it's older than me (and probably you). Writing programs in AWK is like being a beginner again; you have a limited set of tools and you have to find new ways to solve problems with them.
+
+----
+
+Here are some things I learned about AWK.
+
+## Multidimensional Arrays
+
+I store a type (`blob` or `tree`) and a path for each file in the repo. In another language I'd keep a list of objects:
+
+```javascript
+[
+  { type: "blob", path: "README.md" },
+  { type: "tree", path: "src" },
+  { type: "blob", path: "src/main.go" },
+]
+```
+
+But AWK only has one collection type, the associative array. [POSIX AWK](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/awk.html) doesn't support nested arrays either. Unless I want to reply on GNU AWK (I don't), I can't do this:
+
+```awk
+files[i]["type"] = type
+files[i]["path"] = path
+```
+
+You *can* use comma separated indexes though:
+
+```awk
+files[i,"type"] = type
+files[i,"path"] = path
+```
+
+<aside>
+  <p>
+    There are lots of different AWKs. BSD-derived systems including macOS come with nawk, also known as the One True AWK as it's maintained by Brian Kernighan (the K in AWK) and others.
+  </p>
+  <p>
+  GNU AWK (or gawk) is also common and, as you'd expect from the FSF, has many, many, <em>many</em> extra features.
+  </p>
+</aside>
+
+This creates an index by joining all the expressions together with `SUBSEP`. On my system AWK (nawk) `SUBSEP` is 28, or the ASCII file separator character
+
+This does make the array longer than the number of files since there's two entries per file. I store the number of files in a separate variable instead.
+
+## nawk doesn't like 0 bytes in strings
+
+When a file is binary, I show "binary file" instead of it's content. I decided on a *very* rough heuristic for this: if there's a 0 byte in the first 100 bytes of a file, it's binary. My plan was to read a few lines with `getline` and call `index()` to check for a 0 byte:
+
+```awk
+if (index(line, "\0") > 0) {
+  # file is binary
+}
+```
+
+But this call to `index` always returned 1, and every file was considered binary. Here's a small program that hints at why:
+
+```shell
+$ awk 'BEGIN {
+  print "one two\0three"
+  print index("one\0two", "\0")
+  print length("\0")
+}'
+one two
+1
+0
+```
+
+nawk will parse `\0` in a string and insert a 0 byte, but also treats it as a string terminator! This is very confusing if you're not expecting it.
+
+My `index` call always returned 1 because it's actually checking this:
+
+```awk
+index(line, "")
+```
+
+And now a digression about AWK version differences.
+
+----
+
+I tried this across a few AWKs:
+
+AWK | `length("\0")` | `index("a\0b", "\0")`
+----|---------
+nawk | 0 | 1
+GNU AWK | 1 | 2
+busybox AWK | 0 | 0
+mawk | 1 | 2
+GoAWK | 1 | 2
+
+Note that `index` returns 1 for the first character in the string.
+
+GNU AWK, mawk and GoAWK get it right, nawk and busybox AWK don't.
+
+The same null-termination problem happens when you read data from files, stdin, or via `getline`. mawk will truncate the string. The well behaved AWKs all read the whole string with the zero byte in it. Busybox AWK is weird. If I create a file with this content:
+
+```
+one\0two
+```
+
+Then use it as the input file, this happens:
+
+```shell
+$ busybox awk '{ print $0 }' zerosep.txt
+one
+two
+```
+
+The zero byte was treated as a record separator, apparently.
+
+----
+
+Anyway, I couldn't find a way to check a string for a null byte in nawk, so instead I use `od` to dump the bytes and check for `00`:
+
+```awk
+function is_binary(name) {
+  while (("od -N 100 -v -t x1 -A n " name | getline l) > 0) {
+    if (index(l, "00") > 0) {
+      return 1
+    }
+  }
+  return 0
+}
+```
+
+## `getline` and `close()` are weird
+
+To measure how long the program takes, I store timestamps and calculate the difference. I first did this:
+
+```awk
+"date +%s" | getline start_ts
+# ... rest of program
+"date +%s" | getline end_ts
+diff_ts = end_ts - start_ts
+```
+
+But `end_ts` was always empty, unless I commented out the `start_ts` line. Printing the result of `getline` gives us some clues why:
+
+```shell
+$ awk 'BEGIN {
+  print ("date +%s" | getline start_ts)
+  print ("date +%s" | getline end_ts)
+}'
+1
+0
+```
+
+`1` means success, `0` means end of file.
+
+The first `getline` executes `date` and sets up a pipe, the next `getline` is reading from the `same` pipe. The `date` command is finished after one line, so there's no more output.
+
+That seems obvious in retrospect, but it wasn't at all at the time.
+
+To close the pipe and run a new command, you have to call `close()`, with the *literal string* you used in the first call. So to fix my bug, I call `close("date +%s")` after getting each timestamp.
+
+I mean the literal string too, whitespace differences will run a new command:
+
+```shell
+$ awk 'BEGIN {
+  "date" | getline date1
+  " date" | getline date2
+  print date1
+  print date2
+}'
+Wed 23 Sep 2026 14:35:44 BST
+Wed 23 Sep 2026 14:35:44 BST
+```
+
+----
+
+Here are some things I learned about HTML and CSS by making the page interactive with no JavaScript.
+
+## The `<details>` element
+
+I already knew about the [`<details>` element](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details), but it's an excellent addition to HTML and I want to remind you it exists. It creates an expandable section with a label (set by the `<summary>` tag).
+
+I used it to create directories which can be expanded and collapsed:
+
+![](docs-collapsed.png)
+![](docs-expanded.png)
+<br/><small>
+The docs directory collapsed and expanded.
+</small>
+
+## The `:target` pseudo-class
+
+When a file is selected on the left, I show the file's content on the right. How do we do that without JavaScript? First, each file is rendered as a `<section>` element with an id taken from its index in the file array:
+
+```html
+<section id="file-0">
+  <h2>.gitignore</h2>
+  <pre>
+    *.json
+    build/
+  </pre>
+</section>
+```
+
+Then I hide them all with this CSS:
+
+```css
+.content > section {
+  display: none;
+}
+```
+
+Showing the selected file involves, two parts. The files in the tree are anchor links with an id that matches the relevant section:
+
+```html
+<a href="#file-0">.gitignore</a>
+<a href="#file-1">LICENSE</a>
+<a href="#file-2">README.md</a>
+```
+
+This is the magic CSS to un-hide the file content:
+
+```css
+.content > section:target {
+  display: block;
+}
+```
+
+The `:target` pseudo class selects the element the URL fragment points to. If the URL is `repo.html#file-1`, the section with the id `file-1` becomes the target and is un-hidden.
+
+----
+
+That's it. If you've never tried writing more than a one-liner in AWK I recommend it. It's familiar, but odd.
+
+## Should you use it?
+
+Probably not.

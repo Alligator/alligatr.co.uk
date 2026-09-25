@@ -1,0 +1,260 @@
+<!doctype html><html lang="en">  <head>    <title>accent.vim</title>    <style>    body { background-color: #111; color: #b4d0e2; font-family: monospace;           font-size: 10pt; margin: 0; padding: 0 }    main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);           gap: 1rem; align-items: start; max-width: 150ch; margin: 0 auto;           padding: 1rem; }    summary { cursor: pointer; }    pre { background-color: #333c57; padding: 1rem; overflow: auto; margin: 0;          tab-size: 4; white-space: pre-wrap }    nav { padding: 1rem; display: flex; flex-direction: column;          gap: .25rem }    .box { border: 1px solid #434c67; border-radius: 8px; overflow: hidden }    .box-header { padding: 1rem; margin: 0; background: #333c57; font-size: 10pt }    .box-content { padding: 1rem; background: #1a1c2c; }    nav a { display: block }    .dir { display: flex; flex-direction: column; gap: .25rem;            margin-top: .25rem }    a { color: hsl(206 55% 66%) }    h1, h2 { font-size: 1rem }    .content > section { display: none }    .content > section:target { display: block }    footer { padding: 1rem 0; border-top: 1px solid #434c67; text-align: center }    .indent-0 { margin-left: 0ch }    .indent-1 { margin-left: 1ch }    .indent-2 { margin-left: 2ch }    .indent-3 { margin-left: 3ch }    .indent-4 { margin-left: 4ch }    </style>  </head>  <body><main>
+<div class="tree box"><h2 class="box-header">accent.vim tree</h2><nav class="box-content"><a href="#file-0">LICENSE</a><a href="#file-1">README.md</a><a href="#file-2">TODO.md</a><details><summary>colors/</summary><div class="dir indent-1"><a href="#file-4">accent.vim</a></nav></div>
+<div class="content"><section id="file-0" class="box"><h2 class="box-header">LICENSE</h2><pre class="box-content">MIT License
+
+Copyright (c) 2025 alligator
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+</pre></section><section id="file-1" class="box"><h2 class="box-header">README.md</h2><pre class="box-content"># accent.vim
+A vim colourscheme with a configurable accent colour. It can help you quickly tell apart different vim sessions at a glance.
+
+It supports the GUI and 256 colour terminals.
+
+![](https://raw.githubusercontent.com/Alligator/accent.vim/images/accent.gif)
+
+## installing
+Using vim-plug:
+```vim
+Plug &#39;alligator/accent.vim&#39;
+```
+Other package managers may vary.
+
+## options
+```vim
+&quot; g:accent_color or g:accent_colour changes the accent colour.
+&quot; one of
+let g:accent_colour = &#39;yellow&#39; &quot; the default
+let g:accent_colour = &#39;orange&#39;
+let g:accent_colour = &#39;red&#39;
+let g:accent_colour = &#39;green&#39;
+let g:accent_colour = &#39;blue&#39;
+let g:accent_colour = &#39;magenta&#39;
+let g:accent_colour = &#39;cyan&#39;
+
+&quot; g:accent_darken makes the background and some text colours darker.
+let g:accent_darken = 0 &quot; the default
+let g:accent_darken = 1
+
+&quot; g:accent_invert_status inverts the colour of the status line text.
+let g:accent_invert_status = 0 &quot; the default
+let g:accent_invert_status = 1
+
+&quot; g:accent_auto_cwd_colour sets the accent colour using a hash of the current directory.
+let g:accent_auto_cwd_colour = 0 &quot; the default
+let g:accent_auto_cwd_colour = 1
+
+&quot; g:accent_no_bg stops the background colour being set, which will use the terminal default
+let g:accent_no_bg = 0 &quot; the default
+let g:accent_no_bg = 1
+
+&quot; after changing settings, you&#39;ll need to re-apply the colorscheme
+colorscheme accent
+```
+
+a neat thing to do is change the accent colour based on the working directory when vim starts:
+```vim
+if getcwd() =~ &#39;code/my-cool-project&#39;
+  let g:accent_colour = &#39;cyan&#39;
+  colo accent
+endif
+```
+</pre></section><section id="file-2" class="box"><h2 class="box-header">TODO.md</h2><pre class="box-content"># accent.vim to-do
+- [x] vimdiff colours
+- [ ] 256 colour terminal support
+- [ ] quick way to switch accent colour on the fly
+- [x] make the menubar look good with all colours (magenta and green are too bright)
+- [x] inactive buffer names are hard to read
+</pre></section><section id="file-4" class="box"><h2 class="box-header">colors/accent.vim</h2><pre class="box-content">&quot; accent.vim
+&quot;
+&quot; a simple vim colourscheme with a configurable accent colour.
+&quot; by alligator
+&quot;
+&quot; https://github.com/Alligator/accent.vim
+
+set background=dark
+hi clear
+
+if exists(&#39;syntax on&#39;)
+  syntax reset
+endif
+
+let g:colors_name = &#39;accent&#39;
+
+let g:accent_colours = {}
+let g:accent_colours[&#39;red&#39;]     = { &#39;fg&#39;: &#39;#e06c75&#39;, &#39;bg&#39;: &#39;#b04c55&#39;, &#39;ctermfg&#39;: &#39;167&#39;, &#39;ctermbg&#39;: &#39;131&#39; }
+let g:accent_colours[&#39;orange&#39;]  = { &#39;fg&#39;: &#39;#ee9360&#39;, &#39;bg&#39;: &#39;#b66930&#39;, &#39;ctermfg&#39;: &#39;173&#39;, &#39;ctermbg&#39;: &#39;166&#39; }
+let g:accent_colours[&#39;green&#39;]   = { &#39;fg&#39;: &#39;#98c379&#39;, &#39;bg&#39;: &#39;#689349&#39;, &#39;ctermfg&#39;: &#39;149&#39;, &#39;ctermbg&#39;: &#39;107&#39; }
+let g:accent_colours[&#39;yellow&#39;]  = { &#39;fg&#39;: &#39;#e5c07b&#39;, &#39;bg&#39;: &#39;#a5803b&#39;, &#39;ctermfg&#39;: &#39;179&#39;, &#39;ctermbg&#39;: &#39;136&#39; }
+let g:accent_colours[&#39;blue&#39;]    = { &#39;fg&#39;: &#39;#61afe7&#39;, &#39;bg&#39;: &#39;#3876af&#39;, &#39;ctermfg&#39;: &#39;74&#39;, &#39;ctermbg&#39;: &#39;67&#39; }
+let g:accent_colours[&#39;magenta&#39;] = { &#39;fg&#39;: &#39;#c688cd&#39;, &#39;bg&#39;: &#39;#965498&#39;, &#39;ctermfg&#39;: &#39;176&#39;, &#39;ctermbg&#39;: &#39;133&#39; }
+let g:accent_colours[&#39;cyan&#39;]    = { &#39;fg&#39;: &#39;#56b6c2&#39;, &#39;bg&#39;: &#39;#3696a2&#39;, &#39;ctermfg&#39;: &#39;73&#39;,  &#39;ctermbg&#39;: &#39;30&#39; }
+
+let g:accent_auto_cwd_colour = get(g:, &#39;accent_auto_cwd_colour&#39;, 0)
+
+let s:accent = get(g:, &#39;accent_colour&#39;, &#39;yellow&#39;)
+let s:accent = get(g:, &#39;accent_color&#39;, s:accent)
+let s:darken = get(g:, &#39;accent_darken&#39;, 0)
+let s:invert_status = get(g:, &#39;accent_invert_status&#39;, 0)
+let s:no_bg = get(g:, &#39;accent_no_bg&#39;, 0)
+
+&quot; 32 bit fowler-noll-vo hash
+function! s:fnv1a(str)
+  let hash = 2166136261
+  let i = 0
+  while i &lt; len(a:str)
+    let c = char2nr(a:str[i])
+    let hash = xor(hash, c)
+    let hash = hash * 16777619
+    let i += 1
+  endwhile
+  return hash
+endfunction
+
+if get(g:, &#39;accent_auto_cwd_colour&#39;, 0)
+  let hash = s:fnv1a(getcwd())
+  let key_index = abs(hash) % len(g:accent_colours)
+  let color = keys(g:accent_colours)[key_index]
+  let s:accent = color
+endif
+
+
+&quot; foreground
+let s:fg      = &#39; guifg=#bcbfc4 ctermfg=250&#39;
+let s:fg_b1   = &#39; guifg=#efefff ctermfg=255&#39;
+let s:fg_d1   = &#39; guifg=#999999 ctermfg=246&#39;
+let s:fg_d2   = &#39; guifg=#777777 ctermfg=244&#39;
+let s:fg_inv  = &#39; guifg=#282c34 ctermfg=236&#39;
+let s:fg_invd = &#39; guifg=#181c24 ctermfg=234&#39;
+let s:fg_c    = &#39; guifg=&#39; . get(accent_colours, s:accent).fg . &#39; ctermfg=&#39; . get(accent_colours, s:accent).ctermfg
+
+&quot; background
+let s:bg      = &#39; guibg=#282c34 ctermbg=236&#39;
+let s:bg_b1   = &#39; guibg=#383c44 ctermbg=237&#39;
+let s:bg_b2   = &#39; guibg=#484c54 ctermbg=238&#39;
+let s:bg_none = &#39; guibg=NONE&#39;
+let s:bg_inv  = &#39; guibg=#cccfd4 ctermbg=188&#39;
+let s:bg_red  = &#39; guibg=&#39; . accent_colours.red.bg . &#39; ctermbg=&#39; . accent_colours.red.ctermbg
+let s:bg_c    = &#39; guibg=&#39; . get(accent_colours, s:accent).bg . &#39; ctermbg=&#39; . get(accent_colours, s:accent).ctermbg
+
+if s:darken
+  let s:fg      = &#39; guifg=#acafb4 ctermfg=248&#39;
+  let s:fg_b1   = &#39; guifg=#dfdfef ctermfg=253&#39;
+  let s:fg_d1   = &#39; guifg=#888888 ctermfg=244&#39;
+  let s:fg_d2   = &#39; guifg=#666666 ctermfg=242&#39;
+
+  let s:bg      = &#39; guibg=#181c24 ctermbg=234&#39;
+endif
+
+&quot; special
+let s:sp_red      = &#39; guisp=&#39; . accent_colours.red.fg     . &#39; ctermfg=&#39; . accent_colours.red.ctermfg
+let s:sp_magenta  = &#39; guisp=&#39; . accent_colours.magenta.fg . &#39; ctermfg=&#39; . accent_colours.magenta.ctermfg
+let s:sp_blue     = &#39; guisp=&#39; . accent_colours.blue.fg    . &#39; ctermfg=&#39; . accent_colours.blue.ctermfg
+let s:sp_cyan     = &#39; guisp=&#39; . accent_colours.cyan.fg    . &#39; ctermfg=&#39; . accent_colours.cyan.ctermfg
+
+&quot; modifiers
+let s:bold      = &#39; gui=bold&#39;
+let s:none      = &#39; gui=none cterm=none&#39;
+let s:underline = &#39; gui=underline&#39;
+let s:undercurl = &#39; gui=undercurl&#39;
+
+&quot; general
+if s:no_bg
+	execute &#39;hi Normal&#39;       . s:fg      . s:bg_none
+else
+	execute &#39;hi Normal&#39;       . s:fg      . s:bg
+endif
+if s:invert_status
+  execute &#39;hi StatusLine&#39; . s:fg_invd .s:bg_c     . s:none
+else
+  execute &#39;hi StatusLine&#39; . s:fg_b1   . s:bg_c    . s:none
+endif
+execute &#39;hi StatusLineNC&#39; . s:fg_d1   . s:bg_b2   . s:none
+execute &#39;hi VertSplit&#39;    . s:fg_c    . s:bg_b1   . s:none
+execute &#39;hi LineNr&#39;       . s:fg_d2   . s:bg_none . s:none
+execute &#39;hi CursorLineNr&#39; . s:fg_b1   . s:bg_none . s:none
+execute &#39;hi CursorLine&#39;               . s:bg_b1   . s:none
+execute &#39;hi MatchParen&#39;   . s:fg_b1   . s:bg_b1   . s:bold
+execute &#39;hi NonText&#39;      . s:fg_d2   . s:bg_none . s:none
+execute &#39;hi WildMenu&#39;     . s:fg_inv  . s:bg_inv  . s:none
+execute &#39;hi Search&#39;       . s:fg_inv  . s:bg_c    . s:none
+execute &#39;hi Folded&#39;       . s:fg_b1   . s:bg_b1   . s:none
+execute &#39;hi Visual&#39;                   . s:bg_b2
+execute &#39;hi Pmenu&#39;        . s:fg_d1   . s:bg_b1   . s:none
+execute &#39;hi PmenuSel&#39;     . s:fg_c    . s:bg_b2   . s:none
+execute &#39;hi TabLine&#39;      . s:fg_d1   . s:bg_b1   . s:none
+execute &#39;hi TabLineFill&#39;  . s:fg_d1   . s:bg_b2   . s:none
+
+hi! link StatusLineTerm StatusLine
+hi! link StatusLineTermNC StatusLineNC
+
+execute &#39;hi Question&#39;     . s:fg_c
+hi! link MoreMsg Question
+hi! link FoldColumn Folded
+
+&quot; spellchecking
+execute &#39;hi SpellBad&#39;     . &#39; ctermbg=NONE&#39; . s:undercurl . s:sp_red
+execute &#39;hi SpellRare&#39;    . &#39; ctermbg=NONE&#39; . s:undercurl . s:sp_magenta
+execute &#39;hi SpellCap&#39;     . &#39; ctermbg=NONE&#39; . s:undercurl . s:sp_blue
+execute &#39;hi SpellLocal&#39;   . &#39; ctermbg=NONE&#39; . s:undercurl . s:sp_cyan
+
+&quot; syntax
+if s:no_bg
+	execute &#39;hi Normal&#39;       . s:fg    . s:bg_none
+else
+	execute &#39;hi Normal&#39;       . s:fg    . s:bg
+endif
+execute &#39;hi Comment&#39;      . s:fg_d2 . s:bg_none . s:none
+execute &#39;hi String&#39;       . s:fg_c  . s:bg_none . s:none
+execute &#39;hi Type&#39;         . s:fg_b1 . s:bg_none . s:none
+execute &#39;hi PreProc&#39;      . s:fg_d1 . s:bg_none . s:none
+execute &#39;hi Underlined&#39;   . s:fg    . s:bg_none . s:underline
+execute &#39;hi Special&#39;      . s:fg_c  . s:bg_none . s:none
+execute &#39;hi Error&#39;        . s:fg_b1 . s:bg_red  . s:none
+
+hi! link Operator     Normal
+hi! link Identifier   Normal
+hi! link Todo         Normal
+hi! link Macro        PreProc
+hi! link Statement    Type
+hi! link Constant     Type
+hi! link SpecialKey   Comment
+hi! link Title        Type
+hi! link Directory    Type
+hi! link Function     Type
+hi! link Number       String
+hi! link Character    String
+hi! link ErrorMsg     Error
+
+&quot; special stuff
+hi! link xmlAttrib    Normal
+hi! link sqlKeyword   Type
+
+&quot; diff
+let s:diff_red    = &#39; guifg=#e06c75 guibg=NONE gui=NONE ctermfg=167 ctermbg=NONE&#39;
+let s:diff_green  = &#39; guifg=#98c379 guibg=NONE ctermfg=149 ctermbg=NONE&#39;
+let s:diff_purple = &#39; guifg=#c688cd guibg=NONE ctermfg=176 ctermbg=NONE&#39;
+
+execute &#39;hi DiffAdd&#39;    . s:diff_green
+execute &#39;hi DiffDelete&#39; . s:diff_red
+execute &#39;hi DiffChange&#39; . s:bg_b1
+execute &#39;hi DiffText&#39;   . s:fg_b1       . s:bg_red  . s:none
+
+hi! link diffAdded    DiffAdd
+hi! link diffRemoved  DiffDelete
+</pre></section></div></main>  <footer>    Generated by git-tree.awk on Wed 23 Sep 2026 15:51:40 BST in 0s  </footer>  </body></html>

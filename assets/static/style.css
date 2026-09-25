@@ -158,6 +158,9 @@ pre {
 .gd {
   color: palevioletred;
 }
+.nt {
+  color: darkseagreen;
+}
 
 details {
   border-left: 4px solid #666;
