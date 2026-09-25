@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}alligator's blogroll{% endblock %}
+{% block title %}alligator's links{% endblock %}
 {% block header %}
 <h1>
   <a href="{{ '/blogroll'|url }}">alligator's links</a>
@@ -10,9 +10,6 @@
 
   {% for l in this.links.blocks | sort(attribute='date', reverse=True) %}
     <div class="link">
-      <time datetime="{{ l.date|dateformat('YYYY-MM-dd') }}">
-        {{ l.date|dateformat('YYYY-MM-dd') }}
-      </time>
       <a href="{{ l.url}}">{{ l.title }}</a>
       {{ l.description }}
     </div>
