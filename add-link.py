@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import argparse
-from urllib.request import urlopen
+from urllib.request import urlopen, Request
 from html.parser import HTMLParser
 from string import Template
 from datetime import datetime
@@ -10,7 +10,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('url', type=str)
 args = parser.parse_args()
 
-resp = urlopen(args.url)
+req = Request(args.url, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0'})
+resp = urlopen(req)
 if resp.status != 200:
     sys.exit(f'response code was {resp.status}')
 
