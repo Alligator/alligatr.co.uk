@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script type="text/javascript" src="blankslate.js"></script>
+  <script type="text/javascript">
+  window.onload = function() {
+    var s = new Slate('canv', 400, 400);
+
+    var width = height = 10;
+    var points = [];
+    for (var i = 0; i < width; i++) {
+      points[i] = [];
+      for (var j = 0; j < height; j++)
+        points[i][j] = false;
+    }
+
+    s.do(function(ctx, time) {
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = 0.25;
+      for (var i = 0; i < 4; i++) {
+        var x = 0;
+        var y = 0;
+        ctx.moveTo(x, y);
+        for (var j = 0; j < 10; j++) {
+          x += Math.random() > 0.5 ? 40 : 0;
+          y += Math.random() > 0.5 ? 40 : 0;
+          ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+    });
+  }
+  </script>
+</head>
+<body>
+  <canvas id="canv"></canvas>
+</body>
+</html>

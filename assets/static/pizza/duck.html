@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript">
+  var score = 0;
+  var actions = {
+    69: function() {
+      document.querySelector('.duck').innerHTML = atob("ICAgICAgICAgX19fX18KICAgICBfLX5+ICAgICB+fi1fLy8KICAgL34gICAgICAgICAgICAgflwKICB8ICAgICAgICAgICAgICBfICB8XwogfCAgICAgICAgIF8tLX5+fiApfn4gKV9fXwpcfCAgICAgICAgLyAgIF9fXyAgIF8tfiAgIH4tXwpcICAgICAgICAgIF8tfiAgIH4tXyAgICAgICAgIFwKfCAgICAgICAgIC8gICAgICAgICBcICAgICAgICAgfAp8ICAgICAgICB8ICAgICAgICAgICB8ICAgICAoTyAgfAogfCAgICAgIHwgICAgICAgICAgICAgfCAgICAgICAgfAogfCAgICAgIHwgICBPKSAgICAgICAgfCAgICAgICB8CiAvfCAgICAgIHwgICAgICAgICAgIHwgICAgICAgLwogLyBcIF8tLV8gXCAgICAgICAgIC8tXyAgIF8tfikKICAgL34gICAgXCB+LV8gICBfLX4gICB+fn5fXy8KICB8ICAgfFwgIH4tXyB+fn4gXy1+fi0tLX4gIFwKICB8ICAgfCB8ICAgIH4tLX5+ICAvIFwgICAgICB+LV8KICAgfCAgIFwgfCAgICAgICAgICAgICAgICAgICAgICB+LV8KICAgIFwgICB+LXwgICAgICAgICAgICAgICAgICAgICAgICB+fi0tX18gXy1+fi0sCiAgICAgfi1fICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLyAgICAgfAogICAgICAgIH5+LS18ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLwogICAgICAgICAgfCAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAvCiAgICAgICAgICB8ICAgfCAgICAgICAgICAgICAgXyAgICAgICAgICAgIF8tfgogICAgICAgICAgfCAgL35+LS1fICAgX18tLS1+fiAgICAgICAgICBfLX4KICAgICAgICAgIHwgIFwgICAgICAgICAgICAgICAgICAgX18tLX5+CiAgICAgICAgICB8ICB8fn4tLV9fICAgICBfX18tLS1+fgogICAgICAgICAgfCAgfCAgICAgIH5+fn5+CiAgICAgICAgICB8ICB8Cg==");
+    }
+  };
+  window.onload = function() {
+    document.querySelector('.duck').onclick = function(e) {
+      if (actions[score]) {
+        actions[score]();
+      }
+      document.querySelector('.score').innerHTML = 'score ' + ++score;
+    }
+  }
+  </script>
+  <style type="text/css">
+  body {
+    width: 200px;
+    margin: 0 auto;
+  }
+  
+  .duck {
+    cursor: pointer;
+    margin: 0 auto;
+  }
+  .duck:hover {
+    color: blue;
+  }
+  .duck:active {
+    padding-top: 2px;
+    padding-left: 2px;
+  }
+  .head {
+    text-align: center;
+  }
+  .score {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  *::-webkit-selection {
+    background:transparent;
+  }
+  *::selection {
+    background:transparent;
+  }
+  </style>
+</head>
+<body>
+<pre class="head">
+duck clicker
+</pre>
+<pre class="score">score 0</pre>
+<pre class="duck">
+           ..
+          ( '`<
+           )(
+    ( ----'  '.
+    (         ;
+     (_______,'
+~^~^~^~^~^~^~^~^~^~^~
+</pre>
+</body>
+</html>

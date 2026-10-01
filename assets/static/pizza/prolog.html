@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="d3.min.js" charset="utf-8"></script>
+  <script type="text/javascript">
+  var treble = {
+    pred: [
+      'treble([], []).',
+      'treble([H|T], [H,H,H|L]) :-',
+      ' treble(T,L).'
+    ],
+    steps : [
+      { match: 1,
+        depth: 0,
+        stack: [
+          'treble([A,B,C], L).'
+      ]},
+      { match: 2,
+        depth: 0,
+        stack: []
+      },
+    ]
+  }
+  window.onload = function() {
+    var current = treble;
+    var stepc = 0;
+    d3.select('body')
+    .on('click', function() {
+      stepc = (stepc + 1) % current.steps.length;
+      moveTo(stepc);
+    });
+    moveTo(0);
+
+    function moveTo(stepc) {
+      var step = current.steps[stepc];
+
+      var pred = d3.select('#pred').selectAll('pre');
+      pred.data(current.pred)
+        .enter().append('pre')
+        .classed('hilight', function(d, i) { return i == step.match; })
+        .text(function(d) { return d; });
+
+      var stack = d3.select('#stack').selectAll('pre');
+      stack.data(step.stack)
+        .enter().append('pre')
+        .text(function(d) { return new Array(step.depth).join(' ') + d; });
+    }
+  }
+  </script>
+  <style type="text/css">
+  @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300);
+  body {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+  pre {
+    margin: 0;
+  }
+  .content {
+    width: 80ex;
+    margin: 0 auto;
+    font-size: 12pt;
+  }
+  .hilight {
+    color: red;
+  }
+  h1 {
+    text-align: center;
+  }
+  h2 {
+    margin-bottom: .2em;
+    font-size: 18pt;
+  }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <h1>¿prolog?</h1>
+    <div id="pred">
+      <h2>Predicate</h2>
+    </div>
+    <div id="stack">
+      <h2>Stack</h2>
+    </div>
+  </div>
+</body>
+</html>

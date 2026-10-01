@@ -1,0 +1,272 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style type="text/css">
+  @import url(http://fonts.googleapis.com/css?family=Montserrat|Playfair+Display:700|Sancreek|Raleway:800|Yanone+Kaffeesatz|Hammersmith+One|Fredericka+the+Great|Candal);
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+  }
+  h1 {
+    margin: 0;
+    padding: 1em;
+    font-size: 6em;
+  }
+  a, a:hover, a:visited {
+    text-decoration: none;
+    color: inherit;
+  }
+  .shadow {
+    background-color: #f9f5ff;
+    color: #f76;
+    text-shadow: -.005em .010em #fc6,
+                 -.010em .015em #fc6,
+                 -.015em .020em #fc6,
+                 -.020em .025em #fc6,
+                 -.025em .030em #fc6,
+                 -.030em .035em #fc6,
+                 -.035em .040em #fc6,
+                 -.040em .045em #fc6,
+                 -.045em .050em #fc6,
+                 -.050em .055em #fc6,
+                 -.055em .060em #fc6,
+                 -.060em .065em #fc6,
+                 -.065em .070em #fc6,
+                 -.065em .070em #e1e4ec,
+                 -.065em .075em #e1e4ec,
+                 -.065em .080em #e1e4ec,
+                 -.065em .085em #e1e4ec,
+                 -.065em .090em #e1e4ec,
+                 -.065em .095em #e1e4ec,
+                 -.065em .100em #e1e4ec,
+                 -.065em .105em #e1e4ec,
+                 -.065em .110em #e1e4ec,
+                 -.065em .115em #e1e4ec,
+                 -.065em .120em #e1e4ec,
+                 -.065em .125em #e1e4ec,
+                 -.065em .130em #e1e4ec,
+                 -.065em .135em #e1e4ec,
+                 -.065em .140em #e1e4ec,
+                 -.065em .145em #e1e4ec,
+                 -.065em .150em #e1e4ec,
+                 -.065em .155em #e1e4ec,
+                 -.065em .160em #e1e4ec,
+                 -.065em .165em #e1e4ec,
+                 -.065em .170em #e1e4ec,
+                 -.065em .175em #e1e4ec,
+                 -.065em .180em #e1e4ec,
+                 -.065em .185em #e1e4ec;
+}
+
+.inset {
+  color: #ea3;
+  font-family: 'Playfair Display', serif;
+  /* background-color: rgb(228, 143, 0); */
+  background-color: rgb(0, 104, 109);
+  text-shadow: .04em 0 #fe6,
+               .06em 0 #ea3,
+               .08em 0 #ea3,
+               -.02em .02em black,
+               -.04em .04em black,
+               -.06em .06em black,
+               -.08em .08em black,
+
+               -.11em .11em #099;
+}
+
+.twotone {
+  font-family: 'Sancreek', serif;
+  color: #fb5;
+  background-color: #922;
+}
+.twotone div {
+  position: relative;
+  text-shadow: 3px 3px   #922,
+              -3px 3px   #922,
+               5px 5px   black,
+               7px 7px   black,
+               9px 9px   black,
+               11px 11px black,
+               13px 13px black;
+}
+.twotone div:before {
+  content: 'ALLIGATOR';
+  height: .66em;
+  position: absolute;
+  color: #edd;
+  overflow: hidden;
+}
+.simple {
+  font-family: 'Raleway', sans-serif;
+  background-color: #ea3;
+  text-shadow: 02px 02px #edb,
+               04px 04px #edb,
+               06px 06px #edb,
+               08px 08px #edb,
+               10px 10px #edb;
+}
+.inverted {
+  font-family: 'Hammersmith One', sans-serif;
+  background-color: #110;
+  color: #cb7;
+  border: 4px solid #cb7;
+  outline: 12px solid #110;
+  margin: 8px;
+}
+.chunky {
+  font-family: 'Hammersmith One', sans-serif;
+  background-color: #135;
+  color: #c77;
+  letter-spacing: .1em;
+  text-shadow:
+    2px 1px #357,
+    2px 1px #579,
+    2px 3px #357,
+    3px 2px #579,
+    3px 4px #357,
+    4px 3px #579,
+    4px 5px #357,
+    5px 4px #579,
+    5px 6px #357,
+    6px 5px #579,
+    6px 7px #357,
+    7px 6px #579,
+    7px 8px #357,
+    8px 7px #579,
+    8px 9px #357;
+}
+
+.diversarms {
+  font-family: 'Hammersmith One';
+  background-color: #193862;
+  color: #d3d39c;
+  text-shadow:
+     1px -1px #193862,
+     1px  0px #193862,
+     1px  1px #193862,
+     0px -1px #193862,
+     0px  0px #193862,
+     0px  1px #193862,
+    -1px -1px #193862,
+    -1px  0px #193862,
+    -1px  1px #193862,
+
+    -1px 0px #6a3463,
+    -1px 2px #a0697d,
+    -2px 1px #6a3463,
+    -2px 3px #a0697d,
+    -3px 2px #6a3463,
+    -3px 4px #a0697d,
+    -4px 3px #6a3463,
+    -4px 5px #a0697d,
+    -5px 4px #6a3463,
+    -5px 6px #a0697d,
+    -6px 5px #6a3463,
+    -6px 7px #a0697d,
+    -7px 6px #6a3463,
+    -7px 8px #a0697d,
+    -8px 7px #6a3463,
+    -8px 9px #a0697d,
+    -9px 8px #6a3463,
+    -9px 10px #a0697d,
+    -10px 9px #6a3463,
+    -10px 11px #a0697d,
+
+    -10px 11px #092852,
+     -9px 12px #092852,
+     -8px 13px #092852,
+     -7px 14px #092852,
+     -6px 15px #092852,
+     -5px 16px #092852,
+     -4px 17px #092852,
+     -3px 18px #092852,
+     -2px 19px #092852,
+     -1px 20px #092852,
+     -0px 21px #092852;
+}
+.chalk {
+  font-family: 'Fredericka the Great';
+  background-color: #282828;
+  color: #c7c7c7;
+  letter-spacing: .1em;
+  text-shadow:
+   -3px 0px #282828,
+    3px 0px #484848,
+    0px 1px #483828,
+    0px 2px #282848,
+    1px 3px #282828,
+    2px 4px #382848,
+    3px 5px #382848,
+
+    3px 7px #716171,
+    3px 8px #716171,
+    4px 9px #615171,
+    4px 10px #716171,
+    4px 11px #615171,
+    3px 12px #514161;
+}
+
+.sup {
+  font-family: 'Candal';
+  background-color: #c22;
+  color: white;
+  text-shadow:
+    5px  0px black,
+    0px  5px black,
+   -5px  0px black,
+    0px -5px black,
+
+    4px  4px black,
+   -4px  4px black,
+    4px -4px black,
+   -4px -4px black,
+
+    4px  5px black,
+   -4px  5px black,
+    4px -5px black,
+   -4px -5px black,
+
+    5px  4px black,
+   -5px  4px black,
+    5px -4px black,
+    -5px -4px black,
+
+    5px  6px black,
+    6px  7px black,
+    7px  8px black,
+    8px  9px black,
+    9px 10px black,
+
+    0px  6px black,
+    1px  7px black,
+    2px  8px black,
+    4px  9px black,
+    5px 10px black;
+
+  /*
+  00 10 20 30 40 50
+  01 11 21 31 41 51
+  02 12 22 32 42 52
+  03 13 23 33 43 53
+  04 14 24 34 44 54
+  05 15 25 35 45 55
+}
+  </style>
+</head>
+<body>
+  <a href="http://google.com/fonts/specimen/Montserrat"><h1 class="shadow">ALLIGATOR</h1></a>
+  <a href="http://google.com/fonts/specimen/Playfair+Display"><h1 class="inset">ALLIGATOR</h1></a>
+  <a href="http://google.com/fonts/specimen/Hammersmith+One"><h1 class="chunky">ALLIGATOR</h1></a>
+  <a href="http://google.com/fonts/specimen/Sancreek"><h1 class="twotone"><div>ALLIGATOR</div></h1></a>
+  <a href="http://google.com/fonts/specimen/Hammersmith+One"><h1 class="inverted">ALLIGATOR</h1></a>
+  <a href="http://google.com/fonts/specimen/Raleway"><h1 class="simple">ALLIGATOR</h1></a>
+  <a href="http://google.com/fonts/specimen/Hammersmith+One"><h1 class="diversarms">ALLIGATOR</h1></a>
+  <a href="http://google.com/fonts/specimen/Fredericka+the+Great"><h1 class="chalk">ALLIGATOR</h1></a>
+  <a href="http://google.com/fonts/specimen/Candal"><h1 class="sup">ALLIGATOR</h1></a>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+<style> /* {{{ */
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
+body, html {
+  padding: 0;
+  margin: 0;
+}
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+  line-height: 1.35;
+}
+
+circle {
+  /* fill: rgb(31, 119, 180); */
+  /* fill-opacity: .25; */
+  /* stroke: rgb(31, 119, 180); */
+  /* stroke-width: 1px; */
+  fill: none;
+  stroke: none;
+}
+
+.parent circle {
+  fill: #5e4fa2;
+}
+.parent text {
+  fill: white;
+  font-size: 24pt;
+}
+
+.leaf circle {
+  /* fill: rgba(220, 100, 155, 0.9); */
+  stroke-width: 1px;
+  cursor: pointer;
+}
+.leaf text {
+  font-size: 8pt;
+  pointer-events: none;
+}
+
+.active {
+  stroke: black;
+}
+
+text {
+  cursor: pointer;
+  /* pointer-events: none; */
+  fill: white;
+}
+
+.tooltip {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
+  width: 300px;
+  font-size: 10pt;
+  padding: 1em;
+  border: 2px dashed rgba(240, 130, 175, 0.5);
+}
+
+svg {
+  pointer-events: all;
+}
+
+.legend {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+.legend-colour {
+  width: 1em;
+  height: 1em;
+  margin-right: 1ex;
+}
+.legend-text, .legend-colour {
+  display: inline-block;
+}
+#chart {
+  position: relative;
+  border-top: 3px solid #ddd;
+}
+h1, h2, h3 { text-align: center; }
+/* }}} */
+</style>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="d3-tip.js"></script>
+</head>
+<body>
+  <h1>Visualizing Student Satisfaction</h1>
+  <div id="chart">
+    <div class="legend"></div>
+  </div>
+<script>
+window.onload = function() {
+  var tip = d3.tip()
+    .html(function(d) {
+      return d.name;
+    })
+    .attr('class', 'tooltip')
+    .offset(function(d) {
+      var r = d.r - 20;
+      if (d.y < 300) return [-r/2, r/2];
+      return [r/2, r/2];
+    })
+    .direction(function(d) {
+      if (d.x < 300) return 'e';
+      if (d.y < 300) return 's';
+      return 'n';
+    });
+
+  var diameter = 600,
+      format = d3.format(",d");
+
+  var pack = d3.layout.pack()
+    .size([diameter - 4, diameter - 4])
+    .padding(5);
+
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+
+  var zm = d3.behavior.zoom()
+    .on('zoom', zoomHandler);
+
+  var svg = d3.select("#chart").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+  svg.call(zm);
+
+  svg = svg.append("g").call(tip);
+  svg = svg.append('g');
+
+  var zoomedout = false;
+  var zoomThreshold = 0.95;
+  function zoomHandler() {
+    if (d3.event.scale < zoomThreshold && !zoomedout) {
+      node.transition().attr("opacity", function(d) {
+        if (!d.parent)
+          return "0";
+        if (!d.children)
+          return "0";
+        else
+          return "1";
+      }).style('pointer-events', 'none');
+      zoomedout = true;
+  } else if (d3.event.scale > zoomThreshold && zoomedout){
+      node.transition().attr("opacity", function(d) {
+        if (d.children || !d.parent)
+          return "0";
+      }).style('pointer-events', 'all');
+      zoomedout = false;
+    }
+    svg.attr('transform', 'translate(' + d3.event.translate + ')scale(' + d3.event.scale + ')');
+  }
+
+  var node;
+  var txt
+
+  d3.json("nss.json", function(error, root) {
+
+    var categories = [];
+    root.children.forEach(function(d) { categories.push(d.name); });
+    var colourScale = d3.scale.ordinal()
+      .range(['rgb(213,62,79)','rgb(252,141,89)','rgb(254,224,139)','rgb(230,245,152)','rgb(153,213,148)','rgb(50,136,189)'])
+      .domain(categories);
+
+    var a = d3.select('.legend').selectAll('.label')
+      .data(categories).enter()
+        .append('div')
+    a.append('div')
+      .attr('class', 'legend-colour')
+      .style('background-color', colourScale);
+    a.append('div')
+      .attr('class', 'legend-text')
+      .text(function (d) { return d; });
+
+    zm.translate([width/2 - pack.size()[0]/2, 0]);
+    svg.attr('transform', 'translate(' + [width/2 - pack.size()[0]/2, 0] + ')');
+
+    node = svg.datum(root).selectAll(".node")
+        .data(pack.nodes)
+      .enter().append("g")
+        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+        .attr("class", function(d) { return d.name == "root" ? "" : d.children ? "parent" : "leaf"; })
+        .attr("opacity", function(d) {
+          if (!d.parent || d.children)
+            return "0";
+        })
+        .on('mouseover', function(d, i) {
+          if (!d.children) {
+            d3.select(this).classed('active', true);
+            tip.show(d);
+          }
+        })
+        .on('mouseout', function(d, i) {
+          d3.select(this).classed('active', false);
+          tip.hide(d);
+        });
+
+    node.append("circle")
+        .attr("r", function(d) { return d.r; })
+        .style('fill', function(d) {
+          if (!d.children)
+            return colourScale(d.parent.name);
+        });
+
+    txt = node.filter(function(d) { return d.parent; }).append("text");
+    txt.attr("dy", ".3em")
+        .style("text-anchor", "middle")
+        .text(function(d) {
+          if (d.parent && d.children)
+            return d.name;
+          else if (!d.children)
+            return d.value;
+          else
+            return "";
+        })
+        .attr("opacity", function(d) {
+          if (!d.parent)
+            return "0";
+        })
+  });
+}
+</script>
+</body>
+</html>

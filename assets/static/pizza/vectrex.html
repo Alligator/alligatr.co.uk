@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript">
+window.onload = function() {
+  var vc = VectorCanvas('canv');
+  vc.drawLine(20, 20, 200, 20);
+}
+
+function VectorCanvas(id) {
+  var vc = {};
+
+  var canvas = document.getElementById(id);
+  var ctx = canvas.getContext('2d');
+  var w = 800;
+  var h = 600;
+  canvas.width = w;
+  canvas.height = h;
+
+  var lineSpeed = 20;
+
+  var lineBatch = [];
+
+  function lineLen(l) {
+    var a = Math.pow(l[0] - l[2], 2) || 0;
+    var b = Math.pow(l[1] - l[3], 2) || 0;
+    return Math.sqrt(a + b);
+  }
+
+  vc.drawLine = function(x0, y0, x1, y1, cb) {
+    ctx.fillStyle = 'white';
+    var dx = Math.abs(x1 - x0);
+    var dy = Math.abs(y1 - y0);
+    var sx = x0 < x1 ? 1 : -1;
+    var sy = y0 < y1 ? 1 : -1;
+    var err = dx - dy;
+    var i = setInterval(function() {
+      ctx.fillRect(x0, y0, 1, 1);
+      if (x0 == x1 && y0 == y1) {
+        clearInterval(i);
+        cb();
+      }
+      var e2 = 2*err;
+      if (e2 > -dy) {
+        err = err - dy;
+        x0 = x0 + sx;
+      }
+      if (e2 < dx) {
+        err = err + dx;
+        y0 = y0 + sy;
+      }
+    }, 1);
+  }
+
+  return vc;
+}
+
+  </script>
+  <style type="text/css">
+  body {
+    background-color: black;
+    color: white;
+  }
+
+  canvas {
+    border: 1px solid white;
+  }
+  </style>
+</head>
+<body>
+  <canvas id="canv"></canvas>
+</body>
+</html>

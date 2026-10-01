@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript">
+  window.onload = function() {
+    var canvas = document.getElementById('canv');
+    var ctx = canvas.getContext('2d');
+
+    var width = 640;
+    var height = 480;
+    canvas.width  = width;
+    canvas.height = height;
+
+    function BSPTree() {
+      var b = {};
+
+      b.points = [];
+      b.front = b.back = null;
+
+      return b;
+    }
+
+    var draw_line = function(line) {
+      ctx.strokeStyle = 'red';
+      ctx.beginPath();
+      ctx.moveTo(line[0][0], line[0][1]);
+      ctx.lineTo(line[1][0], line[1][1]);
+      ctx.stroke();
+    }
+
+    var draw_tree = function(tree, depth) {
+      var depth = depth || 0;
+      // ctx.fillStyle = 'hsl(' + depth * 36 + ',100%,50%)';
+      ctx.fillStyle = 'black';
+      for (var i = 0; i < tree.points.length; i++) {
+        ctx.beginPath();
+        var p = tree.points[i];
+        ctx.arc(p[0], p[1], 5, 0, Math.PI*2);
+        ctx.fill();
+      }
+      if (tree.plane)
+        draw_line(get_line(tree.plane));
+      if (tree.front)
+        draw_tree(tree.front, depth + 1);
+      if (tree.back)
+        draw_tree(tree.back, depth + 1);
+    }
+
+    function get_line(plane) {
+      return plane[1] ?
+        [[plane[0], 0], [plane[0], height]] : // vert
+        [[0, plane[0]], [width, plane[0]]];   // horz
+    }
+
+    // gen the points
+    var points = [];
+    for (var i = 0; i < 20; i++)
+      points[i] = [
+        Math.floor(Math.random()*(width-20))  + 10,
+        Math.floor(Math.random()*(height-20)) + 10
+      ];
+
+    function build_tree(tree, points, vert) {
+      // very naive - splitting plane is just the first point
+      var plane = [points[0][1], vert];
+
+      var front = [];
+      var back = [];
+      for (var i = 0; i < points.length; i++) {
+        var p = points[i];
+        var l = plane[1] ? 1 : 0;
+          if (p[l] > plane[0])
+            front.push(p);
+          else if (p[l] < plane[0])
+            back.push(p);
+          else
+            tree.points.push(p);
+      }
+
+      if (front.length) {
+        tree.plane = plane;
+        tree.front = BSPTree();
+        build_tree(tree.front, front, !vert);
+      }
+      if (back.length) {
+        tree.plane = plane;
+        tree.back = BSPTree();
+        build_tree(tree.back, back, !vert);
+      }
+      return tree;
+    }
+
+    // naive - splitting plane is just the first point in the list
+    var root = build_tree(BSPTree(), points, false);
+    console.log(root);
+    draw_tree(root);
+
+  }
+  </script>
+  <style type="text/css">
+  canvas {
+    border: 1px solid black;
+  }
+  </style>
+</head>
+<body>
+  <canvas id="canv"></canvas>
+</body>
+</html>

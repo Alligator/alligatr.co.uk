@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script id="term" type="text/javascript">
+  // a lil terminal lookin thing using canvas idk.
+  // it's pretty slow so you probably shouldn't use it.
+  // example: var t = term(ctx, "10pt monospace");
+  //          t.puts('hello', 0, 0);
+  //          t.puts('goodbye', 0, 1, 'black', 'white');
+
+  function term(a,b,c,d,e) { // a=ctx, b=font, c=text width, d=text height
+    with(a)font=b,c=measureText('e').width,          // setting up canvas stuff
+      d=Math.round(c*1.5), c*=1.1,canvas.width=c*80, // text size, canvas size
+      canvas.height=d*40+5,font=b,fillStyle='#fff',  // colors, font
+      e=[];while(e.push([])<80);                     // init empty text array
+    function u(x,y,z,i){                 // update function
+      with(a){
+        save(),clearRect(0,0,c*80,d*40); // clear the canvas
+        for (i=0;i<80*40;i++){           // for each char in the text array
+          y=0|i/80,x=i%80,z=e[x][y];
+          if(z)                          // if there is a char, draw it
+            z.b?fillStyle=z.b:fillStyle='rgba(0,0,0,0)',
+            fillRect(x*c,y*d,c+1,d),     // draw the background
+            fillStyle=z.f||'#fff', fillText(z.c,x*c,y*d+d);};
+        restore();}
+    }
+    return {
+      putc:function(c,x,y,f,b){e[x][y]={c:c[0],f:f,b:b}},
+      puts:function(s,x,y,f,b){for(var i=0,c;c=s[i++];this.putc(c,x+i,y,f,b));},
+      update:u
+    };
+  }
+  </script>
+  <script type="text/javascript">
+  window.onload = function() {
+    var ctx = document.getElementById('canv').getContext('2d');
+    var t = term(ctx, "11pt 'Courier New', monospace");
+    var src = document.getElementById('term').innerHTML.split('\n');
+    for (var i = 0; i < src.length; i++) {
+      var l = src[i].substr(0,79).split('//');
+      t.puts(l[0], 0, i);
+      if (l[1])
+        t.puts('//'+l[1], l[0].length, i, '#db7');
+    }
+    t.update();
+  }
+  </script>
+  <link rel="stylesheet" href="pizza.css" />
+</head>
+<body>
+  <canvas id="canv">
+  </canvas>
+</body>
+</html>

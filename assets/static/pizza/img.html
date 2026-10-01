@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="IM.developer.js"></script>
+  <script type="text/javascript">
+  var POP_SIZE = 20;
+  var ITERATIONS = 50;
+  var TOURNAMENT_SIZE = 2;
+  var MUTATION_RATE = 0.1;
+  var CROSSOVER_RATE = 0.95;
+
+  window.onload = function() {
+    var canvas = document.getElementById('canv');
+    var ctx = canvas.getContext('2d');
+
+    var img = document.getElementById('img');
+
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    function getFitness(indv) {
+      // var id = ctx.createImageData(canvas.width, canvas.height);
+      // id.data.set(indv);
+      // ctx.putImageData(id, 0, 0);
+
+      var done = false;
+      var perc = 0;
+      IM.compare([canvas, canv], function(){}, function(ocanvas, time, percent) {
+        done = true;
+        perc = percent;
+      });
+      while (!done);
+      return perc;
+    }
+
+    function tselect(fitness) {
+      var best;
+      for (var i = 0; i < TOURNAMENT_SIZE; i++) {
+        var ind = fitness[Math.floor(Math.random()*fitness.length)];
+        if (!best || ind[0] > best[0]) best = ind;
+      }
+      return best[1];
+    }
+
+    function crossover(indv1, indv2) {
+      var out = new Uint8ClampedArray(indv1.length);
+      var sp = Math.floor(indv1.length/2);
+      out.set(indv1.subarray(0, sp));
+      out.set(indv2.subarray(sp, indv2.length), sp);
+      return out;
+    }
+
+    // initial population
+    var population = [];
+    for (var i = 0; i < POP_SIZE; i++) {
+      var img = generateRandomImage(canvas.width, canvas.height);
+      population.push(img);
+    }
+
+    // main loop
+    console.debug = function() {};
+    for (var iter = 0; iter < ITERATIONS; iter++) {
+      var newpop = [];
+
+      // calc fitness
+      var fitness = [];
+      var best = [0,0];
+      for (var i = 0; i < population.length; i++) {
+        var f = [getFitness(population[i]), population[i]]; // fitness, indv
+        if (f[0] > best[0])
+          best = f;
+        fitness.push(f);
+      }
+      console.log(iter, best);
+
+      var id = ctx.createImageData(canvas.width, canvas.height);
+      id.data.set(best[1]);
+      ctx.putImageData(id, 0, 0);
+
+      // elitism
+      newpop.push(best[1]);
+
+      var id = ctx.createImageData(canvas.width, canvas.height);
+      id.data.set(best[1]);
+      ctx.putImageData(id, 0, 0);
+
+      for (var i = 0; i < population.length-1; i++) {
+        // tournament selection
+        var selected = tselect(fitness);
+
+        if (Math.random() > 1-CROSSOVER_RATE) {
+          var selected2 = tselect(fitness);
+          selected = crossover(selected, selected2);
+        }
+
+        // mutation
+        if (Math.random() > 1-MUTATION_RATE) {
+          for (var k = 0; k < 100; k++) {
+            idx = Math.floor(Math.random()*selected.length)
+            selected[idx] += Math.floor(Math.random()*10)-20;
+          }
+        }
+
+        newpop.push(selected);
+      }
+
+      population = newpop;
+    }
+
+    /* {{{ pixel manip garbage
+    var id = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var buf32 = new Uint32Array(id.data.buffer);
+
+    var obuf = new ArrayBuffer(id.data.length);
+    var obuf8 = new Uint8ClampedArray(obuf);
+    var obuf32 = new Uint32Array(obuf);
+
+    for (var y = 0; y < canvas.height; y++) {
+      for (var x = 0; x < canvas.width; x++) {
+        var c = buf32[y * canvas.width + x];
+
+        var b = (c >> 16) & 0xff;
+        var g = (c >> 8)  & 0xff;
+        var r = c & 0xff;
+
+        obuf32[y * canvas.width + x] =
+          (255 << 24) |
+          (b << 16) |
+          (g <<  8) |
+           r;
+      }
+    }
+    id.data.set(obuf8);
+    ctx.putImageData(id, 0, 0);
+    }}} */
+  }
+
+  function generateRandomImage(w, h) {
+    var data = new Uint8ClampedArray(w * h * 4);
+    for (var i = 0; i < data.length; i++) {
+      data[i] = Math.round(Math.random()*255);
+    }
+    return data;
+  }
+  </script>
+  <style type="text/css">
+    canvas, img {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canv"></canvas>
+  <img id="img" src="logo.png" alt="" />
+</body>
+</html>

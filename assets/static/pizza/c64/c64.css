@@ -1,0 +1,6 @@
+@font-face {
+  font-family: "C64 User Mono";
+  src: url("C64_User_Mono_v1.0-STYLE.eot");
+  src: url("C64_User_Mono_v1.0-STYLE.ttf") format("truetype"),
+       url("C64_User_Mono_v1.0-STYLE.woff") format("woff");
+}

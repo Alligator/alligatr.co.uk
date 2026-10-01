@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script type="text/javascript">
+  var tree_data = {
+    value: 1,
+    children: [
+      {
+        value: -1,
+        classes: 'hilight',
+        children: [
+          { value: -3 },
+          { value: 5 },
+          { value: 4 },
+        ]
+      },
+      {
+        value: 1,
+        children: [
+          { value: 1 },
+          { value: 3 },
+          { value: 1 },
+        ]
+      },
+      {
+        value: -2,
+        children: [
+          { value: -1 },
+          { value: -2 },
+          { value: 0 },
+        ]
+      },
+    ]
+  }
+
+  function minimax(tree, depth) {
+    var trees = [];
+
+    function f(t, d) {
+      var max = d % 2 == 0;
+      // this is why we need format strings
+      console.log((max + '')[0] + ' ' + new Array(d+1).join('| ') + t.value);
+      if (!t.children) {
+        return t.value;
+      }
+
+      var c = [];
+      for (var i = 0; i < t.children.length; i++) {
+        var st = t.children[i];
+        c.push(f(st, d + 1));
+      }
+      var m = max ? Math.max.apply(null, c) : Math.min.apply(null, c);
+      // t.value = m;
+      // return t.value;
+    }
+
+    f(tree, 0);
+
+    return trees;
+  }
+
+  var trees = minimax(tree_data, 2);
+
+  window.onload = function() {
+    var tree = d3.layout.tree()
+      .sort(null)
+      .size([640, 240])
+      .children(function(d) {
+        return d.children || null;
+      });
+
+    var nodes = tree.nodes(tree_data);
+    var links = tree.links(nodes);
+
+    var g = d3.select('#tree')
+      .append('svg').attr('width', 640).attr('height', 300)
+      .append('g')
+      .attr('transform', 'translate(0, 40)');
+
+    var line = d3.svg.diagonal();
+
+    var link = g.selectAll("pathlink")
+      .data(links)
+      .enter().append("path")
+      .attr("class", "link")
+      .attr("d", line)
+ 
+    var node = g.selectAll("g.node")
+      .data(nodes)
+      .enter().append("g")
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+
+    // Add the dot at every node
+    node.append("circle")
+      .attr('class', function(d) {
+        return 'circle ' + (d.classes || '');
+      })
+      .attr("r", 10);
+
+    node.append('text')
+      .attr('dy', 5)
+      .attr('dx', 15)
+      .text(function(d) { return d.value; });
+  }
+  </script>
+  <style type="text/css">
+  body {
+    font-family: sans-serif;
+  }
+  .link {
+    fill: none;
+    stroke: #888;
+    stroke-width: 2px;
+  }
+  .circle {
+    fill: #fff;
+    stroke: #888;
+    stroke-width: 5px;
+  }
+  .hilight {
+    stroke: #f88;
+  }
+  </style>
+</head>
+<body>
+  <div id="tree"></div>
+</body>
+</html>

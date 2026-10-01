@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript">
+  window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame || window.msRequestAnimationFrame ||
+    function(cb) {
+      setInterval(function() { cb(); }, 66);
+    }
+
+  window.onload = function() {
+    var canvas = document.getElementById('canv');
+    var ctx = canvas.getContext('2d');
+    var width = canvas.width = 640;
+    var height = canvas.height =  480;
+    var buffer = document.createElement('canvas').getContext('2d');
+    buffer.canvas.width = canvas.width;
+    buffer.canvas.height = canvas.height;
+
+    var t = 0;
+    var o = 0;
+    function draw() {
+      buffer.save();
+      buffer.clearRect(0, 0, width, height);
+      buffer.globalCompositeOperation = 'copy';
+      buffer.globalAlpha = 0.98;
+      buffer.drawImage(canvas, 0, 0, width, height);
+      buffer.restore();
+
+      for (var i = 0; i < 90; i++) {
+        buffer.save();
+        buffer.beginPath();
+        buffer.strokeStyle = 'hsla(' + parseInt((t*12) % 360) + ', 50%, 50%, 0.5)';
+        var x = Math.cos(o/3) * (Math.sin(t/3) + 1) * width/5 + width/2;
+        var y = Math.sin(o/9) * (Math.cos(t/3) + 1) * height/5 + height/2;
+        buffer.arc(x, y, 5, 0, Math.PI*2);
+        buffer.closePath();
+        buffer.stroke();
+        buffer.restore();
+        t += Math.PI/720;
+
+        o += 0.2;
+      }
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(buffer.canvas, 0, 0, width, height);
+      window.requestAnimationFrame(draw);
+    }
+    window.requestAnimationFrame(draw);
+  }
+  </script>
+  <style type="text/css">
+  #canv {
+    background-color: #fdf6e3;
+  }
+  </style>
+</head>
+<body>
+  <canvas id="canv"></canvas>
+</body>
+</html>

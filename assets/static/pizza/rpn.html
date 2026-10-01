@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script id="rpn">
+  // a little rpn calculator in js. can probably be smaller.
+  // usage: either below or rpn() in console. e.g. rpn('1 2 + 3 *')
+  //        it uses eval, so all javascript operators should do something.
+
+  function rpn(t,s) {
+    for(s=[],t=t.split(' '),i=0;c=t[i++];)s.push((n=parseFloat(c))?n:eval(s.splice(-2,1)[0]+c[0]+s.pop()));return s;
+  }
+
+  // -annotated-
+  function rpn_annotated(t,s) {
+    for(                        // loop over the tokens
+      s=[],                     // s = the stack
+      t=t.split(' ')            // t = the tokens
+      ,i=0
+      ;c=t[i++];                // c = the current token
+      )
+        s.push(                 // always push something onto the stack
+        (n=parseFloat(c))       // if we can parse a float from c
+          ?n                    //   we have a number, push it onto the stack
+          :                     // else we have an operator
+          eval(                 //   so push the result of eval'ing...
+            s.splice(-2,1)[0]   //   the second top item in the stack
+            +c[0]               //   plus the first character of the token
+            +s.pop()            //   plus the top item in the stack
+          )                     //   so if s=[1,2] and c='+' this is eval('2+1')
+        );return s;             // return the stack
+  }
+  </script>
+  <style>body { background-color: black; color: white; }</style>
+</head>
+<body>
+  <script type="text/javascript">
+  document.body.innerHTML += '<pre>' + document.getElementById('rpn').innerHTML + '</pre>';
+  window.onload = function() {
+    document.getElementById('frm').onsubmit = function() {
+      var d = rpn(document.getElementById('txt').value);
+      document.getElementById('out').innerHTML = d;
+      return false;
+    }
+  }
+  </script>
+  <form action="#" id="frm">
+  <input type="text" id="txt">
+  <input type="submit" value="run">
+  </form>
+  <pre id="out"></pre>
+</body>
+</html>

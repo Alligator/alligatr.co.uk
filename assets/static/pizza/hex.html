@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript">
+  window.onload = function() {
+    var canvas = document.getElementById('canv');
+    var ctx = canvas.getContext('2d');
+    var w = canvas.width;
+    var h = canvas.height;
+
+    var radius = 30;
+    var sides = 6;
+
+    // line segment size
+    var step = (Math.PI*2)/sides;
+    var seg = Math.sqrt(Math.pow(Math.sin(step) * radius, 2) +
+                        Math.pow(Math.cos(step) * radius, 2));
+
+    var v = Math.cos(Math.PI/sides) * radius;
+    var u = Math.cos(Math.PI/sides) * 2 * v;
+    var u2 = u*2;
+
+    var colors = ['#F4B244', '#F03880', '#F2EDD0', '#16CBB8', '#008E9A'];
+    var i = 0;
+    var offset = 12;
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      for (var y = 0; y < h; y += v*2) {
+        var o = offset;
+        var k = Math.sin(o/20) * 3 * (Math.cos(y/h*2) * 3);
+        for (var x = -u2 * 4; x < w; x += u*2) {
+          var c = torgba(colors[i%colors.length], 1);
+          drawpoly(ctx, sides, x + o, y + k, radius, c);
+          drawpoly(ctx, sides, x + u + o, y + v + k, radius, c);
+        }
+        i++;
+      }
+      offset = (offset + 1) % (u * 8);
+      window.requestAnimationFrame(draw);
+    }
+    window.requestAnimationFrame(draw);
+  }
+
+  function torgba(h, a) {
+    var n = parseInt(h.substr(1), 16);
+    return 'rgba(' +
+        (n >> 16) + ',' +
+        (n >> 8 & 255) + ',' +
+        (n & 255) + ',' +
+        a + ')';
+  }
+  
+  function drawpoly(ctx, sides, cx, cy, radius, color) {
+    ctx.beginPath();
+    var step = (Math.PI*2)/sides;
+    for (var i = 0; i < sides; i++) {
+      var x = Math.cos(step * i) * radius + cx;
+      var y = Math.sin(step * i) * radius + cy;
+      ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = color;
+    // ctx.stroke();
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+  </script>
+  <style type="text/css">
+  body {
+    background-color: black;
+    color: white;
+  }
+  #canv {
+    background-color: #222;
+  }
+  </style>
+</head>
+<body>
+  <canvas id="canv" width="640" height="480"></canvas>
+</body>
+</html>

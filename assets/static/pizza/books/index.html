@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+  /* @import url(http://fonts.googleapis.com/css?family=Averia+Serif+Libre:400,400italic); */
+  @import url(http://fonts.googleapis.com/css?family=IM+Fell+DW+Pica:400,400italic);
+  body {
+    text-align: center;
+    background: #333;
+    color: #aaa;
+    font-size: 14pt;
+    /* font-family: 'Averia Serif Libre', serf; */
+    font-family: 'IM Fell DW Pica', serif;
+    /* font-family: 'Crimson Text', sans-serif; */
+  }
+
+  .book-img {
+    display: none;
+  }
+
+  .content {
+    width: 660px;
+    margin: 0 auto;
+    padding: 0;
+    position: relative;
+  }
+
+  h1, h2 {
+    letter-spacing: 2pt;
+    font-variant: small-caps;
+  }
+  h2 {
+    letter-spacing: 2pt;
+    border-bottom: 2px solid #666;
+  }
+
+  a {
+    color: #78b;
+    font-size: 14pt;
+  }
+
+  .input {
+    width: 60%;
+    margin: 0 auto;
+  }
+
+  input {
+    text-align: center;
+    font-size: 14pt;
+    border: none;
+    background-color: #333;
+    color: #aaa;
+    /* font-family: 'Averia Serif Libre', serf; */
+    font-family: 'IM Fell DW Pica', serif;
+    display: inline-block;
+  }
+  .input-row {
+    width: 100%;
+  }
+  input[type="text"] {
+    border-bottom: 2px dashed #666;
+    width: 90%;
+  }
+  input[type="checkbox"] {
+    margin: 0;
+    padding: 0;
+    width: 8%;
+  }
+  input[type="button"] {
+    border: 2px dashed #666;
+    cursor: pointer;
+  }
+  input[type="button"]:hover {
+    background-color: #444;
+  }
+
+  .italic {
+    font-style: italic;
+  }
+  </style>
+  <script>
+  function wrap(ctx, text, width) {
+    var words = text.split(' ');
+    // remove a word from the end until it fits then go again with the rest
+    var lines = [];
+    while (true) {
+      var l = [];
+      while (ctx.measureText(words.join(' ')).width > width && words.length > 0) {
+        l.unshift(words.splice(-1)[0]);
+      }
+      if (words.length > 0) {
+        lines.push(words.join(' '));
+        words = l;
+      } else {
+        break;
+      }
+    }
+    return lines;
+  }
+
+  var imgoffset = 50;
+
+  window.onload = function() {
+    var img = document.getElementById('green-book');
+    var goat = document.getElementById('goat');
+
+    var canvas = document.getElementById('canv');
+    var ctx = canvas.getContext('2d');
+    var width = canvas.width = 660;
+    var height = canvas.height = 1000;
+
+    ctx.textAlign = 'center';
+
+    var font = 'IM Fell DW Pica';
+
+    var textChanged = function() {
+      var t = document.getElementById('top-input');
+      var m = document.getElementById('middle-input');
+      var b = document.getElementById('bottom-input');
+
+      var ti = document.getElementById('top-italic').checked;
+      var mi = document.getElementById('middle-italic').checked;
+      var bi = document.getElementById('bottom-italic').checked;
+
+      if (ti) t.classList.add('italic');
+      else t.classList.remove('italic');
+
+      if (mi) m.classList.add('italic');
+      else m.classList.remove('italic');
+
+      if (bi) b.classList.add('italic');
+      else b.classList.remove('italic');
+
+      update(t.value, m.value, b.value, ti, mi, bi);
+    }
+    var inputs = document.querySelectorAll('.input-watch');
+    for (var i = 0; i < inputs.length; i++) inputs[i].onchange = textChanged;
+    window.redBook = function() {
+      img = document.getElementById('red-book');
+      textChanged();
+    }
+    window.greenBook = function() {
+      img = document.getElementById('green-book');
+      textChanged();
+    }
+
+    function update(top, middle, bottom, ti, mi, bi) {
+      ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(img, 0, 0);
+
+      var tf = (ti ? 'italic ' : '') + '28pt/1.5 ' + font + ', serif';
+      var mf = (mi ? 'italic ' : '') + '48pt/1.5 ' + font + ', serif';
+      var bf = (bi ? 'italic ' : '') + '28pt/1.5 ' + font + ', serif';
+
+      // top and bottom
+      ctx.font = tf;
+      var top = wrap(ctx, top, 600);
+      var bottom = wrap(ctx, bottom, 600);
+      drawLines(top, 150, 28);
+
+      // middle
+      ctx.font = mf;
+      var middle = wrap(ctx, middle, 600);
+      drawLines(middle, (top.length * 64) + 150, 48);
+
+      ctx.font = bf;
+      drawLines(bottom, (top.length * 64) + 160 + (middle.length * 64), 28);
+
+      var aspect = goat.height/goat.width
+      ctx.drawImage(goat, 30, height-(600*aspect) - imgoffset, 600, 600*aspect);
+    }
+
+    function drawLines(lines, offset, size) {
+      var n = size*1.5;
+      for (var i = 0; i < lines.length; i++) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.16)';
+        ctx.fillText(lines[i], width/2, offset-1 + (i * n));
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        ctx.fillText(lines[i], width/2, offset+1 + (i * n));
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fillText(lines[i], width/2, offset + (i * n));
+      }
+    }
+
+    textChanged();
+
+    window.exportBook = function() {
+      var d = document.getElementById('img-link');
+      d.innerHTML = "uploading...";
+      var xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        var url = JSON.parse(xhr.responseText).data.link;
+        d.innerHTML = '<a href="' + url + '">image link</a>';
+      }
+
+      var c = canvas.toDataURL();
+      var fd = new FormData();
+      fd.append('image', c.split(',')[1]);
+
+      xhr.open('POST', 'https://api.imgur.com/3/image.json');
+      xhr.setRequestHeader('Authorization', 'Client-ID 606d94689eb11f5');
+      xhr.send(fd);
+      // window.open(canvas.toDataURL());
+    }
+  }
+  </script>
+</head>
+<body>
+  <img id="red-book" class="book-img" src="red.png">
+  <img id="green-book" class="book-img" src="green.png">
+  <img id="goat" class="book-img" src="duck.png">
+  <div class="content">
+    <h1>the field guide to field guides</h1>
+    <div class="input">
+      <h2>edit this</h2>
+      <div class="input-row">
+        <input class="input-watch" type="text" value="THE FIELD GUIDE TO"id="top-input">
+        <input class="input-watch check" type="checkbox" id="top-italic">
+      </div>
+      <div class="input-row">
+        <input class="input-watch" type="text" value="DISAPPOINTING EVERYONE"id="middle-input">
+        <input class="input-watch check" type="checkbox" id="middle-italic">
+      </div>
+      <div class="input-row">
+        <input class="input-watch" type="text" value="CORD STILTON"id="bottom-input">
+        <input class="input-watch check" type="checkbox" id="bottom-italic">
+      </div>
+      <br />
+      <input onclick="redBook()" style="width: 49%" type="button" value="Red book">
+      <input onclick="greenBook()" style="width: 49%" type="button" value="Green book">
+      <input onclick="exportBook()" style="width: 100%" type="button" value="Export image">
+      <div id="img-link"></div>
+      <p><img src="separator.png" alt="" /></p>
+    </div>
+    <canvas id="canv"></canvas>
+    <p><img src="separator.png" alt="" /></p>
+    <p>alligtor 2014</p>
+    <p>inspired by things from <a href="http://liartownusa.tumblr.com/">liartownusa</a></p>
+  </div>
+</body>
+</html>

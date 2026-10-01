@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script id="type">
+  // a small thing to type messages like what a slow terminal does or something.
+  // it's typing this out right now, wOaH.
+  // usage : type(text, element_object, millisecons)
+  //         e.g type('hello', document.body, 500)
+
+  function type(a,b,c,d,e) {
+    e=0;d=setInterval(function(){!a[e+1]&&clearInterval(d);b.innerHTML+=a[e++]},c);
+  }
+
+  // -annotated-
+  function type_ann(a,b,c,d,e) {    // a = text, b = element, c = delay
+    e=0;                            // e = string index
+    d=setInterval(                  // d = interval
+      function(){                   // function called every interval
+        !a[e+1]&&                   //   if we're at the end of the string
+          clearInterval(d);         //     clear the interval
+        b.innerHTML+=a[e++]         //   add the current character to the elm
+      },c);                         // call every c milliseconds
+  }
+  </script>
+  <script type="text/javascript">
+  window.onload = function() {
+    setTimeout(function(){
+      type(document.getElementById('type').innerHTML.slice(1), document.getElementById('out'), 15);
+    },100);
+  }
+  </script>
+  <link rel="stylesheet" href="pizza.css" />
+</head>
+<body>
+  <pre id="out"></pre>
+</body>
+</html>

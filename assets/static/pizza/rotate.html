@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style type="text/css">
+  @import url(http://fonts.googleapis.com/css?family=Montserrat);
+  body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18pt;
+    text-align: center;
+    background-color: #181818;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .rotatey {
+    line-height: 36px;
+    display: inline-block;
+    margin: 0;
+    color: white;
+    overflow: hidden;
+    border-top: 4px solid #64b383;
+    border-bottom: 4px solid #82eca6;
+  }
+
+  .rotatey span {
+    width: 2em;
+    background-color: #64b383;
+    position: relative;
+    display: inline-block;
+    -webkit-transition: -webkit-transform 0.3s;
+    -webkit-transform-origin: 50% 0;
+    -webkit-transform-style: preserve-3d;
+  }
+
+  .rotatey span::before {
+    background-color: #82eca6;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: attr(data-text);
+    -webkit-transform: rotateX(-90deg);
+    -webkit-transform-origin: 50% 0;
+  }
+
+  @-webkit-keyframes rotate {
+    0% {
+    -webkit-transform: rotateX(0) translateY(0);
+    }
+
+    10% {
+    -webkit-transform: rotateX(90deg) translateY(-19px);
+    }
+    50% {
+    -webkit-transform: rotateX(90deg) translateY(-19px);
+    }
+    60% {
+    -webkit-transform: rotateX(0) translateY(0);
+    }
+
+    100% {
+    -webkit-transform: rotateX(0) translateY(0);
+    }
+  }
+
+  .rotatey span {
+    /* -webkit-transform: rotateX(90deg) translateY(-22px); */
+    -webkit-animation-name: rotate;
+    -webkit-animation-duration: 3.0s;
+    -webkit-animation-fill-mode: forwards;
+    -webkit-animation-iteration-count: infinite;
+  }
+  </style>
+</head>
+<body>
+  <div class="rotatey"><span data-text="A" style="-webkit-animation-delay: 1.0s">A</span></div>
+  <div class="rotatey"><span data-text="L" style="-webkit-animation-delay: 1.1s">L</span></div>
+  <div class="rotatey"><span data-text="L" style="-webkit-animation-delay: 1.2s">L</span></div>
+  <div class="rotatey"><span data-text="I" style="-webkit-animation-delay: 1.3s">I</span></div>
+  <div class="rotatey"><span data-text="G" style="-webkit-animation-delay: 1.4s">G</span></div>
+  <div class="rotatey"><span data-text="A" style="-webkit-animation-delay: 1.5s">A</span></div>
+  <div class="rotatey"><span data-text="T" style="-webkit-animation-delay: 1.6s">T</span></div>
+  <div class="rotatey"><span data-text="O" style="-webkit-animation-delay: 1.7s">O</span></div>
+  <div class="rotatey"><span data-text="R" style="-webkit-animation-delay: 1.8s">R</span></div>
+</body>
+</html>

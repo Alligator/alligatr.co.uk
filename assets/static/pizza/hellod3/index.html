@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript">
+
+  window.onload = function() {
+    var margin = 20;
+    var width = 800 - margin*2;
+    var height = 600 - margin*2;
+
+    var svg = d3.select('body').append('svg')
+      .attr('width', width + margin*2)
+      .attr('height', height + margin*2)
+      .append('g')
+        .attr('transform', 'translate(' + margin + ',' + margin + ')');
+
+    var table = d3.select('body').append('table');
+
+    d3.json('rain.json', function(data) {
+      var rainfall = data.rainfall;
+
+      var yScale = d3.scale.linear()
+        .range([height, 0])
+        .domain([0, d3.max(rainfall)]);
+
+      var xScale = d3.scale.ordinal()
+        .domain(rainfall.map(function(d, i) { return i; }))
+        .rangeRoundBands([0, width], .1);
+
+      svg.append('text')
+        .attr('y', 20)
+        .attr('x', width/2)
+        .attr('text-anchor', 'middle')
+        .text(data.year);
+
+      var yAxis = d3.svg.axis()
+        .scale(yScale)
+        .orient('left')
+        .ticks(15);
+
+      var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .orient('bottom')
+        .ticks(rainfall.length);
+
+      svg.append('g')
+        .attr('transform', 'translate(20, 0)')
+        .attr('class', 'axis-line')
+        .call(yAxis);
+
+      svg.append('g')
+        .attr('transform', 'translate(0,' + height + ')')
+        .attr('class', 'axis-line')
+        .call(xAxis);
+
+      var bar = svg.selectAll('.bar')
+        .data(rainfall).enter();
+
+      bar.append('rect')
+        .attr('rx', 5)
+        .attr('ry', 5)
+        .attr('fill', '#f59')
+        .attr('width', 30)
+        .attr('height', function(d) { return height - yScale(d); })
+        .attr('y', yScale)
+        .attr('x', function(d, i) { return xScale(i) + 15; });
+
+      var t = table.selectAll('dave')
+        .data(rainfall).enter().append('tr');
+
+      t.append('td').text(function(d, i) { return i; });
+      t.append('td').text(function(d, i) { return d; });
+    });
+  }
+
+</script>
+<style type="text/css">
+body {
+  font-family: sans-serif;
+}
+.axis-line {
+  fill: none;
+  stroke: #000;
+}
+</style>
+</head>
+<body>
+</body>
+</html>

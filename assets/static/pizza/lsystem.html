@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="pen_min.js"></script>
+  <script type="text/javascript">
+  // rules { 'a': 'b', 'b': 'ab' }
+  function LSystem(initial, rules) {
+    var ls = {};
+    ls.rules = rules;
+
+    ls.step = function() {
+      if (!ls.string) {
+        ls.string = initial;
+        return initial;
+      }
+      var next = '';
+      for (var i = 0; i < ls.string.length; i++) {
+        next += rules[ls.string[i]] ? rules[ls.string[i]] : ls.string[i];
+      }
+      ls.string = next;
+      return next;
+    };
+
+    return ls;
+  }
+
+  function generatePalette(states) {
+    var s = {};
+    var l = states.length;
+    var step = 360/l;
+    for (var i = 0; i < l; i++) {
+      s[states[i]] = 'hsl(' + (step * i) + ', 100%, 50%)';
+    }
+    return s;
+  }
+
+  window.onload = function() {
+    var ab = LSystem(
+      'a',
+      {
+        'a':'b-a-b',
+        'b':'a+b+a'
+      }
+    );
+
+    var p = new Pen('canv');
+    p.jump(400,300);
+    p.turn(-90);
+    p.pendown();
+
+    for (var i = 0; i < 8; i++)
+      ab.step();
+
+    var pos = [];
+    var bounds = { l:Infinity, r:-Infinity, t:Infinity, b:-Infinity };
+    for (var i = 0; i < ab.string.length; i++) {
+      var c = ab.string[i];
+      switch (c) {
+      case 'a':
+      case 'b':
+        p.go(5);
+        break;
+      case '+':
+        p.turn(-60);
+        break;
+      case '-':
+        p.turn(60);
+        break;
+      }
+      if (p.x > bounds.r) bounds.r = p.x;
+      if (p.x < bounds.l) bounds.l = p.x;
+      if (p.y > bounds.b) bounds.b = p.x;
+      if (p.y < bounds.t) bounds.t = p.x;
+    }
+    console.log(bounds);
+    p.draw();
+  }
+  </script>
+</head>
+<body>
+  <canvas width="800" height="600" id="canv"></canvas>
+</body>
+</html>

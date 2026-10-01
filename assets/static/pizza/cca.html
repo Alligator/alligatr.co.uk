@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript">
+  window.onload = function() {
+    var canvas = document.getElementById('canv');
+    var ctx = canvas.getContext('2d');
+    var width  = canvas.width  = 300;
+    var height = canvas.height = 600;
+    cca_m(canvas, ctx, 300, 600, 4);
+  };
+  // a = canvas
+  // b = ctx
+  // c = cells
+  // d = row
+  // e = col
+  // f = ncells
+  function cca_m(a,b,w,h,n) {
+    for(m=Math,c=[],d=0,f=[];d<h;d++,c=f)
+      for(e=0;e<w;e++,b.fillStyle='hsl('+(360/n)*f[e]+',100%,50%)',b.fillRect(e,d,1,1))
+        f[e] = c[e] == undefined
+          ? m.floor(m.random()*n)
+          : (e>0&&c[e-1]==(c[e]+1)%n)||(e<w&&c[e+1]==(c[e]+1)%n)
+            ? (c[e]+1)%n
+            : c[e];
+  }
+
+  function cca(n) {
+    var canvas = document.getElementById('canv');
+    var ctx = canvas.getContext('2d');
+    var width  = canvas.width  = 300;
+    var height = canvas.height = 600;
+
+    var colstep = 360/n;
+    var cells = [];
+    for (var i = 0; i < width; i++) cells[i] = Math.floor(Math.random()*4);
+
+    for (var g = 0; g < height; g++) {
+      ncells = [];
+      for (var c = 0; c < width; c++) {
+        // check neighbours
+        ncells[c] = ((c > 0     && cells[c-1] == (cells[c] + 1) % n) ||
+                    (c < width && cells[c+1] == (cells[c] + 1) % n))
+          ? (cells[c] + 1) % n
+          : cells[c];
+        ctx.fillStyle = 'hsl(' + Math.floor(colstep*ncells[c]) + ',100%,50%)';
+        ctx.fillRect(c, g, 1, 1);
+      }
+      cells = ncells;
+    }
+  }
+  </script>
+</head>
+<body>
+  <canvas id="canv"></canvas><br />
+  <input style="text" onchange="cca(this.value)">
+</body>
+</html>

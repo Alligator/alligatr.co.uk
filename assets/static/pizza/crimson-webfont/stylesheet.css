@@ -1,0 +1,61 @@
+@font-face {
+    font-family: 'Crimson Text';
+    src: url('crimsontext-bold-webfont.eot');
+    src: url('crimsontext-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('crimsontext-bold-webfont.woff') format('woff'),
+         url('crimsontext-bold-webfont.ttf') format('truetype'),
+         url('crimsontext-bold-webfont.svg#crimson_textbold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    @font-face {
+        font-family: 'Crimson Text';
+            src: url('crimsontext-bold-webfont.svg#crimson_textbold') format('svg');
+        font-weight: bold;
+        font-style: normal;
+    }
+}
+
+@font-face {
+    font-family: 'Crimson Text';
+    src: url('crimsontext-italic-webfont.eot');
+    src: url('crimsontext-italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('crimsontext-italic-webfont.woff') format('woff'),
+         url('crimsontext-italic-webfont.ttf') format('truetype'),
+         url('crimsontext-italic-webfont.svg#crimson_textitalic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    @font-face {
+        font-family: 'Crimson Text';
+            src: url('crimsontext-italic-webfont.svg#crimson_textitalic') format('svg');
+        font-weight: normal;
+        font-style: italic;
+    }
+}
+
+
+@font-face {
+    font-family: 'Crimson Text';
+    src: url('crimsontext-roman-webfont.eot');
+    src: url('crimsontext-roman-webfont.eot?#iefix') format('embedded-opentype'),
+         url('crimsontext-roman-webfont.woff') format('woff'),
+         url('crimsontext-roman-webfont.ttf') format('truetype'),
+         url('crimsontext-roman-webfont.svg#crimson_textroman') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    @font-face {
+        font-family: 'Crimson Text';
+            src: url('crimsontext-roman-webfont.svg#crimson_textroman') format('svg');
+        font-weight: normal;
+        font-style: normal;
+    }
+}
+

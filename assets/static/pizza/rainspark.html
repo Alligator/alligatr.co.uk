@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="d3.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="rainspark.js"></script>
+  <style type="text/css">
+  @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300);
+  body {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 10pt;
+  }
+  .line {
+    stroke-width: 0px;
+    fill: black;
+    shape-rendering: crispEdges;
+  }
+  .ticklabel {
+    opacity: 1.0;
+    fill: black;
+  }
+  .wettest {
+    fill: steelblue;
+  }
+
+  .content {
+    width: 1000px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    text-align: center;
+    font-weight: 300;
+  }
+
+  .footer {
+    text-align: center;
+  }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <h1>UK Rainfall per month 1910 - 2013</h1>
+
+    <div id="chart">
+    </div>
+
+    <div class="footer">
+      <p>alligator 2014</p>
+    </div>
+  </div>
+</body>
+</html>

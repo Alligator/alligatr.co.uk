@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style type="text/css">
+  body {
+    font-family: sans-serif;
+  }
+
+  .content {
+    width: 500px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  input {
+    width: 100%;
+    border: 2px solid #bbb;
+    border-radius: 5px;
+    font-size: 18pt;
+    padding: 5px 10px;
+  }
+  </style>
+  <script type="text/javascript">
+  var ColorParser = function() {
+    /*
+    var c = {};
+
+    var matchers = [
+      {
+        // #fff
+        elm: 'fff',
+        pattern: /^#([0-9a-f])([0-9a-f])([0-9a-f])$/,
+        toRGB: function(match) {
+          var f = function(a) { return parseInt(a + a, 16); };
+          return { r: f(match[1]), g: f(match[2]), b: f(match[3]) };
+        },
+        fromRGB: function(rgb) {
+          // find closest single digit hex match
+          var f = function(color) {
+            var s = '0123456789abcdef';
+            var diff = Infinity;
+            var current = 0;
+            for (var i = 0; i < s.length; i++) {
+              var c = parseInt(s[i] + s[i], 16);
+              if (Math.abs(c - color) < diff) {
+                diff = Math.abs(c - color);
+                current = s[i];
+                if (i === s.length - 1)
+                  return current;
+              } else {
+                return current;
+              }
+            }
+            return 'f';
+          }
+
+          return '#' + f(rgb.r) + f(rgb.g) + f(rgb.b);
+        }
+      },
+      {
+        // #ffffff
+        elm: 'ffffff',
+        pattern: /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/,
+        toRGB: function(match) {
+          return { r: parseInt(match[1], 16), g: parseInt(match[2], 16), b: parseInt(match[3], 16) };
+        },
+        fromRGB: function(rgb) {
+          return '#' + rgb.r.toString(16) +
+                       rgb.g.toString(16) +
+                       rgb.b.toString(16);
+        }
+      },
+      {
+        // rgb(255, 255, 255);
+        elm: 'rgb',
+        pattern: new RegExp('rgb\\(W(\\d{1,3})W,W(\\d{1,3})W,W(\\d{1,3})W\\)'.replace(/W/g, '(?:\\s+)?')),
+        toRGB: function(match) {
+          return { r: parseInt(match[1]), g: parseInt(match[2]), b: parseInt(match[3]) };
+        },
+        fromRGB: function(rgb) {
+          return 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')';
+        }
+      }
+    ];
+
+    c.match = function(color) {
+      for (var i = 0; i < matchers.length; i++) {
+        var matcher = matchers[i];
+        var match = color.match(matcher.pattern);
+        if (match) {
+          return matcher.toRGB(match);
+        }
+      }
+      return null;
+    }
+
+    c.update = function(color) {
+      var rgb = c.match(color);
+      if (rgb) {
+        for (var i = 0; i < matchers.length; i++) {
+          var m = matchers[i];
+          var elm = document.getElementById(m.elm);
+          elm.innerHTML = m.fromRGB(rgb);
+        }
+      }
+    }
+
+    return c;
+  };
+
+  var cp = ColorParser();
+
+  function changed(e) {
+    var color = e.target.value;
+    cp.update(color);
+  }
+
+  window.onload= function() {
+    var elm = document.getElementById('color-input');
+    elm.addEventListener('change', changed);
+  }
+  */
+  </script>
+</head>
+<body>
+  <div class="content">
+    <h1>give us a culla mate</h1>
+    <input type="text" id="color-input" value="tony" />
+    <div id="fff"></div>
+    <div id="ffffff"></div>
+    <div id="rgb"></div>
+  </div>
+
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react/0.11.2/react.min.js"></script>
+
+  <script type="text/javascript">
+    var Culla = React.createClass({
+      displayName: 'culla',
+      getInitialState: function() {
+        return { inp: '#fff' };
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <!-- <meta http-equiv="refresh" content="5"> -->
+  <title>type</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      background-color: #ddd;
+      transition: background-color 10s;
+      overflow: hidden;
+      perspective: 1000px;
+    }
+    
+    textarea {
+      border: none;
+      outline: none;
+      width: 66ex;
+      padding: 2em 3em;
+      font-family: 'Gerogia', serif;
+      font-size: 14pt;
+      line-height: 1.35;
+      box-shadow: 0 0 16px 4px rgba(0, 0, 0, 0.05);
+      color: '#000';
+      background-color: '#fff';
+      transition: color 10s, background-color 10s, -webkit-transform 20s;
+      overflow-y: hidden;
+    }
+
+    .pentagram {
+      background-image: url('pentagram-crushed.png');
+      width: 505px;
+      height: 479px;
+      position: absolute;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 2s;
+    }
+  </style>
+</head>
+<body>
+  <div id="score"></div>
+  <textarea id="type" cols="30" rows="10"></textarea>
+  <script>
+var ta = document.getElementById('type');
+var scoreEl = document.getElementById('score');
+var typing = false;
+var typingTimeout;
+var score = 0;
+var pents = [];
+
+ta.onkeyup = function () {
+  typing = true;
+  clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(function () { typing = false; }, 100);
+};
+ta.onkeydown = function (evt) {
+  if (score >= 10 && Math.random() > 0.1) {
+    var count = Math.ceil((score - 10) / 10);
+    ta.value = ta.value + (Array.apply(null, Array(count)).map(doomed).join(''));
+    evt.preventDefault();
+  }
+};
+
+setInterval(function () {
+  score = typing ? score + 1 : score - 1;
+  score = score < 0 ? 0 : score;
+
+  if (Math.random() > 0.5 && score >= 40) {
+    var img = document.createElement('div');
+    var x = Math.floor(Math.random() * (window.innerWidth + 505));
+    var y = Math.floor(Math.random() * (window.innerHeight + 479));
+    img.className = 'pentagram';
+    img.style.top = (y - 250) + 'px';
+    img.style.left = (x - 250) + 'px';
+    pents.push(img);
+    document.body.appendChild(img);
+    img.style.opacity = 0.1;
+  } else if (!typing) {
+    var img = pents.pop();
+    if (img) {
+      img.style.opacity = 0;
+    }
+  }
+  ta.scrollTop = ta.scrolLHeight;
+}, 250);
+
+setInterval(function () {
+  console.log(score);
+  if (score > 20) {
+    document.body.style.backgroundColor = '#000';
+    ta.style.backgroundColor = '#000';
+    ta.style.color = '#f00';
+    ta.style.transform = 'rotate(6deg) rotateX(40deg) translateZ(200px)';
+  } else {
+    document.body.style.backgroundColor = '#ddd';
+    ta.style.backgroundColor = '#fff';
+    ta.style.color = '#000';
+    ta.style.transform = 'rotate(0) rotateX(0) translateZ(0)';
+  }
+}, 16);
+
+var doom = 'i am a monster '.split('');
+var doomed = function doomed() {
+  var chr = doom.shift();
+  doom.push(chr);
+  return chr;
+};
+  </script>
+</body>
+</html>

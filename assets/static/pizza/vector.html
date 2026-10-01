@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript">
+  window.onload = function() {
+    var canvas = document.getElementById('canv');
+    var ctx = canvas.getContext('2d');
+    canvas.width = 640;
+    canvas.height = 480;
+
+    var vec1 = [200, 200, 300, 100];
+    var vec2 = [200, 200, 300, 300];
+    var dot = 200*200 + 200*200 + 300*300 + 100*300;
+
+    function drawline(l, color) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(l[0], l[1]);
+      ctx.lineTo(l[2], l[3]);
+      ctx.strokeStyle = color;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    drawline(vec1, 'red');
+    drawline(vec2, 'blue');
+  }
+  </script>
+</head>
+<body>
+  <canvas id="canv"></canvas>
+</body>
+</html>

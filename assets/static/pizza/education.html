@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+<body>
+<script type="text/javascript">
+  var width = 800;
+  var height = 600;
+  d3.csv('data.csv', function(err, idata) {
+    var data = {};
+    for (var d in idata) {
+      for (var k in idata[d]) {
+        if (data[k])
+          data[k].push(idata[d][k]);
+        else
+          data[k] = [idata[d][k]];
+      }
+    }
+    console.log(data);
+    var svg = d3.select('body').append('svg')
+      .attr('width', width)
+      .attr('height', height);
+
+    var xScale = d3.scale.linear()
+      .range([0, width])
+      .domain([0, data.length]);
+
+    // var yScale = d3.scale.linear()
+    //   .range([0, height])
+    //   .domain(d3.extent(data, function(d) { console.log(d); }));
+  });
+</script>
+</body>
+</html>

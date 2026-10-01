@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript">
+  window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame || window.msRequestAnimationFrame ||
+    function(cb) {
+      setInterval(function() { cb(); }, 66);
+    }
+  function query() {
+    // defaults
+    var params = {
+      points: 3,
+      time: 300,
+      scale: 200,
+      fade: 0.3,
+      rotation: 0,
+      offset: 30,
+      color: 1,
+      glow: 10,
+      lines: false,
+      orbs : true
+    };
+    var qs = window.location.search.substr(1);
+    var ql = qs.split('&');
+    for (var i = 0; i < ql.length; i++) {
+      if (!ql[i]) continue;
+      var n = ql[i].split('=');
+      if (n[1] == 'false')
+        params[n[0]] = false;
+      else if (n[1] == 'true')
+        params[n[0]] = true;
+      else
+        params[n[0]] = n[1];
+    }
+    return params;
+  }
+
+  function makequery(params) {
+    var q = '?';
+    for (var param in params) {
+      var elm = params[param];
+      if (elm.type == 'checkbox')
+        q += param + '=' + params[param].checked + '&';
+      else
+        q += param + '=' + params[param].value + '&';
+    }
+    return q.substr(0, q.length-1);
+  }
+
+  window.onload = function() {
+    var canvas = document.getElementById('canv');
+    var ctx = canvas.getContext('2d');
+    var cw = canvas.width;
+    var ch = canvas.height;
+
+    var params = query();
+    var table = document.getElementById('param-table');
+    var i = 0;
+    for (var param in params) {
+      var elm = document.createElement('tr');
+      elm.style.color = 'hsl(' + i + ',100%, 75%)';
+      i += 36;
+      if (typeof params[param] == 'boolean') {
+        elm.innerHTML = '<td>' + param + '</td>' +
+                        '<td><input type="checkbox" ' + (params[param] ? 'checked' : '') + '></td>';
+      } else {
+        elm.innerHTML = '<td>' + param + '</td>' +
+                         '<td><input type="text" value="' + params[param] + '"></td>';
+      }
+      table.appendChild(elm);
+      params[param] = elm.childNodes[1].childNodes[0];
+    }
+
+    function orb(x, y, radius, style) {
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, 2*Math.PI, false);
+      ctx.fillStyle = style;
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    var link_elm = document.getElementById('link');
+    setInterval(function() {
+      link_elm.innerHTML = '<a href="'+location.origin+location.pathname+makequery(params)+'">link</a>';
+    }, 640);
+
+    var rt = 0;
+
+
+    function draw() {
+      var max = Math.round((Math.PI*2) * parseInt(params.points.value));
+      var td = parseInt(params.time.value);
+      var scale = parseInt(params.scale.value);
+      var fade = parseFloat(params.fade.value);
+      var rs = parseInt(params.rotation.value);
+      var offset = parseInt(params.offset.value);
+      var color = parseFloat(params.color.value);
+      var glow = parseInt(params.glow.value);
+      var show_lines = params.lines.checked;
+      var show_orbs = params.orbs.checked;
+
+      var t = Date.now()/td;
+      ctx.shadowColor = 'rgba(0,0,0,0)';
+      ctx.fillStyle = 'rgba(0,0,0,' + fade  + ')';
+      ctx.fillRect(0, 0, cw, ch);
+
+      ctx.shadowBlur = glow;
+
+      var coords = [];
+      for (var i = 0; i < max; i++) {
+        var ri = (i/max) * Math.PI*2;
+        var st = (Math.sin(t+i)+1)/2;
+        var x = Math.sin(ri+(rt))*(st*scale)+250;
+        var y = Math.cos(ri+(rt))*(st*scale)+250;
+        x += Math.sin(ri) * offset;
+        y += Math.cos(ri) * offset;
+        coords.push([x, y]);
+        var c = 'hsl(' + parseInt((ri/Math.PI)*180)*color + ',100%,50%)';
+        if (show_orbs) {
+          ctx.shadowColor = c;
+          orb(x, y, 5, c);
+        }
+      }
+
+      if (coords.length > 0 && show_lines) {
+        ctx.beginPath();
+        ctx.moveTo(coords[0][0], coords[0][1]);
+        for (var i = 1; i < coords.length; i++) {
+          ctx.lineTo(coords[i][0], coords[i][1]);
+        }
+        ctx.strokeStyle = 'white';
+        ctx.closePath();
+        ctx.stroke();
+      }
+      rt += (rs/5000) || 0;
+
+      window.requestAnimationFrame(draw);
+    }
+
+    window.requestAnimationFrame(draw);
+
+
+  }
+  </script>
+  <style type="text/css">
+  body   { background-color: #000; color: #fff; font-family: monospace; }
+  input  { background-color: #000; color: inherit; font-family: monospace;
+           margin: 0; padding: 0; height: 1.5em; border: none;
+           border-bottom: 1px solid #999; }
+  canvas { background-color: #000; }
+  .main  { width: 500px; margin: 0 auto; overflow: hidden; }
+  a      { color: #79d; }
+  a:hover{ color: #abf; }
+  td:first-child { text-align: right; }
+  </style>
+</head>
+<body>
+  <div class="main">
+    <canvas id="canv" width="500" height="500"></canvas>
+    <table id="param-table"></table>
+    <div id="link"></div>
+  </div>
+</body>
+</html>

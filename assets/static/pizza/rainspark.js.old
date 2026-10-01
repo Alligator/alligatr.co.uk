@@ -1,0 +1,174 @@
+var width = 1000;
+var lheight  = 45;
+
+var lmargin = 35;
+var bmargin = 20;
+
+var height = (12 * lheight) + bmargin;
+
+d3.json('rainspark.json', function(error, data) {
+  var l = data.length;
+
+  var x = d3.scale.linear()
+    .range([lmargin, width])
+    .domain([1910, 2014]);
+
+  var max = data.reduce(function(a, b) { return Math.max(a, Math.max.apply(null, b.rainfall)); }, 0);
+
+  var y = d3.scale.linear()
+    .range([lheight, height-bmargin])
+    .domain([0, 11]);
+
+  var iy = d3.scale.linear()
+    .range([0, lheight])
+    .domain([0, max]);
+
+  var area = d3.svg.area()
+    //.interpolate("monotone")
+    .x(function(d, i) { return x(i); })
+    .y0(height)
+    .y1(function(d) { return y(d); });
+
+  var svg = d3.select("#chart").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append('g');
+
+  var i = 0;
+
+  var ticks = d3.svg.axis()
+    .scale(y)
+    .orient('left')
+    .tickSize(0, 0)
+    .tickFormat(function(d) { return ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'][d]; } )
+    .ticks(12)
+
+  var bticks = d3.svg.axis()
+    .scale(x)
+    .orient('bottom')
+    .tickSize(0, 0)
+    .tickFormat(function (d) { return '' + d; })
+    .ticks(20);
+
+  svg.append('g')
+    .call(ticks)
+    .attr('transform', 'translate('+(lmargin-5)+', 0)')
+    .selectAll('text').attr('class', 'ticklabel')
+    .attr('dy', '0em')
+
+  svg.append('g')
+    .call(bticks)
+    .attr('transform', 'translate(0,'+(height-bmargin+5)+')')
+    .attr('class', 'ticklabel');
+
+  for (var year in data) {
+    year = data[year];
+
+    var g = svg.append("g");
+      // .attr("transform", "translate(0, " + (lheight * i) + ")");
+    g = g.selectAll('thing')
+      .data(year.rainfall);
+    g.enter().append('rect')
+      .attr('x', function(d) { return x(year.year); })
+      .attr('y', function(d, i) { return y(i) - iy(d); })
+      .attr('class', 'line')
+      .classed('wettest', function(d) { return d == max; })
+      .attr('height', function(d) { return iy(d); })
+      .attr('width', 2)
+
+    // g.append("text")
+    //   .text(year.year)
+    //   .attr("class", "label");
+
+    /*
+    g.append("path")
+      .datum(year.rainfall)
+      .attr("class", "area")
+      .attr("d", area)
+      .on('mouseenter', function(d) {
+        d3.select(this).attr("class", "area-active");
+      })
+      .on('mouseleave', function(d) {
+        d3.select(this).attr("class", "area");
+      })
+
+    g.append("path")
+      .datum(year.rainfall)
+      .attr("class", "line")
+      .attr("d", line);
+
+    g.selectAll('otherthing')
+      .data(year.rainfall)
+      .enter().append('rect')
+      .attr({
+        'x': function(d,i) { return x(i); },
+        'y': y,
+        'height': function(d) { return lheight - y(d); },
+        'width': 1,
+        'class': 'gridline',
+      });
+
+    // g.selectAll('otherthing')
+    //   .data(year.rainfall)
+    //   .enter().append('circle')
+    //   .attr('cx', function(d,i) { return x(i)+1; })
+    //   .attr('cy', y)
+    //   .attr('r', 3)
+    //   .attr('class', 'dot');
+
+    g.append('rect')
+      .attr('x', 0)
+      .attr('y', lheight)
+      .attr('width', width)
+      .attr('height', 1)
+      .attr('class', 'horizline');
+
+    g.on('mouseenter', function() {
+      console.log(this);
+    });
+
+    */
+    i++;
+  }
+
+  /*
+  var gridLines = d3.svg.axis()
+    .scale(x)
+    .orient('top')
+    .tickSize(-lheight * l, 0)
+    .tickFormat('')
+    .ticks(12)
+
+  var ticks = d3.svg.axis()
+    .scale(x)
+    .orient('top')
+    .tickSize(0, 0)
+    .tickFormat(function(d) { return ['jan', 'feb', 'mar', 'may', 'apr', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'][d]; } )
+    .ticks(12)
+
+  var tsvg = d3.select("#ticks").append("svg")
+    .attr("width", width + 50)
+    .attr('height', 15)
+
+  tsvg.append('g')
+    .attr('transform', 'translate(25, 15)')
+    .call(ticks)
+    .selectAll('text').attr('class', 'ticklabel');
+
+  // var l = svg.append('g').call(gridLines)
+  // l.selectAll('line').attr('class', 'gridline');
+  //
+  */
+});
+
+window.onscroll = function() {
+  var ticks = document.querySelector('#ticks');
+  var chart = document.querySelector('#chart');
+  if (document.body.scrollTop > 67) {
+    ticks.style.position = "fixed";
+    chart.style.paddingTop = "15px";
+  } else {
+    ticks.style.position = "relative";
+    chart.style.paddingTop = "0px";
+  }
+}

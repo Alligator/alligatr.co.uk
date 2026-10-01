@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript">
+  // notes
+  //   just implement + - * /
+  //   all of these are left associative. convenient
+  //
+  // op  code  precedence
+  // +   43    2
+  // -   45    2
+  // *   42    3
+  // /   47    3
+  //
+
+  function s(a){
+    for(o=[],p=[],i=0,t=a.split(' ');c=t[i++];)
+    {if(parseFloat(c))o.push(c);
+      else{
+        // console.log(c, c.match(/[*\/]/) ? 1 : 0);
+        console.log(c, o, p);
+        while (p.length > 0 && c.match(/[*\/]/)?1:0) {
+          console.log('  ', p);
+          o.push(p.pop());
+        }
+        p.push(c);
+        // for(;0 in p&&c.match(/[*\/]/);o.push(p.pop()));p.push(c);
+      }
+    }
+    return o.concat(p.reverse()).join(' ');
+  }
+
+  // test
+  var inp = '1 / 2 * 3 + 4 - 5';
+  var out = '1 2 / 3 * 4 + 5 -';
+  var n = s(inp);
+  console.log(' in:', inp);
+  console.log('exp:', out);
+  console.log('out:', n);
+  if (n === out)
+    document.write('PASS');
+  else
+    document.write('FAIL');
+/*
+1  1             =>
+/  1             => /
+2  1 2           => /
+*  1 2 /         => *
+3  1 2 / 3       => *
++  1 2 / 3 *     => +
+4  1 2 / 3 * 4   => +
+   1 2 / 3 * 4 + =>
+*/
+  </script>
+</head>
+<body>
+</body>
+</html>

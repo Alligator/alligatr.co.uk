@@ -1,0 +1,242 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
+  <script type="text/javascript">
+  window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame || window.msRequestAnimationFrame ||
+    function(cb) {
+      setInterval(function() { cb(); }, 33);
+    }
+
+  /*** spherize n stuff ***/
+  var spherize = function(px,py,width,height) {
+    var x = px-width/2;
+    var y = py-height/2;
+    var r = Math.sqrt(x*x+y*y);
+    var maxr = width/2;
+    if (r>maxr) return [px, py];
+    var a = -Math.atan2(y,x);
+    var k = (r/maxr)*(r/maxr)*0.05-1.05;
+    var dx = -Math.cos(a)*r*k;
+    var dy = Math.sin(a)*r*k;
+    return [Math.round(dx+width/2), Math.round(dy+height/2)];
+  }
+
+  function Screen(width, height, rate) {
+    var s = {};
+
+    // public
+    var chars = []; s.chars = chars;
+    var dirty = []; s.dirty = dirty;
+    s.width  = width;
+    s.height = height;
+
+    // private
+    var queue = [];
+    rate = rate || 33;
+
+    function put(c, x, y) {
+      queue.push({c:c, x:x, y:y});
+    }
+
+    setInterval(function() {
+      var t = queue.shift();
+      if (t) {
+        chars[t.x][t.y] = t.c;
+        dirty[t.x][t.y] = true;
+      }
+    }, rate);
+
+    s.putc = function(c, x, y) {
+      put(c, x, y);
+    }
+    s.puts = function(s, x, y) {
+      x = x || 0;
+      y = y || 0;
+      var offset = 0;
+      for (var i = 0; i < s.length; i++) {
+        if (x + offset > width-1) {
+          offset = 0;
+          y++;
+        }
+        if (y > height-1) break;
+        put(s[i], x + offset, y);
+        offset++;
+      }
+    }
+    s.clear = function() {
+      init_chars();
+    }
+
+    function init_chars() {
+      for (var x = 0; x < width; x++) {
+        chars[x] = [];
+        dirty[x] = [];
+        for (var y = 0; y < width; y++) {
+          chars[x][y] = ' ';
+          dirty[x][y] = true;
+        }
+      }
+    }
+    init_chars();
+
+    return s;
+  }
+
+  window.onload = function() {
+    var canvas = document.getElementById('canv');
+    var ctx = canvas.getContext('2d');
+    var buffer = document.createElement('canvas').getContext('2d');
+
+    var char_height = 24;
+    var char_width = 12;
+
+    var width = canvas.width = char_width * 82;
+    var height = canvas.height = char_height * 25;
+    buffer.canvas.width = canvas.width;
+    buffer.canvas.height = canvas.height;
+
+    buffer.font = '24px VT323';
+
+    var scr = Screen(80, 24, 16);
+    var txt = [
+      "// init chars",
+      "function init_chars() {",
+      "  for (var x = 0; x < width; x++) {",
+      "    chars[x] = [];",
+      "    dirty[x] = [];",
+      "    for (var y = 0; y < width; y++) {",
+      "      chars[x][y] = ' ';",
+      "      dirty[x][y] = true;",
+      "    }",
+      "  }",
+      "}"
+    ];
+
+    for (var i = 0; i < txt.length; i++) {
+      scr.puts(txt[i], 0, i);
+    }
+
+    canvas.tabIndex = 1000;
+    canvas.onkeydown = function(e) {
+      // var s = String.fromCharCode(e.keyCode);
+      // if (e.keyCode == 13) {
+      //   txt += '\n';
+      // } else if (e.keyCode == 8) {
+      //   txt = txt.slice(0, -1);
+      // } else {
+      //   t += s;
+      // }
+      // return false;
+    }
+
+    var r = 0;
+    setInterval(function() {
+        r = Math.floor(Math.random()*20) - 10;
+    }, 66);
+
+
+    var wobble = [];
+    for (var i = wobbleoff; i < 100 + wobbleoff; i++) {
+      wobble[i] = Math.floor(1 + Math.sin(i/6) * 3);
+    }
+    var wobbleoff = 0;
+    setInterval(function() {
+      wobbleoff = (wobbleoff + 1) % height;
+    }, 33);
+
+    // prefill cache
+    var cache = [];
+    for (var x = 0; x < width; x++) {
+      for (var y = 0; y < width; y++) {
+        cache[y * width + x] = spherize(x, y, width*1.4, height);
+      }
+    }
+    var cw = buffer.fillStyle = 'hsla(120, 80%, 80%, 0.6)';
+    buffer.fillStyle = 'black';
+    buffer.fillRect(0, 0, width, height);
+    function draw(time) {
+      var cursor = [0, 0];
+      var cr = buffer.fillStyle = 'hsla(0,   80%, 50%, 0.7)';
+      var cc = buffer.fillStyle = 'hsla(200, 100%, 50%, 0.9)';
+
+      for (var x = 0; x < scr.chars.length; x++) {
+        for (var y = 0; y < scr.chars[0].length; y++) {
+          if (scr.dirty[x][y]) {
+            var c = scr.chars[x][y];
+            if (c == ' ') continue;
+            col = x * char_width + char_width;
+            line = y * char_height + char_height;
+            buffer.fillStyle = cr;
+            buffer.fillText(c,  col-2, line);
+            buffer.fillStyle = cc;
+            buffer.fillText(c,  col+2, line);
+            buffer.fillStyle = cw;
+            buffer.fillText(c,  col, line);
+            scr.dirty[x][y] = false;
+          }
+        }
+      }
+
+
+      // post-fx
+      var imgdata = buffer.getImageData(0, 0, width, height);
+      /*
+      var id = new Uint32Array(imgdata.data.buffer);
+
+      var obuf = new ArrayBuffer(imgdata.data.length);
+      var buf8 = new Uint8ClampedArray(obuf);
+      var od = new Uint32Array(obuf);
+
+      var r1 = 0.2;
+      var r2 = 0.8;
+      var offset = 0;
+      var cachei = 0;
+      for (var y = 0; y < height; y++) {
+        offset += Math.random() - 0.5;
+        var roffset = 0;//Math.round(offset);
+        for (var x = 0; x < width; x++) {
+          var c = id[y * width + x];
+          var rand = Math.random() * r1 * 180;
+
+          var a = (c >> 24) & 0xff;
+          var b = (((c >> 16) & 0xff) * r2) + rand;
+          var g = (((c >> 8)  & 0xff) * r2) + rand;
+          var r = (( c        & 0xff) * r2) + rand;
+
+          if (y % 2 == 0 || x % 3 == 0)
+            a *= 0.7;
+
+          // c = cache[y * width + x]
+          // od[c[1] * width + c[0] + roffset] =
+          od[y * width + x + roffset] =
+            (a << 24) |
+            (b << 16) |
+            (g << 8)  |
+             r;
+          
+        }
+      }
+      imgdata.data.set(buf8);
+
+      */
+      ctx.clearRect(0, 0, width, height);
+      ctx.putImageData(imgdata, 0, 0);
+      window.requestAnimationFrame(draw);
+    }
+
+    setTimeout(function() { window.requestAnimationFrame(draw); }, 100);
+  }
+  </script>
+  <style type="text/css">
+  body  { background-color: #222; font-family: 'VT323', monospace; }/* background-image: url('vt220.jpg'); }*/
+  #canv { background-color: #000; font-family: 'VT323', monospace; }/* position: absolute; left: 536px; top: 200px; }*/
+  #canv:focus { outline-width: 0; }
+  </style>
+</head>
+<body>
+  <canvas id="canv"></canvas>
+</body>
+</html>

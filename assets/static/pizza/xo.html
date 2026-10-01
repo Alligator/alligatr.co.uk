@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="d3.min.js" charset="utf-8"></script>
+</head>
+<body>
+<script type="text/javascript">
+  function Board(tiles) {
+    var b = {};
+
+    // copy/init tiles
+    if (tiles) {
+      b.tiles = tiles.slice(0);
+    } else {
+      b.tiles = [];
+      for (var x = 0; x < 3; x++) {
+        b.tiles[x] = [];
+        for (var y = 0; y < 3; y++) b.tiles[x][y] = ' ';
+      }
+    }
+
+    b.print = function() {
+      for (var x = 0; x < 3; x ++) {
+        var line = '';
+        for (var y = 0; y < 3; y ++) {
+          line += ' ' + b.tiles[y][x] + ' ';
+          if (y < 2)
+            line += '|'
+        }
+        console.log(line)
+        if (x < 2)
+          console.log('-----------')
+      }
+    }
+
+    return b;
+  }
+
+  var b = Board();
+  b.tiles[1][0] = 'X';
+  b.print();
+</script>
+</body>
+</html>

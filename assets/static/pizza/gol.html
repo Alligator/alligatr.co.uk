@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript">
+  var input =
+    '00000'+
+    '00100'+
+    '00100'+
+    '00100'+
+    '00000';
+
+  function gol(inp, w) {
+    var next = []; while(next.push([]) < inp.length);
+    for(b={},i=0;c=inp[i++];c|0?b[i-1]=1:0); // set of alive cells
+    for(i=0,s=0;inp[i++];) { // for each cell
+      s=0;
+      for(j=[1,w+1,w+2,w+3],n=0,k=0;k<4;k++) { // summing the neighbours
+        if((v=i+j[k]) in b)n++;
+        if((v=i-j[k]) in b)n++;
+      }
+      s+=n;
+      console.log(s);
+    }
+  }
+
+  //console.log(JSON.stringify(input));
+  input = gol(input, 5);
+  //console.log(JSON.stringify(input));
+  </script>
+  <link rel="stylesheet" href="pizza.css" />
+</head>
+<body>
+</body>
+</html>

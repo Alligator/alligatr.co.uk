@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript">
+  window.onload = function() {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+
+    var width, height;
+    canvas.width = width = 640;
+    canvas.height = height = 480;
+
+    document.body.appendChild(canvas);
+
+    // and now the wipe
+    // column offsets
+    var y = [];
+    y[0] = -Math.floor(Math.random()*16);
+    for (var i = 1; i < width; i ++) {
+      var r = Math.floor(Math.random()*3) - 1;
+      y[i] = y[i-1] + r;
+      if (y[i] > 0)
+        y[i] = 0;
+      else if (y[i] == -16)
+        y[i] = -15;
+    }
+
+    // wipe
+    var done = false;
+
+    var wp = setInterval(function() {
+      if (done == true)
+        clearInterval(wp);
+      done = true;
+      for (var i = 0; i < width; i++) {
+        ctx.fillStyle = 'hsl(' + i/2 + ', 100%, 50%)';
+        var ny = y[i];
+        if (y[i] < 0) {
+          y[i]++;
+          done = false;
+        } else if (y[i] < height) {
+          var dy = y[i] < 16 ? y[i]+1 : 8;
+          if (y[i] + dy >= height)
+            dy = height - y[i];
+
+          y[i] += dy;
+          done = false;
+        }
+        if (i > 0) {
+          ctx.clearRect(i, 0, i, height+16)
+          ctx.fillRect(i, ny, 1, height+16);
+        }
+      }
+    }, 28);
+
+  }
+  </script>
+  <style type="text/css">
+  body, canvas { background-color: black; }
+  </style>
+</head>
+<body>
+</body>
+</html>

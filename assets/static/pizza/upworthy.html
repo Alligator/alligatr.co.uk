@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upworthy or Upworthit?</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" src="upw.js"></script>
+  <style type="text/css">
+  @import url(http://fonts.googleapis.com/css?family=Droid+Serif|Source+Sans+Pro:200,400);
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: 'Source Sans Pro', sans-serif;
+    color: #666;
+    line-height: 1.35;
+  }
+  .content {
+    width: 600px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    margin: 0 auto;
+    padding: 20px;
+    border-bottom: 10px solid rgb(240, 238, 233);
+    border-left: 10px solid rgb(240, 238, 233);
+    border-right: 10px solid rgb(240, 238, 233);
+    border-radius: 0 0 5px 5px;
+  }
+  h1 {
+    font-family: 'Droid Serif', serif;
+    font-size: 24px;
+    background-color: #ff731b;
+    background-image: linear-gradient(to bottom, #ff731b, #fc6100);
+    color: white;
+    padding: 10px;
+    margin: 0;
+    display: inline-block;
+  }
+  .btn-container {
+    display: inline-block;
+    width: 32%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  input {
+    cursor: pointer;
+    font-family: 'Source Sans Pro', sans-serif;
+    border: solid 1px rgb(255, 78, 9);
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 1px 1px 0px inset;
+    background-color: rgb(255, 113, 14);
+    background-image: linear-gradient(rgb(255, 136, 17), rgb(255, 78, 9));
+    padding: 8px 60px;
+    font-size: 18px;
+    color: white;
+    border-radius: 5px;
+    text-shadow: 1px 1px 3px #a54000;
+    outline-width: 0;
+  }
+  input:hover {
+    border: solid 1px rgb(189, 68, 9);
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 1px 1px 0px inset,
+                rgba(0, 0, 0, 0.2) 0px 1px 0px 0px;
+    background-color: rgb(235, 93, 14);
+    background-image: linear-gradient(rgb(255, 116, 17), rgb(255, 78, 9));
+  }
+  .score {
+    text-align: center;
+  }
+  .title {
+    position: relative;
+    font-size: 24px;
+    font-family: 'Droid Serif', serif;
+    color: black;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    height: 4.5em;
+    font-weight: bold;
+  }
+  h1 a {
+    color: white;
+    text-decoration: none;
+  }
+  h1 a:hover {
+    color: rgb(255, 226, 132);
+  }
+  .header {
+    position: relative;
+    height: 60px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 600px;
+    margin: 0 auto;
+    margin-top: 60px;
+    padding: 0;
+    height: 10px;
+    background-color: #F0EEE9;
+    border-radius: 5px 5px 0 0;
+  }
+  .tab {
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+    border-top: 1px solid #f25d00;
+  }
+  .info {
+    vertical-align: top;
+  }
+  .info a {
+    color: #62727a;
+    text-decoration: none;
+    border-bottom: 1px dotted #b3bdc2;
+  }
+  .info a:hover {
+    color: #fc6100;
+    text-decoration: none;
+    border-bottom-color: #fc6100;
+  }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1 class="tab"><a href="http://www.upworthy.com/">Upworthy</a> or <a href="https://twitter.com/UpWorthIt">Upworthit</a>?</h1>
+  </div>
+  <div class="content">
+    <div class="title" id="article-title">
+      Loading
+    </div>
+
+    <div class="controls">
+      <div class="btn-container">
+        <input class="real-btn" type="button" value="real">
+      </div>
+      <div class="btn-container info">
+        <div class="score"></div>
+        <div class="article-link"></div>
+      </div>
+      <div class="btn-container">
+        <input class="fake-btn" type="button" value="fake">
+      </div>
+    </div>
+  </div>
+</body>
+</html>

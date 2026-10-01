@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="crimson-webfont/stylesheet.css" />
+  <style type="text/css">
+body {
+  font-family: 'Crimson Text', serif;
+  font-size: 18pt;
+  line-height: 1.35;
+}
+
+h2 {
+  font-size: 18pt;
+  margin-bottom: 0;
+}
+
+.page {
+  width: 70ex;
+  margin: 0 auto;
+}
+  </style>
+  <script type="text/javascript" src="stemmer.js"></script>
+  <script type="text/javascript">
+window.onload = function() {
+  var text = document.querySelector('.original').innerText;
+  var out = process(text);
+  document.querySelector('.processed').innerText = out;
+}
+
+function process(text) {
+  // implemented as an object for fast lookups
+  var stopwords = { 'the':0 };
+  var tokens = text.split(' ');
+  var output = [];
+
+  for (var i = 0; i < tokens.length; i++) {
+    var token = tokens[i];
+    if (token in stopwords)
+      continue;
+    output.push(stemmer(token));
+  }
+  return output;
+}
+  </script>
+</head>
+<body>
+  <div class="page">
+    <h2>Input</h2>
+    <div class="original">look at the dog</div>
+    <h2>Output</h2>
+    <div class="processed"></div>
+  </div>
+</body>
+</html>

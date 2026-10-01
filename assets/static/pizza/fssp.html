@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript">
+  window.onload = function() {
+    var canvas = document.getElementById('canv');
+    var ctx = canvas.getContext('2d');
+    var x = -1;
+    var q = 0;
+    var r = 1;
+    var s = 2;
+    var l = 3;
+    var f = 4;
+
+    // 5 state. 3n -3 time.
+    var rules = [
+      // ripple driver generation
+      [q,q,q, q], [q,q,x, q], [r,q,q, r], [r,q,r, r], [q,r,q, r],
+      [q,r,r, r], [r,r,q, q], [r,r,r, r], [x,r,q, r], [x,r,r, r],
+     
+      // b-signal generation + propagation
+      [s,q,r, s], [x,q,q, q], [x,q,s, q], [q,q,s, q], [s,r,q, q],
+      [s,r,r, r], [x,r,q, s], [q,s,q, q], [q,s,r, s], [x,s,q, q],
+      [x,s,r, s],
+     
+      // return signal
+      [r,q,x, r], [r,r,x, l], [l,q,q, q], [l,q,x, q], [r,r,l, l],
+      [s,r,l, l], [r,l,q, q], [r,l,x, q], [s,l,q, r], [q,s,l, l],
+      [l,r,q, s], [s,s,r, s], [s,s,q, q],
+     
+      // finding center cells
+      [q,q,l, l], [q,l,r, s], [l,s,s, s], [q,l,s, q], [q,l,q, l],
+      [l,q,s, s], [q,s,s, q], [l,s,q, s], [s,q,q, q], [l,l,s, l],
+      [q,l,l, q], [l,q,l, l], [l,l,q, l], [l,l,l, l], [x,q,l, l],
+      [x,l,l, r], [x,r,l, q], [r,l,l, r], [x,q,r, q], [q,r,l, q],
+      [q,q,r, q], [r,l,s, r], [q,r,s, l], [r,s,q, r], [r,l,r, q],
+      [l,r,l, q], [x,l,s, r], [s,r,x, l],
+     
+      // final sync
+      [x,r,s, f], [r,s,s, f], [s,s,l, f], [s,l,r, f], [l,r,s, f],
+      [s,l,x, f], [x,s,l, f]
+    ];
+
+    var width = 128;
+    var height = (width * 3) - 3;
+    canvas.width = width * 2;
+    canvas.height = (height + 1) * 2;
+    var cells = [];
+    for (var i = 0; i < width; i++)
+      cells[i] = 0;
+    cells[0] = r;
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, width, height);
+
+    var r = 0;
+    var t = setInterval(function() {
+      if (r >= height) {
+        clearInterval(t);
+        print(ctx, height, cells);
+      } else {
+        var ncells = [];
+        for (var i = 0; i < width; i++) ncells[i] = 0;
+        print(ctx, r, cells);
+        for (var c = 0; c < width; c++) {
+          var ls = c > 0 ? cells[c-1] : -1;
+          var rs = c < width-1 ? cells[c+1] : -1;
+          for (var i = 0; i < rules.length; i++) {
+            if (cells[c] == rules[i][1] && ls == rules[i][0] && rs == rules[i][2])
+              ncells[c] = rules[i][3];
+          }
+        }
+        cells = ncells;
+        r++;
+      }
+    }, 66);
+  }
+
+  function print(ctx, y, cells) {
+    var colors = [
+      '#000000', '#ffee22',
+      '#00aaff', '#ff8800', '#ff0000'
+    ];
+    ctx.save();
+    for (var i = 0; i < cells.length; i++) {
+      if (cells[i] > 0) {
+        ctx.fillStyle = colors[cells[i]];
+        ctx.fillRect(i*2, y*2, 2, 2);
+      }
+    }
+    ctx.restore();
+  }
+  </script>
+  <link rel="stylesheet" href="pizza.css" />
+  <style type="text/css">
+  body {
+    background-color: black;
+    text-align: center;
+  }
+  .canv-container {
+    text-align: center;
+  }
+  </style>
+</head>
+<body>
+  <div class="index">
+  <pre>js+canvas implementation of a 5-state <a href="http://en.wikipedia.org/wiki/Firing_squad_synchronization_problem">fssp</a> solution.
+based on
+
+  "A Smallest Five-State Solution to the Firing Squad Synchronization Problem"
+    - Hiroshi Umeo, Takashi Yanagihara 
+
+  </pre>
+  <div class="canv-container">
+    <canvas id="canv"></canvas>
+  </div>
+  </div>
+</body>
+</html>
