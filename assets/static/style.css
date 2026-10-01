@@ -138,6 +138,11 @@ time {
   font-size: 11pt;
 }
 
+td.nopadding > * {
+  padding: 0;
+  margin: 0;
+}
+
 /* syntax highlighting */
 pre {
   color: #ccc;

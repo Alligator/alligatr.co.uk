@@ -9,32 +9,47 @@
   <section>
     <h3>Fun things</h3>
 
-    {% for exp in site.query('/e')
-      .include_hidden(true)
-      .order_by('') %}
-      <div class="project-row project-row__c2">
-        <h4>
-          {%if exp.url %}
-          <a href="{{exp.url}}">{{exp.name}}</a>
-          {% else %}
-          <a href="{{exp|url}}">{{exp.name}}</a>
-          {% endif %}
-        </h4>
-        <div>{{exp.description}}</div>
-      </div>
-    {% endfor %}
+    <table style="width: 100%">
+      <tbody>
+      {% for exp in site.query('/e')
+        .include_hidden(true)
+        .order_by('') %}
+        <tr>
+          <td>
+            {%if exp.url %}
+            <a href="{{exp.url}}">{{exp.name}}</a>
+            {% else %}
+            <a href="{{exp|url}}">{{exp.name}}</a>
+            {% endif %}
+          </td>
+          <td>{{exp.description}}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
 
   </section>
 
   <section>
     <h3>Others</h3>
-    {% for o in this.other.blocks %}
-      <div class="project-row project-row__c3">
-        <h4><a href="{{o.url}}">{{ o.title }}</a></h4>
-        <div class="mobile-hide">{{ o.technology }}</div>
-        <div>{{ o.body }}</div>
-      </div>
-    {% endfor %}
+    <table style="width: 100%">
+      <thead>
+        <tr>
+          <th>Link</th>
+          <th>Tech</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in this.other.blocks %}
+        <tr>
+          <td><a href="{{o.url}}">{{ o.title }}</a></td>
+          <td>{{ o.technology }}</td>
+          <td class="nopadding">{{ o.body }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </section>
 
   <h2>Games</h2>
