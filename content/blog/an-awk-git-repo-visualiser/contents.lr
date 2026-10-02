@@ -61,11 +61,11 @@ files[i,"path"] = path
 
 This creates an index by joining all the expressions together with `SUBSEP`. On my system AWK (nawk) `SUBSEP` is 28, or the ASCII file separator character
 
-This does make the array longer than the number of files since there's two entries per file. I store the number of files in a separate variable instead.
+This does make the array longer than the number of files since there's two entries per file. I store the number of files in a separate variable.
 
 ## nawk doesn't like 0 bytes in strings
 
-When a file is binary, I show "binary file" instead of it's content. I decided on a *very* rough heuristic for this: if there's a 0 byte in the first 100 bytes of a file, it's binary. My plan was to read a few lines with `getline` and call `index()` to check for a 0 byte:
+When a file is binary, I show "binary file" instead of its content. I decided on a *very* rough heuristic for this: if there's a 0 byte in the first 100 bytes of a file, it's binary. My plan was to read a few lines with `getline` and call `index()` to check for a 0 byte:
 
 ```awk
 if (index(line, "\0") > 0) {
@@ -93,44 +93,21 @@ My `index` call always returned 1 because it's actually checking this:
 ```awk
 index(line, "")
 ```
+nawk decides that an empty string is at position 1 of a non-empty string.
 
-And now a digression about AWK version differences.
-
-----
-
-I tried this across a few AWKs:
+I was curious and tried this across a few AWKs (note that `index` returns 1 for the first character in the string):
 
 AWK | `length("\0")` | `index("a\0b", "\0")`
 ----|---------
 nawk | 0 | 1
 GNU AWK | 1 | 2
-busybox AWK | 0 | 0
+BusyBox AWK | 0 | 0
 mawk | 1 | 2
 GoAWK | 1 | 2
 
-Note that `index` returns 1 for the first character in the string.
+GNU AWK, mawk and GoAWK get it right, nawk and BusyBox AWK don't.
 
-GNU AWK, mawk and GoAWK get it right, nawk and busybox AWK don't.
-
-The same null-termination problem happens when you read data from files, stdin, or via `getline`. mawk will truncate the string. The well behaved AWKs all read the whole string with the zero byte in it. Busybox AWK is weird. If I create a file with this content:
-
-```
-one\0two
-```
-
-Then use it as the input file, this happens:
-
-```shell
-$ busybox awk '{ print $0 }' zerosep.txt
-one
-two
-```
-
-The zero byte was treated as a record separator, apparently.
-
-----
-
-Anyway, I couldn't find a way to check a string for a null byte in nawk, so instead I use `od` to dump the bytes and check for `00`:
+I couldn't find a way to check a string for a null byte in nawk, instead I use `od` to dump the first 100 bytes and check for `00`:
 
 ```awk
 function is_binary(name) {
@@ -167,13 +144,13 @@ $ awk 'BEGIN {
 
 `1` means success, `0` means end of file.
 
-The first `getline` executes `date` and sets up a pipe, the next `getline` is reading from the `same` pipe. The `date` command is finished after one line, so there's no more output.
+The first `getline` executes `date` and sets up a pipe, the next `getline` reads from the same pipe! The `date` command is finished after one line, so there's no more output and we get a 0.
 
-That seems obvious in retrospect, but it wasn't at all at the time.
+That seems obvious in retrospect, since to read all the output from a command you usually loop over `getline` until it returns 0.
 
-To close the pipe and run a new command, you have to call `close()`, with the *literal string* you used in the first call. So to fix my bug, I call `close("date +%s")` after getting each timestamp.
+To close the pipe and run a new command, you have to call `close()`, with the literal string you used in the first `getline`. To fix this, I call `close("date +%s")` after getting each timestamp.
 
-I mean the literal string too, whitespace differences will run a new command:
+I mean the *literal* string too, whitespace differences matter:
 
 ```shell
 $ awk 'BEGIN {
@@ -186,13 +163,15 @@ Wed 23 Sep 2026 14:35:44 BST
 Wed 23 Sep 2026 14:35:44 BST
 ```
 
+That's it for surprising things I discovered about AWK, on to the web UI.
+
 ----
 
-Here are some things I learned about HTML and CSS by making the page interactive with no JavaScript.
+I decided to make the UI interactive without JavaScript. If I'm going to be the sort of grognard who writes AWK scripts I can't be seen writing JS. Here are some things I learned.
 
 ## The `<details>` element
 
-I already knew about the [`<details>` element](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details), but it's an excellent addition to HTML and I want to remind you it exists. It creates an expandable section with a label (set by the `<summary>` tag).
+I already knew about the [`<details>` element](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details) but it's an excellent addition to HTML and I want to remind you it exists. It creates an expandable section with a label (set by the `<summary>` tag).
 
 I used it to create directories which can be expanded and collapsed:
 
@@ -204,7 +183,17 @@ The docs directory collapsed and expanded.
 
 ## The `:target` pseudo-class
 
-When a file is selected on the left, I show the file's content on the right. How do we do that without JavaScript? First, each file is rendered as a `<section>` element with an id taken from its index in the file array:
+When a file is selected in the tree I show that file's content on the right. I used the [`:target`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:target) pseudo-class to swap out which file is shown.
+
+First, each file in the tree is rendered as an anchor tag with a document fragment:
+
+```html
+<a href="#file-0">.gitignore</a>
+<a href="#file-1">LICENSE</a>
+<a href="#file-2">README.md</a>
+```
+
+The content is rendered as a section with a matching id:
 
 ```html
 <section id="file-0">
@@ -216,31 +205,18 @@ When a file is selected on the left, I show the file's content on the right. How
 </section>
 ```
 
-Then I hide them all with this CSS:
+This CSS hides all the sections except the target, which is the element the document fragment points to:
 
 ```css
 .content > section {
   display: none;
 }
-```
-
-Showing the selected file involves, two parts. The files in the tree are anchor links with an id that matches the relevant section:
-
-```html
-<a href="#file-0">.gitignore</a>
-<a href="#file-1">LICENSE</a>
-<a href="#file-2">README.md</a>
-```
-
-This is the magic CSS to un-hide the file content:
-
-```css
 .content > section:target {
   display: block;
 }
 ```
 
-The `:target` pseudo class selects the element the URL fragment points to. If the URL is `repo.html#file-1`, the section with the id `file-1` becomes the target and is un-hidden.
+Clicking a file will change the URL to `#file-X` and file X will be shown.
 
 ----
 
